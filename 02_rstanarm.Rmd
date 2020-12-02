@@ -1,0 +1,6 @@
+# rstanarm {#rstanarm}
+
+```{r setup, echo=FALSE}
+library(rstanarm)
+```
+
