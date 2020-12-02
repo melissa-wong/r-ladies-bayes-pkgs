@@ -1,2 +1,26 @@
 # rethinking {#rethinking}
 
+```{r setup, echo=FALSE, results="hide", message=FALSE}
+rm(list=ls())
+
+set.seed(123)
+options("scipen" = 1, "digits" = 4)
+
+library(tidyverse)
+library(datasets)
+data(mtcars)
+
+library(rethinking)
+
+```
+
+## References
+
+[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
+
+[rethinking github repo](https://github.com/rmcelreath/rethinking)
+
+## Linear Model
+
+## Semi-parametric Model
+

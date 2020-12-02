@@ -1,6 +1,26 @@
 # rstanarm {#rstanarm}
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, results="hide", message=FALSE}
+rm(list=ls())
+
+set.seed(123)
+options("scipen" = 1, "digits" = 4)
+
+library(tidyverse)
+library(datasets)
+data(mtcars)
+
 library(rstanarm)
+
 ```
+
+## References
+
+[Regression and Other Stories](https://avehtari.github.io/ROS-Examples/index.html) by Gelman, Hill and Vehtari
+
+[rstanarm online documentation](https://mc-stan.org/users/interfaces/rstanarm)
+
+## Linear Model
+
+## Semi-parametric Model
 

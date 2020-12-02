@@ -1,6 +1,16 @@
-# Intro {#intro}
+# Introduction {#intro}
+
+## References
+
+[Bayesian Data Analysis](http://www.stat.columbia.edu/~gelman/book/) by Gelman
+
+[A First Course in Bayesian Statistical Methods](https://pdhoff.github.io/book/) by Hoff
+
+[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
 
 ## Motivation
+
+## Workflow
 
 ## Data
 

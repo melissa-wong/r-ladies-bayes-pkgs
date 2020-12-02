@@ -1,2 +1,23 @@
 # rstan {#rstan}
 
+```{r setup, echo=FALSE, results="hide", message=FALSE}
+rm(list=ls())
+
+set.seed(123)
+options("scipen" = 1, "digits" = 4)
+
+library(tidyverse)
+library(datasets)
+data(mtcars)
+
+library(rstan)
+
+```
+
+## References
+
+[mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
+
+## Linear Model
+
+## Semi-parametric Model
