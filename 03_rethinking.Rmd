@@ -1,10 +1,10 @@
 # rethinking {#rethinking}
 
-## References
+## Resources
 
-[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
+- [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
 
-[rethinking github repo](https://github.com/rmcelreath/rethinking)
+- [rethinking github repo](https://github.com/rmcelreath/rethinking)
 
 ## Description
 

@@ -1,8 +1,8 @@
 # rstan {#rstan}
 
-## References
+## Resources
 
-[mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
+- [mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
 
 ## Description
 
