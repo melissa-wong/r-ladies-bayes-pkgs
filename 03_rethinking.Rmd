@@ -1,6 +1,16 @@
 # rethinking {#rethinking}
 
-```{r setup, echo=FALSE, results="hide", message=FALSE}
+## References
+
+[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
+
+[rethinking github repo](https://github.com/rmcelreath/rethinking)
+
+## Description
+
+## Environment Setup
+
+```{r setup, results="hide", message=FALSE}
 rm(list=ls())
 
 set.seed(123)
@@ -13,12 +23,6 @@ data(mtcars)
 library(rethinking)
 
 ```
-
-## References
-
-[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
-
-[rethinking github repo](https://github.com/rmcelreath/rethinking)
 
 ## Linear Model
 

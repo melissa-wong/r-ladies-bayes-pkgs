@@ -1,6 +1,14 @@
 # rstan {#rstan}
 
-```{r setup, echo=FALSE, results="hide", message=FALSE}
+## References
+
+[mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
+
+## Description
+
+## Environment Setup
+
+```{r setup, results="hide", message=FALSE}
 rm(list=ls())
 
 set.seed(123)
@@ -12,11 +20,11 @@ data(mtcars)
 
 library(rstan)
 
+# Saves compiled version of model so it only has to be recompiled if the model is changed
+rstan_options(auto_write = TRUE)
+# Set number of cores
+options(mc.cores = parallel::detectCores()-1)
 ```
-
-## References
-
-[mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
 
 ## Linear Model
 
