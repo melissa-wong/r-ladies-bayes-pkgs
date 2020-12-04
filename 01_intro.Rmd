@@ -2,19 +2,65 @@
 
 ## References
 
-[Bayesian Data Analysis](http://www.stat.columbia.edu/~gelman/book/) by Gelman
+[Bayesian Data Analysis](http://www.stat.columbia.edu/~gelman/book/) by Andrew Gelman, et. al.
 
-[A First Course in Bayesian Statistical Methods](https://pdhoff.github.io/book/) by Hoff
+[A First Course in Bayesian Statistical Methods](https://pdhoff.github.io/book/) by Peter Hoff
 
-[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
+[Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by Richard McElreath
 
 ## Motivation
 
+Let's start with something familiar--the Monty Hall problem.  There are three doors labeled A, B and C. A car is behind one of the doors and a goat is behind each of the other two doors. You choose a door (let's say A). Monty Hall, who knows where the car actually is, opens one of the other doors (let's say B) revealing a goat.  Do you stay with door A or do you switch to door C?
+
+We can frame the problem as follows:
+
+1. Initially, you believe the car is equally likely to behind each door (i.e., $P[A=car]=P[B=car]=P[C=car]=\frac{1}{3}$).  Let's call this the _prior_ information.
+
+2. Next, you can calculate the conditional probabilities that Monty Hall opened door B. Let's call this the _likelihood_.
+
+\begin{align*}
+  P[B=open | A=car] &= \frac{1}{2}\\
+  P[B=open | B=car] &= 0 \\
+  P[B=open | C=car] &=1
+\end{align*}
+
+3. Finally, you can update your beliefs with the new information.  Let's call your updated beliefs the _posterior_.
+
+\begin{align*}
+  P[A=car|B=open] &= \frac{P[B=open|A=car]P[A=car]}{P[B=open]} = \frac{1/2 * 1/3}{1/6 + 0 + 1/3} = \frac{1}{3} \\
+  P[B=car|B=open] &= \frac{P[B=open|B=car]P[B=car]}{P[B=open]} = \frac{0 * 1/3}{1/6 + 0 + 1/3} = 0 \\
+  P[C=car|B=open] &= \frac{P[B=open|C=car]P[C=car]}{P[B=open]} = \frac{1 * 1/3}{1/6 + 0 + 1/3} = \frac{2}{3}
+\end{align*}
+  
+Clearly, you should switch to door C.  
+
+This is a toy illustration of how to think about a model in a Bayesian framework:
+
+$$posterior \propto likelihood * prior$$
+See the references for a rigorous mathematical derivation.
+
 ## Workflow
+
+The general workflow I'll follow in the subsequent chapters is as follows:
+
+1. Define the model.
+2. Examine the prior predictive distribution.
+3. Examine diagnostic plots.
+4. Examine posterior distribution.
+5. Examine the posterior predictive distribution.
+
+In general, this is an iterative process. At each step you may discover something that causes you to go back to step 1 and refine the model. 
 
 ## Data
 
-```{r}
+For all of the examples, I use the mtcars data set and a model with _disp_ as the predictor and _mpg_ as the response. I start with a simple linear regression. However, as you can see from the scatterplot below, the relationship between _mpg_ and _disp_ is not linear, so I also fit a slightly more complex semi-parametric model. 
 
+```{r mtcars, message=FALSE}
+library(tidyverse)
+library(datasets)
+data(mtcars)
+mtcars %>%
+  ggplot(aes(x=disp, y=mpg)) +
+  geom_point() 
 ```
 
