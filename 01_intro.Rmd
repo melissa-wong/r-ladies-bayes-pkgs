@@ -37,11 +37,11 @@ Clearly, you should switch to door C.
 This is a toy illustration of how to think about a model in a Bayesian framework:
 
 $$posterior \propto likelihood * prior$$
-See the references for a rigorous mathematical derivation.
+(See the references for a rigorous mathematical derivation.)
 
 ## Workflow
 
-The general workflow I'll follow in the subsequent chapters is as follows:
+The workflow I'll follow in the subsequent chapters is as follows:
 
 1. Define the model.
 2. Examine the prior predictive distribution.
@@ -49,7 +49,7 @@ The general workflow I'll follow in the subsequent chapters is as follows:
 4. Examine posterior distribution.
 5. Examine the posterior predictive distribution.
 
-In general, this is an iterative process. At each step you may discover something that causes you to go back to step 1 and refine the model. 
+In general, this is an iterative process. At each step you may discover something that causes you to start over at step 1 with a new, refined model. 
 
 ## Data
 

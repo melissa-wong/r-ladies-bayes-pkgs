@@ -66,24 +66,18 @@ res %>%
   labs(x="disp", y="prior predictive mpg")
 ```
 
-Hmm, I notice two things in the prior predictive distribution which seem unrealistic given real-world knowledge: 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior that incorporates this additional knowledge. But let's proceed with the analysis to see what happens.
+Hmm, I notice two things in the prior predictive distribution which seem unrealistic given real-world knowledge: 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior that incorporates this additional knowledge. But let's proceed with the analysis and see what happens.
 
 ### Diagnostics
 
-I'll walk through the steps for manually extracting the diagnostic information from the _mdl1_ object since I think that can be helpful to understand exactly what's going on.  However, once you have a handle on these steps I highly recommend the ```shinystan``` package; it will automatically create all of these diagnostic plots (and more) with an nice interactive web interface.
-
-Once the model has been fit, either _as.matrix_ or _as.array_ extracts the posterior draws.  The key difference is that _as.array_ keeps the chains separate. Note that the default is 4 chains, but you can change that parameter in _stan_glm_.
-
-```{r}
-post <- as.array(mdl1)
-str(post)
-```
+I'll walk through the steps for manually extracting the key diagnostic information from the _mdl1_ object since I think that can be helpful to understand exactly what's going on.  However, once you have a handle on these steps I highly recommend the ```shinystan``` package; it will automatically create all of these diagnostic plots (and more) with an nice interactive web interface.
 
 #### Trace Plots
+
 The _bayesplot_ package provides the function _mcmc_trace_ which plots the MCMC draws.
 
 ```{r}
-mcmc_trace(post, pars=c("disp", "sigma"))
+mcmc_trace(mdl1, pars=c("disp", "sigma"))
 ```
 
 There are three things I am looking for in the trace plot of each chain:
@@ -98,7 +92,7 @@ The trace plots above look good.
 
 #### Trace Rank Plots
 
-It can sometimes be had to interpret the trace plots when there are many chains. An alternative is the _mcmc_rank_overlay_ function.  This function plots a trace rank plot which is the distribution of the ranked samples.
+It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the _mcmc_rank_overlay_ function.  This function plots a trace rank plot which is the distribution of the ranked samples.
 
 ```{r}
 mcmc_rank_overlay(mdl1, pars=c("disp", "sigma"))
@@ -132,7 +126,7 @@ knitr::kable(posterior_interval(mdl1, prob=0.95))
 
 The _posterior_predict_ function draws samples from the posterior predictive distribution. The ```shinystan``` package will generate nice plots of the posterior predictive distribution.
 
-In this case, I'm going to plot the expected value of the posterior predictive distribution and overlay the observations since I think it can be easier for a beginner to these methods to understand. The _posterior_linpred_ function returns the linear predictor, possibly transformed by the inverse-link function.  The _posterior_epred_ function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
+In this case, I'm going to plot the expected value of the posterior predictive distribution and overlay the observations since I think it can be easier to understand for someone new to these methods. The _posterior_linpred_ function returns the linear predictor, possibly transformed by the inverse-link function.  The _posterior_epred_ function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
 
 ```{r}
 newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))

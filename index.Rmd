@@ -1,11 +1,12 @@
 --- 
-title: "R-Ladies RTP Intro to Bayesian Packages"
+title: "Intro to R Bayes Packages"
 author: "Melissa Wong"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
 bibliography: [packages.bib]
+nocite: '@*'
 biblio-style: apalike
 link-citations: yes
 github-repo: melissa-wong/r-ladies-rtp-bayes-pkgs
@@ -14,9 +15,9 @@ description: "This is an introduction to several R packages for Bayesian analysi
 
 # Prerequisites
 
-```{r include=FALSE}
+```{r include=FALSE, echo=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
+  .packages(), "rstan", "rstanarm", "rethinking", "bayesplot",
+  "shinystan"), "packages.bib")
 ```

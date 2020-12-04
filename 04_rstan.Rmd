@@ -19,6 +19,7 @@ library(datasets)
 data(mtcars)
 
 library(rstan)
+library(bayesplot)
 
 # Saves compiled version of model so it only has to be recompiled if the model is changed
 rstan_options(auto_write = TRUE)
