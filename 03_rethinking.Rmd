@@ -26,5 +26,186 @@ library(rethinking)
 
 ## Linear Model
 
+### Define Model
+
+```{r mdl1, results="hide"}
+# Note the sign change for mu and b, this seems to be a quirk
+# of map2stan that it didn't like b ~ dnorm(-0.2, 0.1)
+f <- alist(
+  mpg ~ dnorm(mu, sigma),
+  mu <- a - b * disp,
+  a ~ dnorm(25, 10),
+  b ~ dnorm(0.2, 0.1),
+  sigma ~ dexp(1)
+)
+
+# Note the default number of chains = 1, so I'm explicitly setting to 4 here
+mdl1 <- map2stan(f,mtcars, chains=4)
+```
+
+### Prior Predictive Distribution
+
+```{r mdl1_prior}
+# Plot prior predictive distribution
+N <- 100
+
+prior_samples <- as.data.frame(extract.prior(mdl1, n=N))
+
+D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+
+res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] - x[2] * (D-mean(mtcars$disp)))) %>%
+  mutate(disp = D) %>%
+  pivot_longer(cols=c(-"disp"), names_to="iter") 
+
+res %>%
+  ggplot() +
+  geom_line(aes(x=disp, y=value, group=iter), alpha=0.2) +
+  labs(x="disp", y="prior predictive mpg")
+```
+
+### Diagnostics
+
+The _traceplot_ function is the _rethinking_ equivalent to _mcmc_trace_.
+
+```{r mdl1_trace}
+traceplot(mdl1@stanfit)
+```
+
+The _trankplot_ function is the _rethinking_ equivalent to the _mcmc_rank_overlay_.  
+
+```{r mdl1_trank}
+trankplot(mdl1)
+```
+
+The _trankplot_ function conveniently also displays the effective sample size (_n_eff_).  But the _precis_ function is another way to get both _n_eff_ and $\hat{R}$.
+
+```{r mdl1_precis}
+precis(mdl1, prob=0.95)
+```
+
+### Posterior Distribution
+
+The _precis_ function above also displays both the posterior point estimate and credible interval.
+
+### Posterior Predictive Distribution
+
+Finally, I'll check the posterior predictive distribution. The _rethinking_ package includes the _postcheck_ function which displays a plot for posterior predictive checking.
+
+```{r mdl1_ppd, results="hide"}
+postcheck(mdl1, window=nrow(mtcars))
+```
+
+Alternatively, I can plot the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with _rstanarm_ . The _sim_ function draws samples from the posterior predictive distribution, and the _link_ function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the _sim_ and _link_ functions return identical results.
+
+```{r mdl1_eppd, results="hide"}
+newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
+
+y_rep <- as.data.frame(t(link(mdl1, data=newdata, n=50))) %>%
+  cbind(newdata) %>%
+  pivot_longer(cols=starts_with("V"), names_to="grp", values_to="mpg")
+
+y_rep %>%
+  ggplot(aes(x=disp, y=mpg)) +
+  geom_line(aes(group=grp), alpha=0.2) +
+  geom_point(data = mtcars) 
+```
+
 ## Semi-parametric Model
+
+### Define Model
+
+Setting up the semi-parametric model is a bit more work in the _rethinking_ package.  First, I explicitly create the splines.  The component splines are plotted below.
+
+```{r spline}
+library(splines)
+
+num_knots <- 4  # number of interior knots
+knot_list <- quantile(mtcars$disp, probs=seq(0,1,length.out = num_knots))
+B <- bs(mtcars$disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
+
+df1 <- cbind(disp=mtcars$disp, B) %>%
+  as.data.frame() %>%
+  pivot_longer(-disp, names_to="spline", values_to="val")
+
+# Plot at smaller intervals so curves are smooth
+N<- 50
+D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+B_plot <- bs(D, 
+             knots=knot_list[-c(1,num_knots)], 
+             intercept=TRUE)
+
+df2 <- cbind(disp=D, B_plot) %>%
+  as.data.frame() %>%
+  pivot_longer(-disp, names_to="spline", values_to="val")
+
+ggplot(mapping=aes(x=disp, y=val, color=spline)) +
+  geom_point(data=df1) +
+  geom_line(data=df2, linetype="dashed")
+```
+
+Then I define the model with the splines.  I wasn't able to get this model to work with either the _map2stan_ or _ulam_ functions, so I used _quap_ instead which fits a quadratic approximation.
+
+```{r mdl2, results='hide'}
+f <- alist(
+  mpg ~ dnorm(mu, sigma),
+  mu <- a - B %*% w,
+  a ~ dnorm(25, 10),
+  w ~ dnorm(0,5),
+  sigma ~ dexp(1)
+)
+
+
+mdl2 <- quap(f, data=list(mpg=mtcars$mpg, B=B),
+             start=list(w=rep(1, ncol(B)))
+            )
+```
+
+### Prior Predictive Distribution
+
+### Diagnostics
+
+Since MCMC was not used to fit the model, there are no chain diagnostics to examine. 
+
+### Posterior Distribution
+
+I can still use the _precis_ function to look at the postrior distribution, although there's really no intuitive interpretation for the spline weights.
+
+```{r mdl2_post}
+precis(mdl2, depth=2)
+```
+
+### Posterior Predictive Distribution
+
+And finally, the posterior predictive distribution:
+
+```{r mdl2_ppd, figures-side, fig.show="hold", out.width="50%", message=FALSE}
+mu <- link(mdl2)
+mu_mean <- as.data.frame(apply(mu, 2, mean)) %>%
+  mutate(disp=mtcars$disp)
+colnames(mu_mean) <- c("mpg_ppd", "disp")
+
+mu_PI <- as.data.frame(t(apply(mu,2,PI,0.95))) %>%
+  mutate(disp=mtcars$disp)
+colnames(mu_PI) <- c("lwr", "upr", "disp")
+
+ggplot() +
+  geom_point(data=mtcars, aes(x=disp, y=mpg)) +
+  geom_line(data=mu_mean, aes(x=disp, y=mpg_ppd), color="blue") +
+  geom_ribbon(data=mu_PI, aes(x=disp, ymin=lwr, ymax=upr), alpha=0.2) +
+  labs(title="GAM")
+
+ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
+              data=mtcars) +
+  geom_point()+
+  stat_smooth(method="loess",
+              level=0.95) +
+  labs(title="LOESS")
+
+```
+
+## Extras
+
+```{r}
+stancode(mdl1)
+```
 
