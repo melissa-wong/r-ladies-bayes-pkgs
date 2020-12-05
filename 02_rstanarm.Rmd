@@ -8,6 +8,8 @@
 
 ## Description
 
+The _rstanarm_ package is one of the easiest ways to get started with Bayesian models. The functions parallel the frequentist functions you're probably already familiar with, and the syntax will also be familiar. You aren't required to explicitly choose priors because all of the functions have weakly informative priors by default (although some might argue _not_ being required to specify priors is a drawback). The primary limitation I've found thus far is the supported types for user-defined priors is somewhat limited.
+
 ## Environment Setup
 ```{r setup, results="hide", message=FALSE}
 rm(list=ls())
@@ -68,7 +70,7 @@ res %>%
   labs(x="disp", y="prior predictive mpg")
 ```
 
-I notice two things in the prior predictive distribution which seem unrealistic given what I know about the real-world: 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior which incorporates this external knowledge. But let's proceed with the analysis and see what happens.
+I notice two things in the prior predictive distribution which seem unrealistic given what I know about the real world: 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior which incorporates this external knowledge. But let's proceed with the analysis and see what happens.
 
 ### Diagnostics
 
@@ -100,7 +102,9 @@ It can sometimes be hard to interpret the trace plots when there are many chains
 mcmc_rank_overlay(mdl1, pars=c("disp", "sigma"))
 ```
 
-#### Effective Sample Size and $\hat{R}$
+#### $\hat{R}$ and Effective Sample Size
+
+In additional to visually examining the chains, we should also check $\hat{R}$ which is a measure of convergence.  $\hat{R} > 1.0$ indicates poor mixing, and the _mc_stan_ documentation recommends only using samples if $\hat{R} < 1.05$.
 
 Since MCMC samples are usually correlated, the effective sample size (_n_eff_) is often less than the number of samples. There is no hard and fast rule for what is an acceptable number for _n_eff_. McElreath’s guidance is it depends on what you are trying to estimate. If you are interested mostly in the posterior mean, then _n_eff_ = 200 can be enough. But if you are interested in the tails of the distribution and it’s highly skewed then you’ll need _n_eff_ to be much larger. There are two parameters, _iter_ and _warmup_, which you can adjust in _stan_glm_ if a larger _n_eff_ is needed.
 
@@ -112,7 +116,7 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-Since the chains, _n_eff_ and $\hat{R} look good, I'll examine the posterior distributions next.
+Since the chains, _n_eff_ and $\hat{R}$ look good, let's examine the posterior distributions next.
 
 ```{r mdl1_post}
 # Posterior point estimates (medians are used for point estimates)
@@ -150,7 +154,7 @@ Now I'll specify priors which incorporate my prior knowledge that _mpg_ is non-n
 
 \begin{align*}
   mpg \sim N(\mu, \sigma^2) \\
-  \mu = a - b*disp \\
+  \mu = a + b*disp \\
   a \sim Normal(25,10^2) \\
   b \sim Normal(-0.2, 0.1^2) \\
   \sigma \sim Exponential(1)
@@ -182,7 +186,8 @@ prior_samples <- data.frame(a = rnorm(N, 25, 10),
 
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
-res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] + x[2] * (D-mean(mtcars$disp)))) %>%
+res <- as.data.frame(apply(prior_samples, 1, 
+                           function(x) x[1] + x[2] * (D-mean(mtcars$disp)))) %>%
   mutate(disp = D) %>%
   pivot_longer(cols=c(-"disp"), names_to="iter") 
 
@@ -211,7 +216,7 @@ Now let's compare the posterior with informative versus default priors:
 
 ```{r mdl2_post}
 # Point estimates
-knitr::kable(rbind("Default" = coef(mdl1), "Informative" = coef(mdl2)))
+knitr::kable(cbind(coef(mdl1), coef(mdl2)), col.names = c("Default", "Informative"))
 ```
 
 ```{r mdl2_post_int, message=FALSE}
