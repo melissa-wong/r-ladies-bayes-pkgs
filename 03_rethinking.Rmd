@@ -4,9 +4,13 @@
 
 - [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by McElreath
 
+- [Statistical Rethinking Lectures on YouTube](https://www.youtube.com/channel/UCNJK6_DZvcMqNSzQdEkzvzA/featured)
+
 - [rethinking github repo](https://github.com/rmcelreath/rethinking)
 
 ## Description
+
+_Statistical Rethinking_ was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the _rethinking_ package. It uses the familiar formula syntax for defining models. However, unlike _rstanarm_ the functions are not close mirrors of familiar frequentist functions. Another difference from _rstanarm_ is you must specify all priors--there are no defaults. I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that it's also a very good option for getting started.
 
 ## Environment Setup
 
@@ -77,7 +81,7 @@ The _trankplot_ function is the _rethinking_ equivalent to the _mcmc_rank_overla
 trankplot(mdl1)
 ```
 
-The _trankplot_ function conveniently also displays the effective sample size (_n_eff_).  But the _precis_ function is another way to get both _n_eff_ and $\hat{R}$.
+The _trankplot_ function conveniently also displays the effective sample size (_n_eff_).  But the _precis_ function is another way to get both _n_eff_ and $\widehat{R}$.
 
 ```{r mdl1_precis}
 precis(mdl1, prob=0.95)
@@ -110,7 +114,7 @@ y_rep %>%
   geom_point(data = mtcars) 
 ```
 
-## Semi-parametric Model
+## Semi-parametric Model {#GAM}
 
 ### Define Model
 
@@ -205,7 +209,9 @@ ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
 
 ## Extras
 
+The _rethinking_ package has some nice extras. One is the _stancode_ function will return the actual _stan_ code for the model.  This is a great way to start getting familiar with _stan_ syntax!
+
 ```{r}
 stancode(mdl1)
 ```
-
+Also, you can directly access the _stanfit_ object from the returned model using the "_@stanfit_" accessor.  So _bayesplot_ and _shinystan_ will work just like they do with _rstanarm_ and _rstan_.

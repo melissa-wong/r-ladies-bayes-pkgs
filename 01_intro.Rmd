@@ -8,7 +8,7 @@
 
 - [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by Richard McElreath
 
-## Motivation
+## A Motivating Example
 
 Let's start with something familiar--the Monty Hall problem.  There are three doors labeled A, B and C. A car is behind one of the doors and a goat is behind each of the other two doors. You choose a door (let's say A). Monty Hall, who knows where the car actually is, opens one of the other doors (let's say B) revealing a goat.  Do you stay with door A or do you switch to door C?
 

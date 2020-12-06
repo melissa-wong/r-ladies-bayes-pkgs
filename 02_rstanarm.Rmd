@@ -60,7 +60,8 @@ prior_samples <- data.frame(a = rnorm(N, 20, 15),
 
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
-res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] + x[2] * (D-mean(mtcars$disp)))) %>%
+res <- as.data.frame(apply(prior_samples, 1, 
+                           function(x) x[1] + x[2] * (D-mean(mtcars$disp)))) %>%
   mutate(disp = D) %>%
   pivot_longer(cols=c(-"disp"), names_to="iter") 
 
@@ -96,19 +97,19 @@ The trace plots above look good.
 
 #### Trace Rank Plots
 
-It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the _mcmc_rank_overlay_ function.  This function plots a trace rank plot which is the distribution of the ranked samples.
+It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the _mcmc_rank_overlay_ function.  This function plots a trace rank plot which is the distribution of the ranked samples; if the four chains have a roughly uniform distribution that indicates good mixing.
 
 ```{r mdl1_trank_plot}
 mcmc_rank_overlay(mdl1, pars=c("disp", "sigma"))
 ```
 
-#### $\hat{R}$ and Effective Sample Size
+#### $\widehat{R}$ and Effective Sample Size
 
-In additional to visually examining the chains, we should also check $\hat{R}$ which is a measure of convergence.  $\hat{R} > 1.0$ indicates poor mixing, and the _mc_stan_ documentation recommends only using samples if $\hat{R} < 1.05$.
+In addition to visually examining the chains, we should also check $\widehat{R}$ which is a measure of convergence.  $\widehat{R} > 1.0$ indicates poor mixing, and the _mc_stan_ documentation recommends only using samples if $\widehat{R} < 1.05$.  However, a recent paper by @Vehtari_2020 recommends $\widehat{R} < 1.01$.
 
 Since MCMC samples are usually correlated, the effective sample size (_n_eff_) is often less than the number of samples. There is no hard and fast rule for what is an acceptable number for _n_eff_. McElreath’s guidance is it depends on what you are trying to estimate. If you are interested mostly in the posterior mean, then _n_eff_ = 200 can be enough. But if you are interested in the tails of the distribution and it’s highly skewed then you’ll need _n_eff_ to be much larger. There are two parameters, _iter_ and _warmup_, which you can adjust in _stan_glm_ if a larger _n_eff_ is needed.
 
-The _summary_ function displays _n_eff_ and $\hat{R}$ for the object returned by _stan_glm_.
+The _summary_ function displays _n_eff_ and $\widehat{R}$ for the object returned by _stan_glm_.
 
 ```{r mdl1_summary}
 summary(mdl1)
@@ -116,7 +117,7 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-Since the chains, _n_eff_ and $\hat{R}$ look good, let's examine the posterior distributions next.
+Since the chains, _n_eff_ and $\widehat{R}$ look good, let's examine the posterior distributions next.
 
 ```{r mdl1_post}
 # Posterior point estimates (medians are used for point estimates)
@@ -208,7 +209,7 @@ mcmc_trace(mdl2, pars=c("disp", "sigma"))
 ```{r}
 summary(mdl2)
 ```
-The trace plots, _n_eff_ and $\hat{R}$ all look good.
+The trace plots, _n_eff_ and $\widehat{R}$ all look good.
 
 ### Posterior Distribution
 
@@ -297,7 +298,7 @@ mcmc_trace(mdl3, regex_pars=c("disp", "sigma"))
 summary(mdl3)
 ```
 
-The chains, _n_eff_ and $\hat{R}$ look good. In the Estimates section above, we also see the posteriors for the model parameters; there isn't an intuitive interpretation of the spline coefficients so I'll skip ahead to the posterior predictive distribution.
+The chains, _n_eff_ and $\widehat{R}$ look good. In the Estimates section above, we also see the posteriors for the model parameters; there isn't an intuitive interpretation of the spline coefficients so I'll skip ahead to the posterior predictive distribution.
 
 ### Posterior Predictive Distribution
 
