@@ -8,7 +8,7 @@
 
 ## Description
 
-The _rstanarm_ package is one of the easiest ways to get started with Bayesian models. The functions parallel the frequentist functions you're probably already familiar with, and the syntax will also be familiar. You aren't required to explicitly choose priors because all of the functions have weakly informative priors by default (although some might argue _not_ being required to specify priors is a drawback). The primary limitation I've found thus far is the supported types for user-defined priors is somewhat limited.
+The `rstanarm` package is one of the easiest ways to get started with Bayesian models. The functions parallel the frequentist functions you're probably already familiar with, and the syntax will also be familiar. You aren't required to explicitly choose priors because all of the functions have weakly informative priors by default (although some might argue _not_ being required to specify priors is a drawback). The primary limitation I've found thus far is the supported types for user-defined priors is somewhat limited.
 
 ## Environment Setup
 ```{r setup, results="hide", message=FALSE}
@@ -38,14 +38,14 @@ Let's start with the following simple linear model:
   \mu = a + b*disp \\
 \end{align*}
 
-The _stan_glm_ function from the _rstanarm_ package fits a Bayesian linear model.  The syntax is very similar to _lm_/_glm_.
+The `stan_glm` function from the `rstanarm` package fits a Bayesian linear model.  The syntax is very similar to `lm`/`glm`.
 
 ```{r mdl1, results='hide'}
 mdl1 <- stan_glm(mpg ~ disp, data = mtcars)
 ```
 ### Prior Predictive Distribution
 
-Next, I'll examine the prior predictive distribution to see if the default priors seem reasonable.  The _prior_summary_ function shows the default priors for the model as well as the adjusted priors after automatic scaling.  See http://mc-stan.org/rstanarm/articles/priors.html if you are interested in the details about how the default and adjusted priors are calculated. 
+Next, I'll examine the prior predictive distribution to see if the default priors seem reasonable.  The `prior_summary` function shows the default priors for the model as well as the adjusted priors after automatic scaling.  See http://mc-stan.org/rstanarm/articles/priors.html if you are interested in the details about how the default and adjusted priors are calculated. 
 
 ```{r mdl1_prior}
 prior_summary(mdl1)
@@ -75,11 +75,11 @@ I notice two things in the prior predictive distribution which seem unrealistic 
 
 ### Diagnostics
 
-I'll walk through the steps for manually extracting the key diagnostic information from the _mdl1_ object since I think that can be helpful to understand exactly what's going on.  However, once you have a handle on these steps I highly recommend the ```shinystan``` package; it will automatically create all of these diagnostic plots (and more) with an nice interactive web interface.
+I'll walk through the steps for manually extracting the key diagnostic information from the `mdl1` object since I think that can be helpful to understand exactly what's going on.  However, once you have a handle on these steps I highly recommend the `shinystan` package; it will automatically create all of these diagnostic plots (and more) with an nice interactive web interface.
 
 #### Trace Plots
 
-The _bayesplot_ package provides the function _mcmc_trace_ which plots the Markov Chain Monte Carlo (MCMC) draws.
+The `bayesplot` package provides the function `mcmc_trace` which plots the Markov Chain Monte Carlo (MCMC) draws.
 
 ```{r mdl1_trace}
 mcmc_trace(mdl1, pars=c("disp", "sigma"))
@@ -97,7 +97,7 @@ The trace plots above look good.
 
 #### Trace Rank Plots
 
-It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the _mcmc_rank_overlay_ function.  This function plots a trace rank plot which is the distribution of the ranked samples; if the four chains have a roughly uniform distribution that indicates good mixing.
+It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the `mcmc_rank_overlay` function.  This function plots a trace rank plot which is the distribution of the ranked samples; if the four chains have a roughly uniform distribution that indicates good mixing.
 
 ```{r mdl1_trank_plot}
 mcmc_rank_overlay(mdl1, pars=c("disp", "sigma"))
@@ -105,11 +105,11 @@ mcmc_rank_overlay(mdl1, pars=c("disp", "sigma"))
 
 #### $\widehat{R}$ and Effective Sample Size
 
-In addition to visually examining the chains, we should also check $\widehat{R}$ which is a measure of convergence.  $\widehat{R} > 1.0$ indicates poor mixing, and the _mc_stan_ documentation recommends only using samples if $\widehat{R} < 1.05$.  However, a recent paper by @Vehtari_2020 recommends $\widehat{R} < 1.01$.
+In addition to visually examining the chains, we should also check $\widehat{R}$ which is a measure of convergence.  $\widehat{R} > 1.0$ indicates poor mixing, and the `mc_stan` documentation recommends only using samples if $\widehat{R} < 1.05$.  However, a recent paper by @Vehtari_2020 recommends $\widehat{R} < 1.01$.
 
-Since MCMC samples are usually correlated, the effective sample size (_n_eff_) is often less than the number of samples. There is no hard and fast rule for what is an acceptable number for _n_eff_. McElreath’s guidance is it depends on what you are trying to estimate. If you are interested mostly in the posterior mean, then _n_eff_ = 200 can be enough. But if you are interested in the tails of the distribution and it’s highly skewed then you’ll need _n_eff_ to be much larger. There are two parameters, _iter_ and _warmup_, which you can adjust in _stan_glm_ if a larger _n_eff_ is needed.
+Since MCMC samples are usually correlated, the effective sample size (`n_eff`) is often less than the number of samples. There is no hard and fast rule for what is an acceptable number for `n_eff`. McElreath’s guidance is it depends on what you are trying to estimate. If you are interested mostly in the posterior mean, then `n_eff` = 200 can be enough. But if you are interested in the tails of the distribution and it’s highly skewed then you’ll need `n_eff` to be much larger. There are two parameters, `iter` and `warmup`, which you can adjust in `stan_glm` if a larger `n_eff` is needed.
 
-The _summary_ function displays _n_eff_ and $\widehat{R}$ for the object returned by _stan_glm_.
+The `summary` function displays `n_eff` and $\widehat{R}$ for the object returned by `stan_glm`.
 
 ```{r mdl1_summary}
 summary(mdl1)
@@ -117,7 +117,7 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-Since the chains, _n_eff_ and $\widehat{R}$ look good, let's examine the posterior distributions next.
+Since the chains, `n_eff` and $\widehat{R}$ look good, let's examine the posterior distributions next.
 
 ```{r mdl1_post}
 # Posterior point estimates (medians are used for point estimates)
@@ -131,9 +131,9 @@ knitr::kable(posterior_interval(mdl1, prob=0.95))
 
 ### Posterior Predictive Distribution
 
-The _posterior_predict_ function draws samples from the posterior predictive distribution. The ```shinystan``` package also generates nice plots of the posterior predictive distribution.
+The `posterior_predict` function draws samples from the posterior predictive distribution. The `shinystan` package also generates nice plots of the posterior predictive distribution.
 
-In this case, I'm going to plot the expected value of the posterior predictive distribution and overlay the observations since I think it can be easier to understand for someone new to these methods. The _posterior_linpred_ function returns the linear predictor, possibly transformed by the inverse-link function.  The _posterior_epred_ function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
+In this case, I'm going to plot the expected value of the posterior predictive distribution and overlay the observations since I think it can be easier to understand for someone new to these methods. The `posterior_linpred` function returns the linear predictor, possibly transformed by the inverse-link function.  The `posterior_epred` function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
 
 ```{r mdl1_ppd}
 newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
@@ -151,19 +151,19 @@ y_rep %>%
 
 ## Linear Model (User-Defined Priors)
 
-Now I'll specify priors which incorporate my prior knowledge that _mpg_ is non-negative and is non-increasing as _disp_ increases.  My new model is as follows:
+Now I'll specify priors which incorporate my prior knowledge that `mpg` is non-negative and is non-increasing as `disp` increases.  My new model is as follows:
 
 \begin{align*}
-  mpg \sim N(\mu, \sigma^2) \\
-  \mu = a + b*disp \\
-  a \sim Normal(25,10^2) \\
-  b \sim Normal(-0.2, 0.1^2) \\
-  \sigma \sim Exponential(1)
+  mpg &\sim N(\mu, \sigma^2) \\
+  \mu &= a + b*disp \\
+  a &\sim Normal(25,10^2) \\
+  b &\sim Normal(-0.2, 0.1^2) \\
+  \sigma &\sim Exponential(1)
 \end{align*}
 
 The differences from the default priors are
 
-1. The intercept prior has a slightly smaller variance so negative values of _mpg_ are less likely.
+1. The intercept prior has a slightly smaller variance so negative values of`mpg` are less likely.
 
 2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.2 so that positive values are less likely.
 
@@ -209,7 +209,7 @@ mcmc_trace(mdl2, pars=c("disp", "sigma"))
 ```{r}
 summary(mdl2)
 ```
-The trace plots, _n_eff_ and $\widehat{R}$ all look good.
+The trace plots, `n_eff` and $\widehat{R}$ all look good.
 
 ### Posterior Distribution
 
@@ -248,7 +248,7 @@ y_rep %>%
 
 ### Define model
 
-The linear model is a poor choice for this data, so I'll try a model with splines next. The _stan_gamm4_ function from the _rstanarm_ package fits Bayesian nonlinear (and mixed) models.
+The linear model is a poor choice for this data, so I'll try a model with splines next. The `stan_gamm4` function from the `rstanarm` package fits Bayesian nonlinear (and mixed) models.
 
 ```{r mdl3, results='hide'}
 mdl3 <- stan_gamm4(mpg ~ s(disp, bs="cr", k=7), 
@@ -258,7 +258,7 @@ mdl3 <- stan_gamm4(mpg ~ s(disp, bs="cr", k=7),
 
 ### Prior Predictive Distribution
 
-Unlike the linear model, it's not as straightforward to manually construct the prior predictive distribution.  Fortunately, _rstanarm_ can automatically generate the prior predictive distribution too--we just refit the model _without_ conditioning on the data by setting _prior_PD = TRUE_.
+Unlike the linear model, it's not as straightforward to manually construct the prior predictive distribution.  Fortunately, `rstanarm` can automatically generate the prior predictive distribution too--we just refit the model _without_ conditioning on the data by setting `prior_PD = TRUE`.
 
 ```{r mdl3_prior, results="hide"}
 mdl3_prior_pred <- stan_gamm4(mpg ~ s(disp, bs="cr", k=7), 
@@ -298,7 +298,7 @@ mcmc_trace(mdl3, regex_pars=c("disp", "sigma"))
 summary(mdl3)
 ```
 
-The chains, _n_eff_ and $\widehat{R}$ look good. In the Estimates section above, we also see the posteriors for the model parameters; there isn't an intuitive interpretation of the spline coefficients so I'll skip ahead to the posterior predictive distribution.
+The chains, `n_eff` and $\widehat{R}$ look good. In the Estimates section above, we also see the posteriors for the model parameters; there isn't an intuitive interpretation of the spline coefficients so I'll skip ahead to the posterior predictive distribution.
 
 ### Posterior Predictive Distribution
 

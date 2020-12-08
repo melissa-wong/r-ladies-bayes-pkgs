@@ -10,7 +10,7 @@
 
 ## Description
 
-_Statistical Rethinking_ was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the _rethinking_ package. It uses the familiar formula syntax for defining models. However, unlike _rstanarm_ the functions are not close mirrors of familiar frequentist functions. Another difference from _rstanarm_ is you must specify all priors--there are no defaults. I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that it's also a very good option for getting started.
+_Statistical Rethinking_ was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the `rethinking` package. It uses the familiar formula syntax for defining models. However, unlike `rstanarm` the functions are not close mirrors of familiar frequentist functions. Another difference from `rstanarm` is you must specify all priors--there are no defaults. I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that it's also a very good option for getting started.
 
 ## Environment Setup
 
@@ -32,6 +32,16 @@ library(rethinking)
 
 ### Define Model
 
+The `rethinking` package does not have default priors so I need to explicitly choose them.  Again I'll use the follmodel is
+
+\begin{align*}
+  mpg &\sim N(\mu, \sigma^2) \\
+  \mu &= a + b*disp \\
+  a &\sim Normal(25,10^2) \\
+  b &\sim Normal(-0.2, 0.1^2) \\
+  \sigma &\sim Exponential(1)
+\end{align*}
+
 ```{r mdl1, results="hide"}
 # Note the sign change for mu and b, this seems to be a quirk
 # of map2stan that it didn't like b ~ dnorm(-0.2, 0.1)
@@ -47,7 +57,7 @@ f <- alist(
 mdl1 <- map2stan(f,mtcars, chains=4)
 ```
 
-### Prior Predictive Distribution
+### Prior Predictive Distribution {#rethinkingprior}
 
 ```{r mdl1_prior}
 # Plot prior predictive distribution
@@ -69,19 +79,19 @@ res %>%
 
 ### Diagnostics
 
-The _traceplot_ function is the _rethinking_ equivalent to _mcmc_trace_.
+The `traceplot` function is the `rethinking` equivalent to `mcmc_trace`.
 
 ```{r mdl1_trace}
 traceplot(mdl1@stanfit)
 ```
 
-The _trankplot_ function is the _rethinking_ equivalent to the _mcmc_rank_overlay_.  
+The `trankplot` function is the `rethinking` equivalent to the `mcmc_rank_overlay`.  
 
 ```{r mdl1_trank}
 trankplot(mdl1)
 ```
 
-The _trankplot_ function conveniently also displays the effective sample size (_n_eff_).  But the _precis_ function is another way to get both _n_eff_ and $\widehat{R}$.
+The `trankplot` function conveniently also displays the effective sample size (`n_eff`).  But the `precis` function is another way to get both `n_eff` and $\widehat{R}$.
 
 ```{r mdl1_precis}
 precis(mdl1, prob=0.95)
@@ -89,17 +99,17 @@ precis(mdl1, prob=0.95)
 
 ### Posterior Distribution
 
-The _precis_ function above also displays both the posterior point estimate and credible interval.
+The `precis` function above also displays both the posterior point estimate and credible interval.
 
 ### Posterior Predictive Distribution
 
-Finally, I'll check the posterior predictive distribution. The _rethinking_ package includes the _postcheck_ function which displays a plot for posterior predictive checking.
+Finally, I'll check the posterior predictive distribution. The `rethinking` package includes the `postcheck` function which displays a plot for posterior predictive checking.
 
 ```{r mdl1_ppd, results="hide"}
 postcheck(mdl1, window=nrow(mtcars))
 ```
 
-Alternatively, I can plot the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with _rstanarm_ . The _sim_ function draws samples from the posterior predictive distribution, and the _link_ function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the _sim_ and _link_ functions return identical results.
+Alternatively, I can plot the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with `rstanarm` . The `sim` function draws samples from the posterior predictive distribution, and the `link` function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the `sim` and `link` functions return identical results.
 
 ```{r mdl1_eppd, results="hide"}
 newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
@@ -118,7 +128,7 @@ y_rep %>%
 
 ### Define Model
 
-Setting up the semi-parametric model is a bit more work in the _rethinking_ package.  First, I explicitly create the splines.  The component splines are plotted below.
+Setting up the semi-parametric model is a bit more work in the `rethinking` package.  First, I explicitly create the splines.  The component splines are plotted below.
 
 ```{r spline}
 library(splines)
@@ -147,7 +157,7 @@ ggplot(mapping=aes(x=disp, y=val, color=spline)) +
   geom_line(data=df2, linetype="dashed")
 ```
 
-Then I define the model with the splines.  I wasn't able to get this model to work with either the _map2stan_ or _ulam_ functions, so I used _quap_ instead which fits a quadratic approximation.
+Then I define the model with the splines.  I wasn't able to get this model to work with either the `map2stan` or `ulam` functions, so I used `quap` instead which fits a quadratic approximation.
 
 ```{r mdl2, results='hide'}
 f <- alist(
@@ -172,7 +182,7 @@ Since MCMC was not used to fit the model, there are no chain diagnostics to exam
 
 ### Posterior Distribution
 
-I can still use the _precis_ function to look at the postrior distribution, although there's really no intuitive interpretation for the spline weights.
+I can still use the `precis` function to look at the postrior distribution, although there's really no intuitive interpretation for the spline weights.
 
 ```{r mdl2_post}
 precis(mdl2, depth=2)
@@ -209,9 +219,10 @@ ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
 
 ## Extras
 
-The _rethinking_ package has some nice extras. One is the _stancode_ function will return the actual _stan_ code for the model.  This is a great way to start getting familiar with _stan_ syntax!
+The `rethinking` package has some nice extras. One is the `stancode` function will return the actual `stan` code for the model.  This is a great way to start getting familiar with `stan` syntax!
 
 ```{r}
 stancode(mdl1)
 ```
-Also, you can directly access the _stanfit_ object from the returned model using the "_@stanfit_" accessor.  So _bayesplot_ and _shinystan_ will work just like they do with _rstanarm_ and _rstan_.
+
+Also, `map2stan` returns an object that contains a `stanfit` object which you can access with the "_\@stanfit_" accessor.  Both `bayesplot` and `shinystan` work with that `stanfit` object just like they do with `rstanarm` or `rstan` models.
