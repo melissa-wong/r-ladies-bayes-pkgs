@@ -1,0 +1,129 @@
+# brms {#brms}
+
+## Resources
+
+- [Overview of brms](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf)
+
+- [Solomon Kurz's translation of _Statistical Rethinking_](https://bookdown.org/content/4857/)
+
+## Description
+
+
+## Environment Setup
+
+```{r setup, results="hide", message=FALSE}
+rm(list=ls())
+
+set.seed(123)
+options("scipen" = 1, "digits" = 4)
+
+library(tidyverse)
+library(datasets)
+data(mtcars)
+
+library(brms)
+library(bayesplot)
+
+```
+
+## Linear Model
+
+### Define Model
+
+Like the `rethinking` package, `rstan` doesn't have default priors, so I need to explicitly choose them:
+
+\begin{align*}
+  mpg &\sim N(\mu, \sigma^2) \\
+  \mu &= a + b*disp \\
+  a &\sim N(25,10) \\
+  b &\sim N(-0.2, 0.1) \\
+  \sigma &\sim Exp(1)
+\end{align*}
+
+
+### Prior Predictive Distribution
+
+
+
+### Diagnostics
+
+
+### Posterior Distribution
+
+
+
+### Posterior Predictive Distribution
+
+
+## Semi-parametric Model
+
+### Define Model
+
+First, I'll define the splines just as I did with the `rethinking` package.  
+
+```{r splines}
+library(splines)
+
+num_knots <- 4  # number of interior knots
+knot_list <- quantile(mtcars$disp, probs=seq(0,1,length.out = num_knots))
+B <- bs(mtcars$disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
+
+df1 <- cbind(disp=mtcars$disp, B) %>%
+  as.data.frame() %>%
+  pivot_longer(-disp, names_to="spline", values_to="val")
+
+# Plot at smaller intervals so curves are smooth
+N<- 50
+D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+B_plot <- bs(D, 
+             knots=knot_list[-c(1,num_knots)], 
+             intercept=TRUE)
+
+df2 <- cbind(disp=D, B_plot) %>%
+  as.data.frame() %>%
+  pivot_longer(-disp, names_to="spline", values_to="val")
+
+ggplot(mapping=aes(x=disp, y=val, color=spline)) +
+  geom_point(data=df1) +
+  geom_line(data=df2, linetype="dashed")
+```
+
+Note: the dashed lines are the splines and the points are the values of the spline at the specific values of `mtcars$disp`; the points are inputs into the `stan` model.
+
+
+
+### Prior Predictive Distribution
+
+
+
+### Diagnostics
+
+
+
+### Posterior Distribution
+
+
+
+### Posterior Predictive Distribution
+
+
+
+## Semi-parametric Model (Random Walk Prior)
+
+### Define Model
+
+### Prior Predictive Distribution
+
+### Diagnostics
+
+### Posterior Distribution
+
+### Posterior Predictive Distribution
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
+

@@ -34,8 +34,8 @@ library(bayesplot)
 Let's start with the following simple linear model:
 
 \begin{align*}
-  mpg \sim N(\mu, \sigma^2) \\
-  \mu = a + b*disp \\
+  mpg &\sim N(\mu, \sigma^2) \\
+  \mu &= a + b*disp \\
 \end{align*}
 
 The `stan_glm` function from the `rstanarm` package fits a Bayesian linear model.  The syntax is very similar to `lm`/`glm`.
@@ -128,6 +128,7 @@ coef(mdl1)
 # 95% credible intervals
 knitr::kable(posterior_interval(mdl1, prob=0.95))
 ```
+
 
 ### Posterior Predictive Distribution
 
@@ -320,3 +321,8 @@ ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
 
 ```
 
+## Session Info
+
+```{r}
+sessionInfo()
+```

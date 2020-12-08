@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 rethinking | Intro to R Bayes Packages</title>
+  <meta name="description" content="This is an introduction to several R packages for Bayesian analysis." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 rethinking | Intro to R Bayes Packages" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is an introduction to several R packages for Bayesian analysis." />
+  <meta name="github-repo" content="melissa-wong/r-ladies-rtp-bayes-pkgs" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 rethinking | Intro to R Bayes Packages" />
+  
+  <meta name="twitter:description" content="This is an introduction to several R packages for Bayesian analysis." />
+  
+
+<meta name="author" content="Melissa Wong" />
+
+
+<meta name="date" content="2020-12-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="rstanarm.html"/>
+<link rel="next" href="brms.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Intro to R Bayes Packages</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#resources"><i class="fa fa-check"></i><b>2.1</b> Resources</a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>2.2</b> A Motivating Example</a></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
+<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>2.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>3</b> rstanarm</a><ul>
+<li class="chapter" data-level="3.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
+<li class="chapter" data-level="3.2" data-path="rstanarm.html"><a href="rstanarm.html#description"><i class="fa fa-check"></i><b>3.2</b> Description</a></li>
+<li class="chapter" data-level="3.3" data-path="rstanarm.html"><a href="rstanarm.html#environment-setup"><i class="fa fa-check"></i><b>3.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="3.4" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-default-priors"><i class="fa fa-check"></i><b>3.4</b> Linear Model (Default Priors)</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model"><i class="fa fa-check"></i><b>3.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="3.4.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution"><i class="fa fa-check"></i><b>3.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.4.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics"><i class="fa fa-check"></i><b>3.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.4.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution"><i class="fa fa-check"></i><b>3.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="3.4.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>3.4.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-user-defined-priors"><i class="fa fa-check"></i><b>3.5</b> Linear Model (User-Defined Priors)</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-1"><i class="fa fa-check"></i><b>3.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-1"><i class="fa fa-check"></i><b>3.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.5.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-1"><i class="fa fa-check"></i><b>3.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.5.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution-1"><i class="fa fa-check"></i><b>3.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="3.5.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-1"><i class="fa fa-check"></i><b>3.5.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="rstanarm.html"><a href="rstanarm.html#semi-parametric-model"><i class="fa fa-check"></i><b>3.6</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-2"><i class="fa fa-check"></i><b>3.6.1</b> Define model</a></li>
+<li class="chapter" data-level="3.6.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-2"><i class="fa fa-check"></i><b>3.6.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.6.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-and-posterior"><i class="fa fa-check"></i><b>3.6.3</b> Diagnostics and Posterior</a></li>
+<li class="chapter" data-level="3.6.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-2"><i class="fa fa-check"></i><b>3.6.4</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="rstanarm.html"><a href="rstanarm.html#session-info"><i class="fa fa-check"></i><b>3.7</b> Session Info</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="rethinking.html"><a href="rethinking.html"><i class="fa fa-check"></i><b>4</b> rethinking</a><ul>
+<li class="chapter" data-level="4.1" data-path="rethinking.html"><a href="rethinking.html#resources-2"><i class="fa fa-check"></i><b>4.1</b> Resources</a></li>
+<li class="chapter" data-level="4.2" data-path="rethinking.html"><a href="rethinking.html#description-1"><i class="fa fa-check"></i><b>4.2</b> Description</a></li>
+<li class="chapter" data-level="4.3" data-path="rethinking.html"><a href="rethinking.html#environment-setup-1"><i class="fa fa-check"></i><b>4.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="4.4" data-path="rethinking.html"><a href="rethinking.html#linear-model"><i class="fa fa-check"></i><b>4.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="rethinking.html"><a href="rethinking.html#define-model-3"><i class="fa fa-check"></i><b>4.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="rethinking.html"><a href="rethinking.html#rethinkingprior"><i class="fa fa-check"></i><b>4.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.4.3" data-path="rethinking.html"><a href="rethinking.html#diagnostics-2"><i class="fa fa-check"></i><b>4.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.4.4" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-2"><i class="fa fa-check"></i><b>4.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.4.5" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-3"><i class="fa fa-check"></i><b>4.4.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="rethinking.html"><a href="rethinking.html#GAM"><i class="fa fa-check"></i><b>4.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="rethinking.html"><a href="rethinking.html#define-model-4"><i class="fa fa-check"></i><b>4.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.5.2" data-path="rethinking.html"><a href="rethinking.html#prior-predictive-distribution-3"><i class="fa fa-check"></i><b>4.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.5.3" data-path="rethinking.html"><a href="rethinking.html#diagnostics-3"><i class="fa fa-check"></i><b>4.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.5.4" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-3"><i class="fa fa-check"></i><b>4.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.5.5" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-4"><i class="fa fa-check"></i><b>4.5.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="rethinking.html"><a href="rethinking.html#extras"><i class="fa fa-check"></i><b>4.6</b> Extras</a></li>
+<li class="chapter" data-level="4.7" data-path="rethinking.html"><a href="rethinking.html#session-info-1"><i class="fa fa-check"></i><b>4.7</b> Session Info</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="brms.html"><a href="brms.html"><i class="fa fa-check"></i><b>5</b> brms</a><ul>
+<li class="chapter" data-level="5.1" data-path="brms.html"><a href="brms.html#resources-3"><i class="fa fa-check"></i><b>5.1</b> Resources</a></li>
+<li class="chapter" data-level="5.2" data-path="brms.html"><a href="brms.html#description-2"><i class="fa fa-check"></i><b>5.2</b> Description</a></li>
+<li class="chapter" data-level="5.3" data-path="brms.html"><a href="brms.html#environment-setup-2"><i class="fa fa-check"></i><b>5.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="5.4" data-path="brms.html"><a href="brms.html#linear-model-1"><i class="fa fa-check"></i><b>5.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="brms.html"><a href="brms.html#define-model-5"><i class="fa fa-check"></i><b>5.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="5.4.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-4"><i class="fa fa-check"></i><b>5.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.4.3" data-path="brms.html"><a href="brms.html#diagnostics-4"><i class="fa fa-check"></i><b>5.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="5.4.4" data-path="brms.html"><a href="brms.html#posterior-distribution-4"><i class="fa fa-check"></i><b>5.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="5.4.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-5"><i class="fa fa-check"></i><b>5.4.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="brms.html"><a href="brms.html#semi-parametric-model-1"><i class="fa fa-check"></i><b>5.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="brms.html"><a href="brms.html#define-model-6"><i class="fa fa-check"></i><b>5.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="5.5.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-5"><i class="fa fa-check"></i><b>5.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.5.3" data-path="brms.html"><a href="brms.html#diagnostics-5"><i class="fa fa-check"></i><b>5.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="5.5.4" data-path="brms.html"><a href="brms.html#posterior-distribution-5"><i class="fa fa-check"></i><b>5.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="5.5.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-6"><i class="fa fa-check"></i><b>5.5.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="brms.html"><a href="brms.html#semi-parametric-model-random-walk-prior"><i class="fa fa-check"></i><b>5.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="brms.html"><a href="brms.html#define-model-7"><i class="fa fa-check"></i><b>5.6.1</b> Define Model</a></li>
+<li class="chapter" data-level="5.6.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-6"><i class="fa fa-check"></i><b>5.6.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.6.3" data-path="brms.html"><a href="brms.html#diagnostics-6"><i class="fa fa-check"></i><b>5.6.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="5.6.4" data-path="brms.html"><a href="brms.html#posterior-distribution-6"><i class="fa fa-check"></i><b>5.6.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="5.6.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-7"><i class="fa fa-check"></i><b>5.6.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="brms.html"><a href="brms.html#session-info-2"><i class="fa fa-check"></i><b>5.7</b> Session Info</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="rstan.html"><a href="rstan.html"><i class="fa fa-check"></i><b>6</b> rstan</a><ul>
+<li class="chapter" data-level="6.1" data-path="rstan.html"><a href="rstan.html#resources-4"><i class="fa fa-check"></i><b>6.1</b> Resources</a></li>
+<li class="chapter" data-level="6.2" data-path="rstan.html"><a href="rstan.html#description-3"><i class="fa fa-check"></i><b>6.2</b> Description</a></li>
+<li class="chapter" data-level="6.3" data-path="rstan.html"><a href="rstan.html#environment-setup-3"><i class="fa fa-check"></i><b>6.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="6.4" data-path="rstan.html"><a href="rstan.html#linear-model-2"><i class="fa fa-check"></i><b>6.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="rstan.html"><a href="rstan.html#define-model-8"><i class="fa fa-check"></i><b>6.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="6.4.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-7"><i class="fa fa-check"></i><b>6.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="6.4.3" data-path="rstan.html"><a href="rstan.html#diagnostics-7"><i class="fa fa-check"></i><b>6.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="6.4.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-7"><i class="fa fa-check"></i><b>6.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="6.4.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-8"><i class="fa fa-check"></i><b>6.4.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-2"><i class="fa fa-check"></i><b>6.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="rstan.html"><a href="rstan.html#define-model-9"><i class="fa fa-check"></i><b>6.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="6.5.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-8"><i class="fa fa-check"></i><b>6.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="6.5.3" data-path="rstan.html"><a href="rstan.html#diagnostics-8"><i class="fa fa-check"></i><b>6.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="6.5.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-8"><i class="fa fa-check"></i><b>6.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="6.5.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-9"><i class="fa fa-check"></i><b>6.5.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-random-walk-prior-1"><i class="fa fa-check"></i><b>6.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
+<li class="chapter" data-level="6.6.1" data-path="rstan.html"><a href="rstan.html#define-model-10"><i class="fa fa-check"></i><b>6.6.1</b> Define Model</a></li>
+<li class="chapter" data-level="6.6.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-9"><i class="fa fa-check"></i><b>6.6.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="6.6.3" data-path="rstan.html"><a href="rstan.html#diagnostics-9"><i class="fa fa-check"></i><b>6.6.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="6.6.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-9"><i class="fa fa-check"></i><b>6.6.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="6.6.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-10"><i class="fa fa-check"></i><b>6.6.5</b> Posterior Predictive Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="rstan.html"><a href="rstan.html#session-info-3"><i class="fa fa-check"></i><b>6.7</b> Session Info</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Intro to R Bayes Packages</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rethinking" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> rethinking</h1>
+<div id="resources-2" class="section level2">
+<h2><span class="header-section-number">4.1</span> Resources</h2>
+<ul>
+<li><p><a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking</a> by McElreath</p></li>
+<li><p><a href="https://www.youtube.com/channel/UCNJK6_DZvcMqNSzQdEkzvzA/featured">Statistical Rethinking Lectures on YouTube</a></p></li>
+<li><p><a href="https://github.com/rmcelreath/rethinking">rethinking github repo</a></p></li>
+</ul>
+</div>
+<div id="description-1" class="section level2">
+<h2><span class="header-section-number">4.2</span> Description</h2>
+<p><em>Statistical Rethinking</em> was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the <code>rethinking</code> package. It uses the familiar formula syntax for defining models. However, unlike <code>rstanarm</code> the functions are not close mirrors of familiar frequentist functions. Another difference from <code>rstanarm</code> is you must specify all priors–there are no defaults. I ran into some difficulty with the semi-parametric regression (<a href="rethinking.html#GAM">4.5</a>), but aside from that it’s also a very good option for getting started.</p>
+</div>
+<div id="environment-setup-1" class="section level2">
+<h2><span class="header-section-number">4.3</span> Environment Setup</h2>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="rethinking.html#cb34-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
+<span id="cb34-2"><a href="rethinking.html#cb34-2"></a></span>
+<span id="cb34-3"><a href="rethinking.html#cb34-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb34-4"><a href="rethinking.html#cb34-4"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb34-5"><a href="rethinking.html#cb34-5"></a></span>
+<span id="cb34-6"><a href="rethinking.html#cb34-6"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb34-7"><a href="rethinking.html#cb34-7"></a><span class="kw">library</span>(datasets)</span>
+<span id="cb34-8"><a href="rethinking.html#cb34-8"></a><span class="kw">data</span>(mtcars)</span>
+<span id="cb34-9"><a href="rethinking.html#cb34-9"></a></span>
+<span id="cb34-10"><a href="rethinking.html#cb34-10"></a><span class="kw">library</span>(rethinking)</span></code></pre></div>
+</div>
+<div id="linear-model" class="section level2">
+<h2><span class="header-section-number">4.4</span> Linear Model</h2>
+<div id="define-model-3" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> Define Model</h3>
+<p>The <code>rethinking</code> package does not have default priors so I need to explicitly choose them. Again I’ll use the follmodel is</p>
+<p><span class="math display">\[\begin{align*}
+  mpg &amp;\sim N(\mu, \sigma^2) \\
+  \mu &amp;= a + b*disp \\
+  a &amp;\sim Normal(25,10^2) \\
+  b &amp;\sim Normal(-0.2, 0.1^2) \\
+  \sigma &amp;\sim Exponential(1)
+\end{align*}\]</span></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="rethinking.html#cb35-1"></a><span class="co"># Note the sign change for mu and b, this seems to be a quirk</span></span>
+<span id="cb35-2"><a href="rethinking.html#cb35-2"></a><span class="co"># of map2stan that it didn&#39;t like b ~ dnorm(-0.2, 0.1)</span></span>
+<span id="cb35-3"><a href="rethinking.html#cb35-3"></a>f &lt;-<span class="st"> </span><span class="kw">alist</span>(</span>
+<span id="cb35-4"><a href="rethinking.html#cb35-4"></a>  mpg <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu, sigma),</span>
+<span id="cb35-5"><a href="rethinking.html#cb35-5"></a>  mu &lt;-<span class="st"> </span>a <span class="op">-</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span>disp,</span>
+<span id="cb35-6"><a href="rethinking.html#cb35-6"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">25</span>, <span class="dv">10</span>),</span>
+<span id="cb35-7"><a href="rethinking.html#cb35-7"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>),</span>
+<span id="cb35-8"><a href="rethinking.html#cb35-8"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
+<span id="cb35-9"><a href="rethinking.html#cb35-9"></a>)</span>
+<span id="cb35-10"><a href="rethinking.html#cb35-10"></a></span>
+<span id="cb35-11"><a href="rethinking.html#cb35-11"></a><span class="co"># Note the default number of chains = 1, so I&#39;m explicitly setting to 4 here</span></span>
+<span id="cb35-12"><a href="rethinking.html#cb35-12"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">map2stan</span>(f,mtcars, <span class="dt">chains=</span><span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## Trying to compile a simple C file</code></pre>
+<pre><code>## Computing WAIC</code></pre>
+</div>
+<div id="rethinkingprior" class="section level3">
+<h3><span class="header-section-number">4.4.2</span> Prior Predictive Distribution</h3>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="rethinking.html#cb38-1"></a><span class="co"># Plot prior predictive distribution</span></span>
+<span id="cb38-2"><a href="rethinking.html#cb38-2"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb38-3"><a href="rethinking.html#cb38-3"></a></span>
+<span id="cb38-4"><a href="rethinking.html#cb38-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">extract.prior</span>(mdl1, <span class="dt">n=</span>N))</span>
+<span id="cb38-5"><a href="rethinking.html#cb38-5"></a></span>
+<span id="cb38-6"><a href="rethinking.html#cb38-6"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb38-7"><a href="rethinking.html#cb38-7"></a></span>
+<span id="cb38-8"><a href="rethinking.html#cb38-8"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D<span class="op">-</span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)))) <span class="op">%&gt;%</span></span>
+<span id="cb38-9"><a href="rethinking.html#cb38-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb38-10"><a href="rethinking.html#cb38-10"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
+<span id="cb38-11"><a href="rethinking.html#cb38-11"></a></span>
+<span id="cb38-12"><a href="rethinking.html#cb38-12"></a>res <span class="op">%&gt;%</span></span>
+<span id="cb38-13"><a href="rethinking.html#cb38-13"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb38-14"><a href="rethinking.html#cb38-14"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb38-15"><a href="rethinking.html#cb38-15"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;prior predictive mpg&quot;</span>)</span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/mdl1_prior-1.png" width="672" /></p>
+</div>
+<div id="diagnostics-2" class="section level3">
+<h3><span class="header-section-number">4.4.3</span> Diagnostics</h3>
+<p>The <code>traceplot</code> function is the <code>rethinking</code> equivalent to <code>mcmc_trace</code>.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="rethinking.html#cb39-1"></a><span class="kw">traceplot</span>(mdl1<span class="op">@</span>stanfit)</span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/mdl1_trace-1.png" width="672" /></p>
+<p>The <code>trankplot</code> function is the <code>rethinking</code> equivalent to the <code>mcmc_rank_overlay</code>.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rethinking.html#cb40-1"></a><span class="kw">trankplot</span>(mdl1)</span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/mdl1_trank-1.png" width="672" /></p>
+<p>The <code>trankplot</code> function conveniently also displays the effective sample size (<code>n_eff</code>). But the <code>precis</code> function is another way to get both <code>n_eff</code> and <span class="math inline">\(\widehat{R}\)</span>.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="rethinking.html#cb41-1"></a><span class="kw">precis</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>)</span></code></pre></div>
+<pre><code>##           mean      sd     2.5%    97.5% n_eff Rhat4
+## a     29.65030 1.18866 27.32351 32.02460  1429 1.000
+## b      0.04148 0.00448  0.03252  0.05042  1472 1.000
+## sigma  3.20829 0.40702  2.51923  4.07572  1673 1.003</code></pre>
+</div>
+<div id="posterior-distribution-2" class="section level3">
+<h3><span class="header-section-number">4.4.4</span> Posterior Distribution</h3>
+<p>The <code>precis</code> function above also displays both the posterior point estimate and credible interval.</p>
+</div>
+<div id="posterior-predictive-distribution-3" class="section level3">
+<h3><span class="header-section-number">4.4.5</span> Posterior Predictive Distribution</h3>
+<p>Finally, I’ll check the posterior predictive distribution. The <code>rethinking</code> package includes the <code>postcheck</code> function which displays a plot for posterior predictive checking.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="rethinking.html#cb43-1"></a><span class="kw">postcheck</span>(mdl1, <span class="dt">window=</span><span class="kw">nrow</span>(mtcars))</span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/mdl1_ppd-1.png" width="672" /></p>
+<p>Alternatively, I can plot the expectation of the posterior predictive distribution (i.e., <span class="math inline">\(\mu\)</span>) like I did with <code>rstanarm</code> . The <code>sim</code> function draws samples from the posterior predictive distribution, and the <code>link</code> function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the <code>sim</code> and <code>link</code> functions return identical results.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="rethinking.html#cb44-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp)))</span>
+<span id="cb44-2"><a href="rethinking.html#cb44-2"></a></span>
+<span id="cb44-3"><a href="rethinking.html#cb44-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">link</span>(mdl1, <span class="dt">data=</span>newdata, <span class="dt">n=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb44-4"><a href="rethinking.html#cb44-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
+<span id="cb44-5"><a href="rethinking.html#cb44-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">starts_with</span>(<span class="st">&quot;V&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
+<span id="cb44-6"><a href="rethinking.html#cb44-6"></a></span>
+<span id="cb44-7"><a href="rethinking.html#cb44-7"></a>y_rep <span class="op">%&gt;%</span></span>
+<span id="cb44-8"><a href="rethinking.html#cb44-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb44-9"><a href="rethinking.html#cb44-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>grp), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb44-10"><a href="rethinking.html#cb44-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/mdl1_eppd-1.png" width="672" /></p>
+</div>
+</div>
+<div id="GAM" class="section level2">
+<h2><span class="header-section-number">4.5</span> Semi-parametric Model</h2>
+<div id="define-model-4" class="section level3">
+<h3><span class="header-section-number">4.5.1</span> Define Model</h3>
+<p>Setting up the semi-parametric model is a bit more work in the <code>rethinking</code> package. First, I explicitly create the splines. The component splines are plotted below.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rethinking.html#cb45-1"></a><span class="kw">library</span>(splines)</span>
+<span id="cb45-2"><a href="rethinking.html#cb45-2"></a></span>
+<span id="cb45-3"><a href="rethinking.html#cb45-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
+<span id="cb45-4"><a href="rethinking.html#cb45-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
+<span id="cb45-5"><a href="rethinking.html#cb45-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb45-6"><a href="rethinking.html#cb45-6"></a></span>
+<span id="cb45-7"><a href="rethinking.html#cb45-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp, B) <span class="op">%&gt;%</span></span>
+<span id="cb45-8"><a href="rethinking.html#cb45-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb45-9"><a href="rethinking.html#cb45-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb45-10"><a href="rethinking.html#cb45-10"></a></span>
+<span id="cb45-11"><a href="rethinking.html#cb45-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
+<span id="cb45-12"><a href="rethinking.html#cb45-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb45-13"><a href="rethinking.html#cb45-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb45-14"><a href="rethinking.html#cb45-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
+<span id="cb45-15"><a href="rethinking.html#cb45-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
+<span id="cb45-16"><a href="rethinking.html#cb45-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb45-17"><a href="rethinking.html#cb45-17"></a></span>
+<span id="cb45-18"><a href="rethinking.html#cb45-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
+<span id="cb45-19"><a href="rethinking.html#cb45-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb45-20"><a href="rethinking.html#cb45-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb45-21"><a href="rethinking.html#cb45-21"></a></span>
+<span id="cb45-22"><a href="rethinking.html#cb45-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
+<span id="cb45-23"><a href="rethinking.html#cb45-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
+<span id="cb45-24"><a href="rethinking.html#cb45-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/spline-1.png" width="672" /></p>
+<p>Then I define the model with the splines. I wasn’t able to get this model to work with either the <code>map2stan</code> or <code>ulam</code> functions, so I used <code>quap</code> instead which fits a quadratic approximation.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="rethinking.html#cb46-1"></a>f &lt;-<span class="st"> </span><span class="kw">alist</span>(</span>
+<span id="cb46-2"><a href="rethinking.html#cb46-2"></a>  mpg <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu, sigma),</span>
+<span id="cb46-3"><a href="rethinking.html#cb46-3"></a>  mu &lt;-<span class="st"> </span>a <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span>w,</span>
+<span id="cb46-4"><a href="rethinking.html#cb46-4"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">25</span>, <span class="dv">10</span>),</span>
+<span id="cb46-5"><a href="rethinking.html#cb46-5"></a>  w <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>,<span class="dv">5</span>),</span>
+<span id="cb46-6"><a href="rethinking.html#cb46-6"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
+<span id="cb46-7"><a href="rethinking.html#cb46-7"></a>)</span>
+<span id="cb46-8"><a href="rethinking.html#cb46-8"></a></span>
+<span id="cb46-9"><a href="rethinking.html#cb46-9"></a></span>
+<span id="cb46-10"><a href="rethinking.html#cb46-10"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">quap</span>(f, <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">mpg=</span>mtcars<span class="op">$</span>mpg, <span class="dt">B=</span>B),</span>
+<span id="cb46-11"><a href="rethinking.html#cb46-11"></a>             <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">w=</span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">ncol</span>(B)))</span>
+<span id="cb46-12"><a href="rethinking.html#cb46-12"></a>            )</span></code></pre></div>
+</div>
+<div id="prior-predictive-distribution-3" class="section level3">
+<h3><span class="header-section-number">4.5.2</span> Prior Predictive Distribution</h3>
+</div>
+<div id="diagnostics-3" class="section level3">
+<h3><span class="header-section-number">4.5.3</span> Diagnostics</h3>
+<p>Since MCMC was not used to fit the model, there are no chain diagnostics to examine.</p>
+</div>
+<div id="posterior-distribution-3" class="section level3">
+<h3><span class="header-section-number">4.5.4</span> Posterior Distribution</h3>
+<p>I can still use the <code>precis</code> function to look at the postrior distribution, although there’s really no intuitive interpretation for the spline weights.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rethinking.html#cb47-1"></a><span class="kw">precis</span>(mdl2, <span class="dt">depth=</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##           mean     sd    5.5%   94.5%
+## w[1]  -12.0932 2.2958 -15.762 -8.4241
+## w[2]   -4.3203 2.5531  -8.401 -0.2399
+## w[3]    0.4861 2.7405  -3.894  4.8660
+## w[4]    5.8948 2.8873   1.280 10.5093
+## w[5]    2.1765 2.8839  -2.433  6.7856
+## w[6]    9.0562 2.3915   5.234 12.8782
+## a      20.1995 2.0329  16.951 23.4484
+## sigma   1.9638 0.2397   1.581  2.3469</code></pre>
+</div>
+<div id="posterior-predictive-distribution-4" class="section level3">
+<h3><span class="header-section-number">4.5.5</span> Posterior Predictive Distribution</h3>
+<p>And finally, the posterior predictive distribution:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="rethinking.html#cb49-1"></a>mu &lt;-<span class="st"> </span><span class="kw">link</span>(mdl2)</span>
+<span id="cb49-2"><a href="rethinking.html#cb49-2"></a>mu_mean &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(mu, <span class="dv">2</span>, mean)) <span class="op">%&gt;%</span></span>
+<span id="cb49-3"><a href="rethinking.html#cb49-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp)</span>
+<span id="cb49-4"><a href="rethinking.html#cb49-4"></a><span class="kw">colnames</span>(mu_mean) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mpg_ppd&quot;</span>, <span class="st">&quot;disp&quot;</span>)</span>
+<span id="cb49-5"><a href="rethinking.html#cb49-5"></a></span>
+<span id="cb49-6"><a href="rethinking.html#cb49-6"></a>mu_PI &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">apply</span>(mu,<span class="dv">2</span>,PI,<span class="fl">0.95</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb49-7"><a href="rethinking.html#cb49-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp)</span>
+<span id="cb49-8"><a href="rethinking.html#cb49-8"></a><span class="kw">colnames</span>(mu_PI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lwr&quot;</span>, <span class="st">&quot;upr&quot;</span>, <span class="st">&quot;disp&quot;</span>)</span>
+<span id="cb49-9"><a href="rethinking.html#cb49-9"></a></span>
+<span id="cb49-10"><a href="rethinking.html#cb49-10"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb49-11"><a href="rethinking.html#cb49-11"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb49-12"><a href="rethinking.html#cb49-12"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>mu_mean, <span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg_ppd), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb49-13"><a href="rethinking.html#cb49-13"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>mu_PI, <span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb49-14"><a href="rethinking.html#cb49-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;GAM&quot;</span>)</span>
+<span id="cb49-15"><a href="rethinking.html#cb49-15"></a></span>
+<span id="cb49-16"><a href="rethinking.html#cb49-16"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
+<span id="cb49-17"><a href="rethinking.html#cb49-17"></a>              <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
+<span id="cb49-18"><a href="rethinking.html#cb49-18"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb49-19"><a href="rethinking.html#cb49-19"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>,</span>
+<span id="cb49-20"><a href="rethinking.html#cb49-20"></a>              <span class="dt">level=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
+<span id="cb49-21"><a href="rethinking.html#cb49-21"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;LOESS&quot;</span>)</span></code></pre></div>
+<p><img src="03_rethinking_files/figure-html/mdl2_ppd,%20figures-side-1.png" width="50%" /><img src="03_rethinking_files/figure-html/mdl2_ppd,%20figures-side-2.png" width="50%" /></p>
+</div>
+</div>
+<div id="extras" class="section level2">
+<h2><span class="header-section-number">4.6</span> Extras</h2>
+<p>The <code>rethinking</code> package has some nice extras. One is the <code>stancode</code> function will return the actual <code>stan</code> code for the model. This is a great way to start getting familiar with <code>stan</code> syntax!</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="rethinking.html#cb50-1"></a><span class="kw">stancode</span>(mdl1)</span></code></pre></div>
+<pre><code>## //2020-12-08 13:57:09
+## data{
+##     int&lt;lower=1&gt; N;
+##     real mpg[N];
+##     real disp[N];
+## }
+## parameters{
+##     real a;
+##     real b;
+##     real&lt;lower=0&gt; sigma;
+## }
+## model{
+##     vector[N] mu;
+##     sigma ~ exponential( 1 );
+##     b ~ normal( 0.2 , 0.1 );
+##     a ~ normal( 25 , 10 );
+##     for ( i in 1:N ) {
+##         mu[i] = a - b * disp[i];
+##     }
+##     mpg ~ normal( mu , sigma );
+## }
+## generated quantities{
+##     vector[N] mu;
+##     for ( i in 1:N ) {
+##         mu[i] = a - b * disp[i];
+##     }
+## }</code></pre>
+<p>Also, <code>map2stan</code> returns an object that contains a <code>stanfit</code> object which you can access with the “<em>@stanfit</em>” accessor. Both <code>bayesplot</code> and <code>shinystan</code> work with that <code>stanfit</code> object just like they do with <code>rstanarm</code> or <code>rstan</code> models.</p>
+</div>
+<div id="session-info-1" class="section level2">
+<h2><span class="header-section-number">4.7</span> Session Info</h2>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="rethinking.html#cb52-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.0.3 (2020-10-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] splines   parallel  stats     graphics  grDevices datasets  utils    
+## [8] methods   base     
+## 
+## other attached packages:
+##  [1] rethinking_2.13      rstan_2.21.2         StanHeaders_2.21.0-6
+##  [4] forcats_0.5.0        stringr_1.4.0        dplyr_1.0.2         
+##  [7] purrr_0.3.4          readr_1.4.0          tidyr_1.1.2         
+## [10] tibble_3.0.4         ggplot2_3.3.2        tidyverse_1.3.0     
+## 
+## loaded via a namespace (and not attached):
+##  [1] httr_1.4.2         jsonlite_1.7.1     modelr_0.1.8       RcppParallel_5.0.2
+##  [5] assertthat_0.2.1   stats4_4.0.3       renv_0.12.0        cellranger_1.1.0  
+##  [9] yaml_2.2.1         pillar_1.4.7       backports_1.2.0    lattice_0.20-41   
+## [13] glue_1.4.2         digest_0.6.27      rvest_0.3.6        colorspace_2.0-0  
+## [17] Matrix_1.2-18      htmltools_0.5.0    pkgconfig_2.0.3    broom_0.7.2       
+## [21] haven_2.3.1        bookdown_0.21      mvtnorm_1.1-1      scales_1.1.1      
+## [25] processx_3.4.5     mgcv_1.8-33        farver_2.0.3       generics_0.1.0    
+## [29] ellipsis_0.3.1     withr_2.3.0        cli_2.2.0          magrittr_2.0.1    
+## [33] crayon_1.3.4       readxl_1.3.1       evaluate_0.14      ps_1.4.0          
+## [37] fs_1.5.0           fansi_0.4.1        nlme_3.1-149       MASS_7.3-53       
+## [41] xml2_1.3.2         pkgbuild_1.1.0     tools_4.0.3        loo_2.3.1         
+## [45] prettyunits_1.1.1  hms_0.5.3          lifecycle_0.2.0    matrixStats_0.57.0
+## [49] V8_3.4.0           munsell_0.5.0      reprex_0.3.0       callr_3.5.1       
+## [53] compiler_4.0.3     rlang_0.4.9        grid_4.0.3         rstudioapi_0.13   
+## [57] labeling_0.4.2     rmarkdown_2.5      gtable_0.3.0       codetools_0.2-16  
+## [61] inline_0.3.17      DBI_1.1.0          curl_4.3           R6_2.5.0          
+## [65] gridExtra_2.3      lubridate_1.7.9.2  knitr_1.30         shape_1.4.5       
+## [69] stringi_1.5.3      Rcpp_1.0.5         vctrs_0.3.5        dbplyr_2.0.0      
+## [73] tidyselect_1.1.0   xfun_0.19          coda_0.19-4</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="rstanarm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="brms.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03_rethinking.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["r-ladies-rtp-bayes-pkgs.pdf", "r-ladies-rtp-bayes-pkgs.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

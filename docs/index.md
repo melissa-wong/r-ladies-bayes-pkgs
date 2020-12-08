@@ -1,7 +1,7 @@
 --- 
 title: "Intro to R Bayes Packages"
 author: "Melissa Wong"
-date: "`r Sys.Date()`"
+date: "2020-12-08"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -15,9 +15,4 @@ description: "This is an introduction to several R packages for Bayesian analysi
 
 # Prerequisites
 
-```{r include=FALSE, echo=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), "rstan", "rstanarm", "rethinking", "bayesplot",
-  "shinystan", "brms"), "packages.bib")
-```
+

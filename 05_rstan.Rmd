@@ -6,7 +6,7 @@
 
 ## Description
 
-All of the packages in the previous chapters are running `stan` under the hood. One of the biggest advantages to using `rstan` (or `cmdstanr`) is you get the full power and flexibility of `rstan` so you can build models that aren't supported by the other packages. The tradeoff is syntax is quite different which can be a challenge for those who are only familiar with R.
+All of the packages in the previous chapters are running `stan` under the hood. One of the biggest advantages to using `rstan` (or `cmdstanr`) is you get the full power and flexibility of `stan` so you can build models that aren't supported by the other packages. The tradeoff is the syntax is quite different which can be a challenge for those who are only familiar with R.
 
 ## Environment Setup
 
@@ -167,7 +167,7 @@ N<- 50
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
 draws <- as.data.frame(mdl1) %>%
-  head(100)
+  head(50)
 
 # Expected value posterior predictive distribution
 post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*D) %>%
@@ -177,7 +177,7 @@ post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*D) %>%
 
 ggplot() +
   geom_line(data=post_pred, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
-  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg, color=factor(cyl)))
+  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
 ```
 
 Note that the expected value of the ppd doesn't include $\sigma$. 
@@ -439,4 +439,10 @@ ggplot() +
 
 ### Posterior Predictive Distribution
 
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
 
