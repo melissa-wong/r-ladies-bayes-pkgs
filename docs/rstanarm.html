@@ -239,10 +239,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-random-walk-prior-1"><i class="fa fa-check"></i><b>6.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
 <li class="chapter" data-level="6.6.1" data-path="rstan.html"><a href="rstan.html#define-model-10"><i class="fa fa-check"></i><b>6.6.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.6.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-9"><i class="fa fa-check"></i><b>6.6.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="6.6.3" data-path="rstan.html"><a href="rstan.html#diagnostics-9"><i class="fa fa-check"></i><b>6.6.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.6.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-9"><i class="fa fa-check"></i><b>6.6.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.6.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-10"><i class="fa fa-check"></i><b>6.6.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="6.6.2" data-path="rstan.html"><a href="rstan.html#diagnostics-9"><i class="fa fa-check"></i><b>6.6.2</b> Diagnostics</a></li>
+<li class="chapter" data-level="6.6.3" data-path="rstan.html"><a href="rstan.html#posterior-distribution-9"><i class="fa fa-check"></i><b>6.6.3</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="6.6.4" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-10"><i class="fa fa-check"></i><b>6.6.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
 <li class="chapter" data-level="6.7" data-path="rstan.html"><a href="rstan.html#session-info-3"><i class="fa fa-check"></i><b>6.7</b> Session Info</a></li>
 </ul></li>
@@ -282,19 +281,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="environment-setup" class="section level2">
 <h2><span class="header-section-number">3.3</span> Environment Setup</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="rstanarm.html#cb4-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
-<span id="cb4-2"><a href="rstanarm.html#cb4-2"></a></span>
-<span id="cb4-3"><a href="rstanarm.html#cb4-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb4-4"><a href="rstanarm.html#cb4-4"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
-<span id="cb4-5"><a href="rstanarm.html#cb4-5"></a></span>
-<span id="cb4-6"><a href="rstanarm.html#cb4-6"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb4-7"><a href="rstanarm.html#cb4-7"></a><span class="kw">library</span>(gridExtra)</span>
-<span id="cb4-8"><a href="rstanarm.html#cb4-8"></a><span class="kw">library</span>(kableExtra)</span>
-<span id="cb4-9"><a href="rstanarm.html#cb4-9"></a><span class="kw">library</span>(datasets)</span>
-<span id="cb4-10"><a href="rstanarm.html#cb4-10"></a><span class="kw">data</span>(mtcars)</span>
-<span id="cb4-11"><a href="rstanarm.html#cb4-11"></a></span>
-<span id="cb4-12"><a href="rstanarm.html#cb4-12"></a><span class="kw">library</span>(rstanarm)</span>
-<span id="cb4-13"><a href="rstanarm.html#cb4-13"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="rstanarm.html#cb2-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
+<span id="cb2-2"><a href="rstanarm.html#cb2-2"></a></span>
+<span id="cb2-3"><a href="rstanarm.html#cb2-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-4"><a href="rstanarm.html#cb2-4"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb2-5"><a href="rstanarm.html#cb2-5"></a></span>
+<span id="cb2-6"><a href="rstanarm.html#cb2-6"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb2-7"><a href="rstanarm.html#cb2-7"></a><span class="kw">library</span>(gridExtra)</span>
+<span id="cb2-8"><a href="rstanarm.html#cb2-8"></a><span class="kw">library</span>(kableExtra)</span>
+<span id="cb2-9"><a href="rstanarm.html#cb2-9"></a><span class="kw">library</span>(datasets)</span>
+<span id="cb2-10"><a href="rstanarm.html#cb2-10"></a><span class="kw">data</span>(mtcars)</span>
+<span id="cb2-11"><a href="rstanarm.html#cb2-11"></a></span>
+<span id="cb2-12"><a href="rstanarm.html#cb2-12"></a><span class="kw">library</span>(rstanarm)</span>
+<span id="cb2-13"><a href="rstanarm.html#cb2-13"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
 </div>
 <div id="linear-model-default-priors" class="section level2">
 <h2><span class="header-section-number">3.4</span> Linear Model (Default Priors)</h2>
@@ -306,12 +305,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   \mu &amp;= a + b*disp \\
 \end{align*}\]</span></p>
 <p>The <code>stan_glm</code> function from the <code>rstanarm</code> package fits a Bayesian linear model. The syntax is very similar to <code>lm</code>/<code>glm</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="rstanarm.html#cb5-1"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(mpg <span class="op">~</span><span class="st"> </span>disp, <span class="dt">data =</span> mtcars)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="rstanarm.html#cb3-1"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(mpg <span class="op">~</span><span class="st"> </span>disp, <span class="dt">data =</span> mtcars)</span></code></pre></div>
 </div>
 <div id="prior-predictive-distribution" class="section level3">
 <h3><span class="header-section-number">3.4.2</span> Prior Predictive Distribution</h3>
 <p>Next, I’ll examine the prior predictive distribution to see if the default priors seem reasonable. The <code>prior_summary</code> function shows the default priors for the model as well as the adjusted priors after automatic scaling. See <a href="http://mc-stan.org/rstanarm/articles/priors.html" class="uri">http://mc-stan.org/rstanarm/articles/priors.html</a> if you are interested in the details about how the default and adjusted priors are calculated.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="rstanarm.html#cb6-1"></a><span class="kw">prior_summary</span>(mdl1)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="rstanarm.html#cb4-1"></a><span class="kw">prior_summary</span>(mdl1)</span></code></pre></div>
 <pre><code>## Priors for model &#39;mdl1&#39; 
 ## ------
 ## Intercept (after predictors centered)
@@ -333,23 +332,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##     ~ exponential(rate = 0.17)
 ## ------
 ## See help(&#39;prior_summary.stanreg&#39;) for more details</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="rstanarm.html#cb8-1"></a><span class="co"># Plot prior predictive distribution using adjusted priors</span></span>
-<span id="cb8-2"><a href="rstanarm.html#cb8-2"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb8-3"><a href="rstanarm.html#cb8-3"></a></span>
-<span id="cb8-4"><a href="rstanarm.html#cb8-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">rnorm</span>(N, <span class="dv">20</span>, <span class="dv">15</span>),</span>
-<span id="cb8-5"><a href="rstanarm.html#cb8-5"></a>                            <span class="dt">b =</span> <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.12</span>))</span>
-<span id="cb8-6"><a href="rstanarm.html#cb8-6"></a></span>
-<span id="cb8-7"><a href="rstanarm.html#cb8-7"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb8-8"><a href="rstanarm.html#cb8-8"></a></span>
-<span id="cb8-9"><a href="rstanarm.html#cb8-9"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, </span>
-<span id="cb8-10"><a href="rstanarm.html#cb8-10"></a>                           <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D<span class="op">-</span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)))) <span class="op">%&gt;%</span></span>
-<span id="cb8-11"><a href="rstanarm.html#cb8-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D) <span class="op">%&gt;%</span></span>
-<span id="cb8-12"><a href="rstanarm.html#cb8-12"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
-<span id="cb8-13"><a href="rstanarm.html#cb8-13"></a></span>
-<span id="cb8-14"><a href="rstanarm.html#cb8-14"></a>res <span class="op">%&gt;%</span></span>
-<span id="cb8-15"><a href="rstanarm.html#cb8-15"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb8-16"><a href="rstanarm.html#cb8-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb8-17"><a href="rstanarm.html#cb8-17"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;prior predictive mpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="rstanarm.html#cb6-1"></a><span class="co"># Plot prior predictive distribution using adjusted priors</span></span>
+<span id="cb6-2"><a href="rstanarm.html#cb6-2"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb6-3"><a href="rstanarm.html#cb6-3"></a></span>
+<span id="cb6-4"><a href="rstanarm.html#cb6-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">rnorm</span>(N, <span class="dv">20</span>, <span class="dv">15</span>),</span>
+<span id="cb6-5"><a href="rstanarm.html#cb6-5"></a>                            <span class="dt">b =</span> <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.12</span>))</span>
+<span id="cb6-6"><a href="rstanarm.html#cb6-6"></a></span>
+<span id="cb6-7"><a href="rstanarm.html#cb6-7"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb6-8"><a href="rstanarm.html#cb6-8"></a></span>
+<span id="cb6-9"><a href="rstanarm.html#cb6-9"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, </span>
+<span id="cb6-10"><a href="rstanarm.html#cb6-10"></a>                           <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D<span class="op">-</span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)))) <span class="op">%&gt;%</span></span>
+<span id="cb6-11"><a href="rstanarm.html#cb6-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb6-12"><a href="rstanarm.html#cb6-12"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
+<span id="cb6-13"><a href="rstanarm.html#cb6-13"></a></span>
+<span id="cb6-14"><a href="rstanarm.html#cb6-14"></a>res <span class="op">%&gt;%</span></span>
+<span id="cb6-15"><a href="rstanarm.html#cb6-15"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb6-16"><a href="rstanarm.html#cb6-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb6-17"><a href="rstanarm.html#cb6-17"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;prior predictive mpg&quot;</span>)</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl1_prior_plot-1.png" width="672" /></p>
 <p>I notice two things in the prior predictive distribution which seem unrealistic given what I know about the real world: 1) negative mpg and 2) increasing mpg as displacement increases. Later on I’ll choose a more informative prior which incorporates this external knowledge. But let’s proceed with the analysis and see what happens.</p>
 </div>
@@ -359,7 +358,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="trace-plots" class="section level4">
 <h4><span class="header-section-number">3.4.3.1</span> Trace Plots</h4>
 <p>The <code>bayesplot</code> package provides the function <code>mcmc_trace</code> which plots the Markov Chain Monte Carlo (MCMC) draws.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="rstanarm.html#cb9-1"></a><span class="kw">mcmc_trace</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="rstanarm.html#cb7-1"></a><span class="kw">mcmc_trace</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl1_trace-1.png" width="672" /></p>
 <p>There are three things I am looking for in the trace plot of each chain:</p>
 <ol style="list-style-type: decimal">
@@ -372,7 +371,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="trace-rank-plots" class="section level4">
 <h4><span class="header-section-number">3.4.3.2</span> Trace Rank Plots</h4>
 <p>It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the <code>mcmc_rank_overlay</code> function. This function plots a trace rank plot which is the distribution of the ranked samples; if the four chains have a roughly uniform distribution that indicates good mixing.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="rstanarm.html#cb10-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="rstanarm.html#cb8-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl1_trank_plot-1.png" width="672" /></p>
 </div>
 <div id="widehatr-and-effective-sample-size" class="section level4">
@@ -380,7 +379,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In addition to visually examining the chains, we should also check <span class="math inline">\(\widehat{R}\)</span> which is a measure of convergence. <span class="math inline">\(\widehat{R} &gt; 1.0\)</span> indicates poor mixing, and the <code>mc_stan</code> documentation recommends only using samples if <span class="math inline">\(\widehat{R} &lt; 1.05\)</span>. However, a recent paper by <span class="citation">Vehtari et al. (<a href="#ref-Vehtari_2020" role="doc-biblioref">2020</a>)</span> recommends <span class="math inline">\(\widehat{R} &lt; 1.01\)</span>.</p>
 <p>Since MCMC samples are usually correlated, the effective sample size (<code>n_eff</code>) is often less than the number of samples. There is no hard and fast rule for what is an acceptable number for <code>n_eff</code>. McElreath’s guidance is it depends on what you are trying to estimate. If you are interested mostly in the posterior mean, then <code>n_eff</code> = 200 can be enough. But if you are interested in the tails of the distribution and it’s highly skewed then you’ll need <code>n_eff</code> to be much larger. There are two parameters, <code>iter</code> and <code>warmup</code>, which you can adjust in <code>stan_glm</code> if a larger <code>n_eff</code> is needed.</p>
 <p>The <code>summary</code> function displays <code>n_eff</code> and <span class="math inline">\(\widehat{R}\)</span> for the object returned by <code>stan_glm</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="rstanarm.html#cb11-1"></a><span class="kw">summary</span>(mdl1)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="rstanarm.html#cb9-1"></a><span class="kw">summary</span>(mdl1)</span></code></pre></div>
 <pre><code>## 
 ## Model Info:
 ##  function:     stan_glm
@@ -418,12 +417,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="posterior-distribution" class="section level3">
 <h3><span class="header-section-number">3.4.4</span> Posterior Distribution</h3>
 <p>Since the chains, <code>n_eff</code> and <span class="math inline">\(\widehat{R}\)</span> look good, let’s examine the posterior distributions next.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="rstanarm.html#cb13-1"></a><span class="co"># Posterior point estimates (medians are used for point estimates)</span></span>
-<span id="cb13-2"><a href="rstanarm.html#cb13-2"></a><span class="kw">coef</span>(mdl1)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="rstanarm.html#cb11-1"></a><span class="co"># Posterior point estimates (medians are used for point estimates)</span></span>
+<span id="cb11-2"><a href="rstanarm.html#cb11-2"></a><span class="kw">coef</span>(mdl1)</span></code></pre></div>
 <pre><code>## (Intercept)        disp 
 ##    29.57206    -0.04103</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="rstanarm.html#cb15-1"></a><span class="co"># 95% credible intervals</span></span>
-<span id="cb15-2"><a href="rstanarm.html#cb15-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">posterior_interval</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="rstanarm.html#cb13-1"></a><span class="co"># 95% credible intervals</span></span>
+<span id="cb13-2"><a href="rstanarm.html#cb13-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">posterior_interval</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>))</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -478,16 +477,16 @@ sigma
 <h3><span class="header-section-number">3.4.5</span> Posterior Predictive Distribution</h3>
 <p>The <code>posterior_predict</code> function draws samples from the posterior predictive distribution. The <code>shinystan</code> package also generates nice plots of the posterior predictive distribution.</p>
 <p>In this case, I’m going to plot the expected value of the posterior predictive distribution and overlay the observations since I think it can be easier to understand for someone new to these methods. The <code>posterior_linpred</code> function returns the linear predictor, possibly transformed by the inverse-link function. The <code>posterior_epred</code> function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="rstanarm.html#cb16-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp)))</span>
-<span id="cb16-2"><a href="rstanarm.html#cb16-2"></a></span>
-<span id="cb16-3"><a href="rstanarm.html#cb16-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">posterior_epred</span>(mdl1, <span class="dt">newdata=</span>newdata, <span class="dt">draws=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb16-4"><a href="rstanarm.html#cb16-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
-<span id="cb16-5"><a href="rstanarm.html#cb16-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">starts_with</span>(<span class="st">&quot;V&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
-<span id="cb16-6"><a href="rstanarm.html#cb16-6"></a></span>
-<span id="cb16-7"><a href="rstanarm.html#cb16-7"></a>y_rep <span class="op">%&gt;%</span></span>
-<span id="cb16-8"><a href="rstanarm.html#cb16-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb16-9"><a href="rstanarm.html#cb16-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>grp), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb16-10"><a href="rstanarm.html#cb16-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="rstanarm.html#cb14-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp)))</span>
+<span id="cb14-2"><a href="rstanarm.html#cb14-2"></a></span>
+<span id="cb14-3"><a href="rstanarm.html#cb14-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">posterior_epred</span>(mdl1, <span class="dt">newdata=</span>newdata, <span class="dt">draws=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb14-4"><a href="rstanarm.html#cb14-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
+<span id="cb14-5"><a href="rstanarm.html#cb14-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">starts_with</span>(<span class="st">&quot;V&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
+<span id="cb14-6"><a href="rstanarm.html#cb14-6"></a></span>
+<span id="cb14-7"><a href="rstanarm.html#cb14-7"></a>y_rep <span class="op">%&gt;%</span></span>
+<span id="cb14-8"><a href="rstanarm.html#cb14-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb14-9"><a href="rstanarm.html#cb14-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>grp), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb14-10"><a href="rstanarm.html#cb14-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl1_ppd-1.png" width="672" /></p>
 </div>
 </div>
@@ -508,38 +507,38 @@ sigma
 </ol>
 <div id="define-model-1" class="section level3">
 <h3><span class="header-section-number">3.5.1</span> Define Model</h3>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="rstanarm.html#cb17-1"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(mpg <span class="op">~</span><span class="st"> </span>disp, <span class="dt">data =</span> mtcars,</span>
-<span id="cb17-2"><a href="rstanarm.html#cb17-2"></a>                 <span class="dt">prior =</span> <span class="kw">normal</span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.1</span>), <span class="co"># prior for slope</span></span>
-<span id="cb17-3"><a href="rstanarm.html#cb17-3"></a>                 <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">25</span>,<span class="dv">10</span>), <span class="co"># prior for intercept</span></span>
-<span id="cb17-4"><a href="rstanarm.html#cb17-4"></a>                 <span class="dt">prior_aux =</span> <span class="kw">exponential</span>(<span class="dv">1</span>))  <span class="co"># prior for standard deviation</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="rstanarm.html#cb15-1"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(mpg <span class="op">~</span><span class="st"> </span>disp, <span class="dt">data =</span> mtcars,</span>
+<span id="cb15-2"><a href="rstanarm.html#cb15-2"></a>                 <span class="dt">prior =</span> <span class="kw">normal</span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.1</span>), <span class="co"># prior for slope</span></span>
+<span id="cb15-3"><a href="rstanarm.html#cb15-3"></a>                 <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">25</span>,<span class="dv">10</span>), <span class="co"># prior for intercept</span></span>
+<span id="cb15-4"><a href="rstanarm.html#cb15-4"></a>                 <span class="dt">prior_aux =</span> <span class="kw">exponential</span>(<span class="dv">1</span>))  <span class="co"># prior for standard deviation</span></span></code></pre></div>
 </div>
 <div id="prior-predictive-distribution-1" class="section level3">
 <h3><span class="header-section-number">3.5.2</span> Prior Predictive Distribution</h3>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="rstanarm.html#cb18-1"></a><span class="co"># Plot prior predictive distribution using adjusted priors</span></span>
-<span id="cb18-2"><a href="rstanarm.html#cb18-2"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb18-3"><a href="rstanarm.html#cb18-3"></a></span>
-<span id="cb18-4"><a href="rstanarm.html#cb18-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">rnorm</span>(N, <span class="dv">25</span>, <span class="dv">10</span>),</span>
-<span id="cb18-5"><a href="rstanarm.html#cb18-5"></a>                            <span class="dt">b =</span> <span class="kw">rnorm</span>(N, <span class="fl">-0.2</span>, <span class="fl">0.1</span>))</span>
-<span id="cb18-6"><a href="rstanarm.html#cb18-6"></a></span>
-<span id="cb18-7"><a href="rstanarm.html#cb18-7"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb18-8"><a href="rstanarm.html#cb18-8"></a></span>
-<span id="cb18-9"><a href="rstanarm.html#cb18-9"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, </span>
-<span id="cb18-10"><a href="rstanarm.html#cb18-10"></a>                           <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D<span class="op">-</span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)))) <span class="op">%&gt;%</span></span>
-<span id="cb18-11"><a href="rstanarm.html#cb18-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D) <span class="op">%&gt;%</span></span>
-<span id="cb18-12"><a href="rstanarm.html#cb18-12"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
-<span id="cb18-13"><a href="rstanarm.html#cb18-13"></a></span>
-<span id="cb18-14"><a href="rstanarm.html#cb18-14"></a>res <span class="op">%&gt;%</span></span>
-<span id="cb18-15"><a href="rstanarm.html#cb18-15"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb18-16"><a href="rstanarm.html#cb18-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb18-17"><a href="rstanarm.html#cb18-17"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;prior predictive mpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="rstanarm.html#cb16-1"></a><span class="co"># Plot prior predictive distribution using adjusted priors</span></span>
+<span id="cb16-2"><a href="rstanarm.html#cb16-2"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb16-3"><a href="rstanarm.html#cb16-3"></a></span>
+<span id="cb16-4"><a href="rstanarm.html#cb16-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">rnorm</span>(N, <span class="dv">25</span>, <span class="dv">10</span>),</span>
+<span id="cb16-5"><a href="rstanarm.html#cb16-5"></a>                            <span class="dt">b =</span> <span class="kw">rnorm</span>(N, <span class="fl">-0.2</span>, <span class="fl">0.1</span>))</span>
+<span id="cb16-6"><a href="rstanarm.html#cb16-6"></a></span>
+<span id="cb16-7"><a href="rstanarm.html#cb16-7"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb16-8"><a href="rstanarm.html#cb16-8"></a></span>
+<span id="cb16-9"><a href="rstanarm.html#cb16-9"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, </span>
+<span id="cb16-10"><a href="rstanarm.html#cb16-10"></a>                           <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D<span class="op">-</span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)))) <span class="op">%&gt;%</span></span>
+<span id="cb16-11"><a href="rstanarm.html#cb16-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb16-12"><a href="rstanarm.html#cb16-12"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
+<span id="cb16-13"><a href="rstanarm.html#cb16-13"></a></span>
+<span id="cb16-14"><a href="rstanarm.html#cb16-14"></a>res <span class="op">%&gt;%</span></span>
+<span id="cb16-15"><a href="rstanarm.html#cb16-15"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb16-16"><a href="rstanarm.html#cb16-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb16-17"><a href="rstanarm.html#cb16-17"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;prior predictive mpg&quot;</span>)</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl2_prior_plot-1.png" width="672" /></p>
 <p>Compared to the prior predictive distribution with the default priors, this looks more consistent with my real-world knowledge that was reflected in the priors.</p>
 </div>
 <div id="diagnostics-1" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Diagnostics</h3>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="rstanarm.html#cb19-1"></a><span class="kw">mcmc_trace</span>(mdl2, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="rstanarm.html#cb17-1"></a><span class="kw">mcmc_trace</span>(mdl2, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl2_trace-1.png" width="672" /></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="rstanarm.html#cb20-1"></a><span class="kw">summary</span>(mdl2)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="rstanarm.html#cb18-1"></a><span class="kw">summary</span>(mdl2)</span></code></pre></div>
 <pre><code>## 
 ## Model Info:
 ##  function:     stan_glm
@@ -577,8 +576,8 @@ sigma
 <div id="posterior-distribution-1" class="section level3">
 <h3><span class="header-section-number">3.5.4</span> Posterior Distribution</h3>
 <p>Now let’s compare the posterior with informative versus default priors:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="rstanarm.html#cb22-1"></a><span class="co"># Point estimates</span></span>
-<span id="cb22-2"><a href="rstanarm.html#cb22-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">cbind</span>(<span class="kw">coef</span>(mdl1), <span class="kw">coef</span>(mdl2)), <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Default&quot;</span>, <span class="st">&quot;Informative&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="rstanarm.html#cb20-1"></a><span class="co"># Point estimates</span></span>
+<span id="cb20-2"><a href="rstanarm.html#cb20-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">cbind</span>(<span class="kw">coef</span>(mdl1), <span class="kw">coef</span>(mdl2)), <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Default&quot;</span>, <span class="st">&quot;Informative&quot;</span>))</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -617,10 +616,10 @@ disp
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="rstanarm.html#cb23-1"></a><span class="co"># 95% credible intervals</span></span>
-<span id="cb23-2"><a href="rstanarm.html#cb23-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">cbind</span>(<span class="kw">posterior_interval</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>),</span>
-<span id="cb23-3"><a href="rstanarm.html#cb23-3"></a>                  <span class="kw">posterior_interval</span>(mdl2, <span class="dt">prob=</span><span class="fl">0.95</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb23-4"><a href="rstanarm.html#cb23-4"></a><span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot; &quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;Default&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Informative&quot;</span> =<span class="st"> </span><span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="rstanarm.html#cb21-1"></a><span class="co"># 95% credible intervals</span></span>
+<span id="cb21-2"><a href="rstanarm.html#cb21-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">cbind</span>(<span class="kw">posterior_interval</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>),</span>
+<span id="cb21-3"><a href="rstanarm.html#cb21-3"></a>                  <span class="kw">posterior_interval</span>(mdl2, <span class="dt">prob=</span><span class="fl">0.95</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb21-4"><a href="rstanarm.html#cb21-4"></a><span class="st">  </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot; &quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;Default&quot;</span> =<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;Informative&quot;</span> =<span class="st"> </span><span class="dv">2</span>))</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -712,16 +711,16 @@ sigma
 </div>
 <div id="posterior-predictive-distribution-1" class="section level3">
 <h3><span class="header-section-number">3.5.5</span> Posterior Predictive Distribution</h3>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="rstanarm.html#cb24-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp)))</span>
-<span id="cb24-2"><a href="rstanarm.html#cb24-2"></a></span>
-<span id="cb24-3"><a href="rstanarm.html#cb24-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">posterior_epred</span>(mdl2, <span class="dt">newdata=</span>newdata, <span class="dt">draws=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb24-4"><a href="rstanarm.html#cb24-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
-<span id="cb24-5"><a href="rstanarm.html#cb24-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">starts_with</span>(<span class="st">&quot;V&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
-<span id="cb24-6"><a href="rstanarm.html#cb24-6"></a></span>
-<span id="cb24-7"><a href="rstanarm.html#cb24-7"></a>y_rep <span class="op">%&gt;%</span></span>
-<span id="cb24-8"><a href="rstanarm.html#cb24-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb24-9"><a href="rstanarm.html#cb24-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>grp), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb24-10"><a href="rstanarm.html#cb24-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="rstanarm.html#cb22-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp)))</span>
+<span id="cb22-2"><a href="rstanarm.html#cb22-2"></a></span>
+<span id="cb22-3"><a href="rstanarm.html#cb22-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">posterior_epred</span>(mdl2, <span class="dt">newdata=</span>newdata, <span class="dt">draws=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb22-4"><a href="rstanarm.html#cb22-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
+<span id="cb22-5"><a href="rstanarm.html#cb22-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">starts_with</span>(<span class="st">&quot;V&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
+<span id="cb22-6"><a href="rstanarm.html#cb22-6"></a></span>
+<span id="cb22-7"><a href="rstanarm.html#cb22-7"></a>y_rep <span class="op">%&gt;%</span></span>
+<span id="cb22-8"><a href="rstanarm.html#cb22-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb22-9"><a href="rstanarm.html#cb22-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>grp), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb22-10"><a href="rstanarm.html#cb22-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl2_ppd-1.png" width="672" /></p>
 </div>
 </div>
@@ -730,41 +729,41 @@ sigma
 <div id="define-model-2" class="section level3">
 <h3><span class="header-section-number">3.6.1</span> Define model</h3>
 <p>The linear model is a poor choice for this data, so I’ll try a model with splines next. The <code>stan_gamm4</code> function from the <code>rstanarm</code> package fits Bayesian nonlinear (and mixed) models.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="rstanarm.html#cb25-1"></a>mdl3 &lt;-<span class="st"> </span><span class="kw">stan_gamm4</span>(mpg <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(disp, <span class="dt">bs=</span><span class="st">&quot;cr&quot;</span>, <span class="dt">k=</span><span class="dv">7</span>), </span>
-<span id="cb25-2"><a href="rstanarm.html#cb25-2"></a>                   <span class="dt">data =</span> mtcars, </span>
-<span id="cb25-3"><a href="rstanarm.html#cb25-3"></a>                   <span class="dt">adapt_delta =</span> <span class="fl">0.99</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="rstanarm.html#cb23-1"></a>mdl3 &lt;-<span class="st"> </span><span class="kw">stan_gamm4</span>(mpg <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(disp, <span class="dt">bs=</span><span class="st">&quot;cr&quot;</span>, <span class="dt">k=</span><span class="dv">7</span>), </span>
+<span id="cb23-2"><a href="rstanarm.html#cb23-2"></a>                   <span class="dt">data =</span> mtcars, </span>
+<span id="cb23-3"><a href="rstanarm.html#cb23-3"></a>                   <span class="dt">adapt_delta =</span> <span class="fl">0.99</span>)</span></code></pre></div>
 </div>
 <div id="prior-predictive-distribution-2" class="section level3">
 <h3><span class="header-section-number">3.6.2</span> Prior Predictive Distribution</h3>
 <p>Unlike the linear model, it’s not as straightforward to manually construct the prior predictive distribution. Fortunately, <code>rstanarm</code> can automatically generate the prior predictive distribution too–we just refit the model <em>without</em> conditioning on the data by setting <code>prior_PD = TRUE</code>.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="rstanarm.html#cb26-1"></a>mdl3_prior_pred &lt;-<span class="st"> </span><span class="kw">stan_gamm4</span>(mpg <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(disp, <span class="dt">bs=</span><span class="st">&quot;cr&quot;</span>, <span class="dt">k=</span><span class="dv">7</span>), </span>
-<span id="cb26-2"><a href="rstanarm.html#cb26-2"></a>                   <span class="dt">data =</span> mtcars, </span>
-<span id="cb26-3"><a href="rstanarm.html#cb26-3"></a>                   <span class="dt">prior_PD =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb26-4"><a href="rstanarm.html#cb26-4"></a>                   <span class="dt">adapt_delta =</span> <span class="fl">0.99</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="rstanarm.html#cb27-1"></a>N &lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb27-2"><a href="rstanarm.html#cb27-2"></a></span>
-<span id="cb27-3"><a href="rstanarm.html#cb27-3"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb27-4"><a href="rstanarm.html#cb27-4"></a></span>
-<span id="cb27-5"><a href="rstanarm.html#cb27-5"></a>prior_pred &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">posterior_epred</span>(mdl3_prior_pred,</span>
-<span id="cb27-6"><a href="rstanarm.html#cb27-6"></a>                                <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">disp=</span>D),</span>
-<span id="cb27-7"><a href="rstanarm.html#cb27-7"></a>                                <span class="dt">draws=</span>N)))</span>
-<span id="cb27-8"><a href="rstanarm.html#cb27-8"></a></span>
-<span id="cb27-9"><a href="rstanarm.html#cb27-9"></a>tmp &lt;-<span class="st"> </span>prior_pred <span class="op">%&gt;%</span></span>
-<span id="cb27-10"><a href="rstanarm.html#cb27-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D)<span class="op">%&gt;%</span></span>
-<span id="cb27-11"><a href="rstanarm.html#cb27-11"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="op">-</span><span class="st">&quot;disp&quot;</span>, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
-<span id="cb27-12"><a href="rstanarm.html#cb27-12"></a></span>
-<span id="cb27-13"><a href="rstanarm.html#cb27-13"></a>tmp <span class="op">%&gt;%</span></span>
-<span id="cb27-14"><a href="rstanarm.html#cb27-14"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb27-15"><a href="rstanarm.html#cb27-15"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb27-16"><a href="rstanarm.html#cb27-16"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="rstanarm.html#cb24-1"></a>mdl3_prior_pred &lt;-<span class="st"> </span><span class="kw">stan_gamm4</span>(mpg <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(disp, <span class="dt">bs=</span><span class="st">&quot;cr&quot;</span>, <span class="dt">k=</span><span class="dv">7</span>), </span>
+<span id="cb24-2"><a href="rstanarm.html#cb24-2"></a>                   <span class="dt">data =</span> mtcars, </span>
+<span id="cb24-3"><a href="rstanarm.html#cb24-3"></a>                   <span class="dt">prior_PD =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb24-4"><a href="rstanarm.html#cb24-4"></a>                   <span class="dt">adapt_delta =</span> <span class="fl">0.99</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="rstanarm.html#cb25-1"></a>N &lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb25-2"><a href="rstanarm.html#cb25-2"></a></span>
+<span id="cb25-3"><a href="rstanarm.html#cb25-3"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb25-4"><a href="rstanarm.html#cb25-4"></a></span>
+<span id="cb25-5"><a href="rstanarm.html#cb25-5"></a>prior_pred &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">posterior_epred</span>(mdl3_prior_pred,</span>
+<span id="cb25-6"><a href="rstanarm.html#cb25-6"></a>                                <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">disp=</span>D),</span>
+<span id="cb25-7"><a href="rstanarm.html#cb25-7"></a>                                <span class="dt">draws=</span>N)))</span>
+<span id="cb25-8"><a href="rstanarm.html#cb25-8"></a></span>
+<span id="cb25-9"><a href="rstanarm.html#cb25-9"></a>tmp &lt;-<span class="st"> </span>prior_pred <span class="op">%&gt;%</span></span>
+<span id="cb25-10"><a href="rstanarm.html#cb25-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp =</span> D)<span class="op">%&gt;%</span></span>
+<span id="cb25-11"><a href="rstanarm.html#cb25-11"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="op">-</span><span class="st">&quot;disp&quot;</span>, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
+<span id="cb25-12"><a href="rstanarm.html#cb25-12"></a></span>
+<span id="cb25-13"><a href="rstanarm.html#cb25-13"></a>tmp <span class="op">%&gt;%</span></span>
+<span id="cb25-14"><a href="rstanarm.html#cb25-14"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb25-15"><a href="rstanarm.html#cb25-15"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb25-16"><a href="rstanarm.html#cb25-16"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>This prior predictive distribution gives us some crazy possibilities. However we saw earlier that there is enough data that the model isn’t very sensitive to the choice of prior, so let’s continue and see what happens.</p>
 </div>
 <div id="diagnostics-and-posterior" class="section level3">
 <h3><span class="header-section-number">3.6.3</span> Diagnostics and Posterior</h3>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="rstanarm.html#cb28-1"></a><span class="kw">mcmc_trace</span>(mdl3, <span class="dt">regex_pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="rstanarm.html#cb26-1"></a><span class="kw">mcmc_trace</span>(mdl3, <span class="dt">regex_pars=</span><span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="rstanarm.html#cb29-1"></a><span class="kw">summary</span>(mdl3)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="rstanarm.html#cb27-1"></a><span class="kw">summary</span>(mdl3)</span></code></pre></div>
 <pre><code>## 
 ## Model Info:
 ##  function:     stan_gamm4
@@ -815,23 +814,23 @@ sigma
 <div id="posterior-predictive-distribution-2" class="section level3">
 <h3><span class="header-section-number">3.6.4</span> Posterior Predictive Distribution</h3>
 <p>The expectation over the ppd is plotted below, along with a loess curve for comparison. This model is clearly a better fit to the data than the linear model.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="rstanarm.html#cb31-1"></a><span class="kw">plot_nonlinear</span>(mdl3, <span class="dt">prob=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
-<span id="cb31-2"><a href="rstanarm.html#cb31-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
-<span id="cb31-3"><a href="rstanarm.html#cb31-3"></a>             <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
-<span id="cb31-4"><a href="rstanarm.html#cb31-4"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;GAM&quot;</span>, <span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg-mean(mpg)&quot;</span>)</span>
-<span id="cb31-5"><a href="rstanarm.html#cb31-5"></a></span>
-<span id="cb31-6"><a href="rstanarm.html#cb31-6"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
-<span id="cb31-7"><a href="rstanarm.html#cb31-7"></a>              <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
-<span id="cb31-8"><a href="rstanarm.html#cb31-8"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb31-9"><a href="rstanarm.html#cb31-9"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>,</span>
-<span id="cb31-10"><a href="rstanarm.html#cb31-10"></a>              <span class="dt">level=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
-<span id="cb31-11"><a href="rstanarm.html#cb31-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;LOESS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="rstanarm.html#cb29-1"></a><span class="kw">plot_nonlinear</span>(mdl3, <span class="dt">prob=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
+<span id="cb29-2"><a href="rstanarm.html#cb29-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
+<span id="cb29-3"><a href="rstanarm.html#cb29-3"></a>             <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
+<span id="cb29-4"><a href="rstanarm.html#cb29-4"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;GAM&quot;</span>, <span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg-mean(mpg)&quot;</span>)</span>
+<span id="cb29-5"><a href="rstanarm.html#cb29-5"></a></span>
+<span id="cb29-6"><a href="rstanarm.html#cb29-6"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
+<span id="cb29-7"><a href="rstanarm.html#cb29-7"></a>              <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
+<span id="cb29-8"><a href="rstanarm.html#cb29-8"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb29-9"><a href="rstanarm.html#cb29-9"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>,</span>
+<span id="cb29-10"><a href="rstanarm.html#cb29-10"></a>              <span class="dt">level=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
+<span id="cb29-11"><a href="rstanarm.html#cb29-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;LOESS&quot;</span>)</span></code></pre></div>
 <p><img src="02_rstanarm_files/figure-html/mdl3_ppd,%20figures-side-1.png" width="50%" /><img src="02_rstanarm_files/figure-html/mdl3_ppd,%20figures-side-2.png" width="50%" /></p>
 </div>
 </div>
 <div id="session-info" class="section level2">
 <h2><span class="header-section-number">3.7</span> Session Info</h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="rstanarm.html#cb32-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="rstanarm.html#cb30-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Big Sur 10.16

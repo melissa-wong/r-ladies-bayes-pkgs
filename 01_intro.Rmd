@@ -63,11 +63,7 @@ mtcars %>%
   ggplot(aes(x=disp, y=mpg)) +
   geom_point() 
 ```
-## Session Info
 
-```{r}
-sessionInfo()
-```
 
 
 

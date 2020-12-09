@@ -88,7 +88,6 @@ posterior-distribution-8
 posterior-predictive-distribution-9
 semi-parametric-model-random-walk-prior-1
 define-model-10
-prior-predictive-distribution-9
 diagnostics-9
 posterior-distribution-9
 posterior-predictive-distribution-10

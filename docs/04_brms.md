@@ -2,6 +2,8 @@
 
 ## Resources
 
+- [Overview of brms](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf)
+
 - [Solomon Kurz's translation of _Statistical Rethinking_](https://bookdown.org/content/4857/)
 
 ## Description

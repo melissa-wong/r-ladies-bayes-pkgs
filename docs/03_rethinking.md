@@ -239,7 +239,7 @@ precis(mdl2, depth=2)
 
 ### Posterior Predictive Distribution
 
-And finally, the posterior predictive distribution:
+Finally, the posterior predictive distribution and LOESS for comparison:
 
 
 ```r
@@ -270,7 +270,7 @@ ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
 
 ## Extras
 
-The `rethinking` package has some nice extras. One is the `stancode` function will return the actual `stan` code for the model.  This is a great way to start getting familiar with `stan` syntax!
+The `rethinking` package has some nice extras. One is the `stancode` function will return the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax!
 
 
 ```r
@@ -278,7 +278,7 @@ stancode(mdl1)
 ```
 
 ```
-## //2020-12-08 13:57:09
+## //2020-12-08 18:53:07
 ## data{
 ##     int<lower=1> N;
 ##     real mpg[N];
@@ -307,7 +307,7 @@ stancode(mdl1)
 ## }
 ```
 
-Also, `map2stan` returns an object that contains a `stanfit` object which you can access with the "_\@stanfit_" accessor.  Both `bayesplot` and `shinystan` work with that `stanfit` object just like they do with `rstanarm` or `rstan` models.
+Also, `map2stan` returns an object that contains a `stanfit` object which you can access with the `\@stanfit` accessor.  Both `bayesplot` and `shinystan` work with that `stanfit` object just like they do with `rstanarm` or `rstan` models.
 
 ## Session Info
 

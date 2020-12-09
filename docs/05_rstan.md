@@ -6,7 +6,7 @@
 
 ## Description
 
-All of the packages in the previous chapters are running `stan` under the hood. One of the biggest advantages to using `rstan` (or `cmdstanr`) is you get the full power and flexibility of `stan` so you can build models that aren't supported by the other packages. The tradeoff is syntax is quite different which can be a challenge for those who are only familiar with R.
+All of the packages in the previous chapters are running `stan` under the hood. One of the biggest advantages to using `rstan` (or `cmdstanr`) is you get the full power and flexibility of `stan` so you can build models that aren't supported by the other packages. The tradeoff is the syntax is quite different which can be a challenge for those who are only familiar with R.
 
 ## Environment Setup
 
@@ -179,7 +179,7 @@ print(mdl1)
 ## sigma   3.19    0.01 0.40   2.53   2.92   3.15   3.41   4.07  1553    1
 ## lp__  -57.58    0.04 1.28 -60.90 -58.16 -57.23 -56.64 -56.15  1298    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec  8 13:58:47 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec  8 19:00:30 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -214,7 +214,7 @@ N<- 50
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
 draws <- as.data.frame(mdl1) %>%
-  head(100)
+  head(50)
 
 # Expected value posterior predictive distribution
 post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*D) %>%
@@ -224,7 +224,7 @@ post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*D) %>%
 
 ggplot() +
   geom_line(data=post_pred, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
-  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg, color=factor(cyl)))
+  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
 ```
 
 <img src="05_rstan_files/figure-html/mdl1_ppd-1.png" width="672" />
@@ -249,6 +249,7 @@ mdl_code_ppd <- '
     real<lower=0.0> sigma;
   }
   transformed parameters{
+    // Expected value of posterior predictive
     vector[N] Y_hat = a + b * disp;
   }
   model{
@@ -367,7 +368,7 @@ mdl_code <- '
     mpg ~ normal(Y_hat, sigma);
     // Priors
     a ~ normal(25, 10);
-    sigma ~ exponential(0.2);
+    sigma ~ exponential(1);
     w ~ normal(0, 5);
   }
   generated quantities{
@@ -406,7 +407,7 @@ mdl2 <- '
   }
   generated quantities{
     real a_sim = normal_rng(25, 10);
-    real sigma_sim = exponential_rng(0.2);
+    real sigma_sim = exponential_rng(1);
     real mpg_sim[N];
     vector[N] Y_hat;
     vector[num_basis] w_sim;
@@ -472,21 +473,21 @@ print(mdl1_gam, pars=c("a", "sigma", "w"))
 ```
 
 ```
-## Inference for Stan model: 7ae6bef6fd6e1ad16f99577e64710ecd.
+## Inference for Stan model: 82641c24a01364d6c7401a2add0dc8c4.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##        mean se_mean   sd   2.5%    25%   50%   75% 97.5% n_eff Rhat
-## a     20.23    0.07 2.05  16.31  18.84 20.22 21.61 24.31   954    1
-## sigma  2.32    0.01 0.34   1.77   2.07  2.27  2.52  3.12  2290    1
-## w[1]  11.82    0.07 2.39   7.06  10.20 11.80 13.42 16.49  1215    1
-## w[2]   4.31    0.08 2.76  -1.22   2.45  4.34  6.19  9.73  1263    1
-## w[3]  -0.61    0.08 2.88  -6.09  -2.58 -0.63  1.32  5.05  1451    1
-## w[4]  -5.67    0.08 3.10 -11.84  -7.78 -5.62 -3.58  0.46  1359    1
-## w[5]  -2.39    0.08 2.99  -8.41  -4.41 -2.33 -0.38  3.46  1567    1
-## w[6]  -8.79    0.07 2.54 -13.63 -10.55 -8.80 -7.08 -3.70  1339    1
+## a     20.30    0.06 2.06  16.49  18.88 20.28 21.70 24.31  1063    1
+## sigma  2.23    0.01 0.32   1.71   2.01  2.20  2.42  2.98  1929    1
+## w[1]  11.77    0.07 2.42   7.13  10.13 11.78 13.42 16.43  1210    1
+## w[2]   4.25    0.07 2.66  -1.11   2.49  4.28  6.07  9.47  1603    1
+## w[3]  -0.69    0.08 2.85  -6.23  -2.64 -0.66  1.26  4.79  1372    1
+## w[4]  -5.78    0.07 3.00 -11.67  -7.75 -5.80 -3.80  0.18  1618    1
+## w[5]  -2.47    0.08 3.03  -8.47  -4.52 -2.41 -0.46  3.59  1536    1
+## w[6]  -8.91    0.07 2.53 -13.84 -10.64 -8.88 -7.11 -4.02  1487    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec  8 14:00:36 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec  8 19:02:25 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -544,14 +545,169 @@ ggplot() +
 
 ### Define Model
 
-### Prior Predictive Distribution
+One challenge with splines is choosing the number of knots.  For the previous model, I tried several values for `num_knots` until settling on 4.  However, there is a `stan` case study for splines that uses a novel prior which addresses this issue.  The details are [here](https://mc-stan.org/users/documentation/case-studies/splines_in_stan.html).
+
+For this example, I will set `num_knots=20` and then fit models with and without the random walk prior. This is an example where the `rstan`'s flexibility is an advantage because it would be difficult or impossible to specify the random walk prior in the other packages.
+
+
+```r
+library(splines)
+
+num_knots <- 20  # number of interior knots
+knot_list <- quantile(mtcars$disp, probs=seq(0,1,length.out = num_knots))
+B <- bs(mtcars$disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
+
+# Define model with smoothing prior
+mdl_smooth_code <- '
+  data{
+    int<lower=1> N;
+    int<lower=1> num_basis;
+    vector[N] mpg;
+    vector[N] disp;
+    matrix[N, num_basis] B;
+  }
+  parameters{
+    real a;
+    real<lower=0.0> sigma;
+    vector[num_basis] w_raw;
+    real<lower=0.0> tau;
+  }
+  transformed parameters{
+    vector[num_basis] w;
+    vector[N] Y_hat;
+    w[1] = w_raw[1];
+    for (i in 2:num_basis)
+      w[i] = w[i-1] + w_raw[i]*tau;
+    Y_hat = a + B*w;
+  }
+  model{
+    // Likelihood
+    mpg ~ normal(Y_hat, sigma);
+    // Priors
+    a ~ normal(25, 10);
+    sigma ~ exponential(0.2);
+    w_raw ~ normal(0, 1);
+    tau ~ normal(0,1);
+  }
+  generated quantities{
+    real mpg_ppd[N] = normal_rng(a + B*w, sigma);
+  }
+'
+
+mdl_data <- list(N=nrow(mtcars), 
+                 num_basis=ncol(B),
+                 B=B,
+                 mpg = mtcars$mpg,
+                 disp = mtcars$disp)
+
+# Fit model with smoothing prior
+mdl2_gam_smooth <- stan(model_code=mdl_smooth_code, data=mdl_data,
+                 control=list(adapt_delta=0.99))
+```
+
+```
+## Trying to compile a simple C file
+```
+
+```r
+# Fit model without smoothing prior
+mdl2_gam <- stan(model_code = mdl_code, data=mdl_data,
+                 control=list(adapt_delta=0.99))
+```
 
 ### Diagnostics
 
+
+```r
+mcmc_rank_overlay(mdl2_gam_smooth, pars=vars("a", "sigma", starts_with("w")))
+```
+
+<img src="05_rstan_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+
+
+```r
+print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
+```
+
+```
+## Inference for Stan model: 23823b707cfe5dba6123c91e263dff37.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+## a      31.87    0.04 2.03  27.82  30.49  31.86  33.22  35.93  3017    1
+## sigma   2.28    0.01 0.37   1.67   2.01   2.24   2.49   3.10  2402    1
+## w[1]    0.07    0.01 0.97  -1.87  -0.58   0.06   0.72   1.95  4655    1
+## w[2]   -0.98    0.03 1.89  -4.69  -2.22  -0.97   0.27   2.72  4062    1
+## w[3]   -2.13    0.03 2.16  -6.46  -3.53  -2.05  -0.73   2.01  3973    1
+## w[4]   -3.45    0.04 2.37  -8.12  -5.01  -3.46  -1.90   1.20  3901    1
+## w[5]   -5.84    0.04 2.50 -10.73  -7.51  -5.83  -4.13  -1.01  3698    1
+## w[6]   -8.13    0.04 2.45 -12.87  -9.82  -8.18  -6.48  -3.22  3100    1
+## w[7]   -8.98    0.04 2.52 -13.94 -10.67  -9.00  -7.31  -3.98  3251    1
+## w[8]   -9.61    0.04 2.40 -14.33 -11.18  -9.62  -7.99  -4.84  3883    1
+## w[9]  -10.40    0.04 2.43 -15.09 -12.00 -10.41  -8.80  -5.71  4040    1
+## w[10] -11.83    0.04 2.34 -16.36 -13.44 -11.82 -10.29  -7.21  3313    1
+## w[11] -12.79    0.04 2.57 -17.95 -14.49 -12.80 -11.08  -7.85  3693    1
+## w[12] -13.16    0.04 2.58 -18.29 -14.86 -13.19 -11.47  -8.08  4218    1
+## w[13] -13.75    0.04 2.32 -18.24 -15.30 -13.75 -12.22  -9.15  3995    1
+## w[14] -15.46    0.04 2.45 -20.21 -17.11 -15.44 -13.82 -10.69  3350    1
+## w[15] -16.21    0.04 2.45 -21.21 -17.83 -16.18 -14.53 -11.59  3137    1
+## w[16] -16.43    0.04 2.55 -21.42 -18.14 -16.41 -14.75 -11.35  3394    1
+## w[17] -16.53    0.04 2.46 -21.40 -18.18 -16.51 -14.88 -11.72  3291    1
+## w[18] -15.83    0.04 2.35 -20.39 -17.39 -15.86 -14.24 -11.24  3589    1
+## w[19] -15.78    0.04 2.49 -20.55 -17.37 -15.80 -14.14 -10.99  3690    1
+## w[20] -17.31    0.04 2.50 -22.29 -18.97 -17.28 -15.60 -12.54  3971    1
+## w[21] -19.34    0.05 2.67 -24.66 -21.11 -19.31 -17.60 -14.06  2659    1
+## w[22] -20.30    0.05 2.81 -25.93 -22.12 -20.33 -18.42 -14.80  2876    1
+## 
+## Samples were drawn using NUTS(diag_e) at Tue Dec  8 19:03:46 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).
+```
+
 ### Posterior Distribution
+
+
+```r
+plot(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
+plot(mdl2_gam, pars=c("a", "sigma", "w"))
+```
+
+<img src="05_rstan_files/figure-html/figures-side-1.png" width="50%" /><img src="05_rstan_files/figure-html/figures-side-2.png" width="50%" />
 
 ### Posterior Predictive Distribution
 
+
+```r
+draws <- as.data.frame(mdl2_gam) %>% head(100)
+
+Epost_pred <- draws %>% select(starts_with("Y_hat")) %>%
+  apply(2, function(x) quantile(x, probs=c(0.055, 0.5, 0.945))) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp = mtcars$disp)
+
+draws_smooth <- as.data.frame(mdl2_gam_smooth) %>% head(100)
+
+Epost_pred_smooth <- draws_smooth %>% select(starts_with("Y_hat")) %>%
+  apply(2, function(x) quantile(x, probs=c(0.055, 0.5, 0.945))) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp = mtcars$disp)
+
+rbind(Epost_pred %>% select(c("disp", `50%`)) %>% mutate(type="without smoothing prior"),
+      Epost_pred_smooth %>% select(c("disp", `50%`)) %>% mutate(type="with smoothing prior")) %>%
+  ggplot() +
+  geom_line( mapping=aes(x=disp, y=`50%`, linetype=type), color="blue" ) +
+  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg)) +
+  labs(y="mpg")
+```
+
+<img src="05_rstan_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+
+The plot above shows that even with a large number of knots (in this case 20), the model with the smoothing prior significantly reduces over-fitting when compared to the model without the smoothing prior.
 
 ## Session Info
 

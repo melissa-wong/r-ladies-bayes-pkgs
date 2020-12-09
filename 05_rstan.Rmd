@@ -199,6 +199,7 @@ mdl_code_ppd <- '
     real<lower=0.0> sigma;
   }
   transformed parameters{
+    // Expected value of posterior predictive
     vector[N] Y_hat = a + b * disp;
   }
   model{
@@ -305,7 +306,7 @@ mdl_code <- '
     mpg ~ normal(Y_hat, sigma);
     // Priors
     a ~ normal(25, 10);
-    sigma ~ exponential(0.2);
+    sigma ~ exponential(1);
     w ~ normal(0, 5);
   }
   generated quantities{
@@ -339,7 +340,7 @@ mdl2 <- '
   }
   generated quantities{
     real a_sim = normal_rng(25, 10);
-    real sigma_sim = exponential_rng(0.2);
+    real sigma_sim = exponential_rng(1);
     real mpg_sim[N];
     vector[N] Y_hat;
     vector[num_basis] w_sim;
@@ -431,14 +432,116 @@ ggplot() +
 
 ### Define Model
 
-### Prior Predictive Distribution
+One challenge with splines is choosing the number of knots.  For the previous model, I tried several values for `num_knots` until settling on 4.  However, there is a `stan` case study for splines that uses a novel prior which addresses this issue.  The details are [here](https://mc-stan.org/users/documentation/case-studies/splines_in_stan.html).
+
+For this example, I will set `num_knots=20` and then fit models with and without the random walk prior. This is an example where the `rstan`'s flexibility is an advantage because it would be difficult or impossible to specify the random walk prior in the other packages.
+
+```{r results="hide"}
+library(splines)
+
+num_knots <- 20  # number of interior knots
+knot_list <- quantile(mtcars$disp, probs=seq(0,1,length.out = num_knots))
+B <- bs(mtcars$disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
+
+# Define model with smoothing prior
+mdl_smooth_code <- '
+  data{
+    int<lower=1> N;
+    int<lower=1> num_basis;
+    vector[N] mpg;
+    vector[N] disp;
+    matrix[N, num_basis] B;
+  }
+  parameters{
+    real a;
+    real<lower=0.0> sigma;
+    vector[num_basis] w_raw;
+    real<lower=0.0> tau;
+  }
+  transformed parameters{
+    vector[num_basis] w;
+    vector[N] Y_hat;
+    w[1] = w_raw[1];
+    for (i in 2:num_basis)
+      w[i] = w[i-1] + w_raw[i]*tau;
+    Y_hat = a + B*w;
+  }
+  model{
+    // Likelihood
+    mpg ~ normal(Y_hat, sigma);
+    // Priors
+    a ~ normal(25, 10);
+    sigma ~ exponential(0.2);
+    w_raw ~ normal(0, 1);
+    tau ~ normal(0,1);
+  }
+  generated quantities{
+    real mpg_ppd[N] = normal_rng(a + B*w, sigma);
+  }
+'
+
+mdl_data <- list(N=nrow(mtcars), 
+                 num_basis=ncol(B),
+                 B=B,
+                 mpg = mtcars$mpg,
+                 disp = mtcars$disp)
+
+# Fit model with smoothing prior
+mdl2_gam_smooth <- stan(model_code=mdl_smooth_code, data=mdl_data,
+                 control=list(adapt_delta=0.99))
+
+# Fit model without smoothing prior
+mdl2_gam <- stan(model_code = mdl_code, data=mdl_data,
+                 control=list(adapt_delta=0.99))
+```
 
 ### Diagnostics
 
+```{r fig.height=8}
+mcmc_rank_overlay(mdl2_gam_smooth, pars=vars("a", "sigma", starts_with("w")))
+```
+
+
+```{r}
+print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
+```
+
 ### Posterior Distribution
+
+```{r figures-side, fig.show="hold", out.width="50%", message=FALSE}
+plot(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
+plot(mdl2_gam, pars=c("a", "sigma", "w"))
+```
 
 ### Posterior Predictive Distribution
 
+```{r}
+draws <- as.data.frame(mdl2_gam) %>% head(100)
+
+Epost_pred <- draws %>% select(starts_with("Y_hat")) %>%
+  apply(2, function(x) quantile(x, probs=c(0.055, 0.5, 0.945))) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp = mtcars$disp)
+
+draws_smooth <- as.data.frame(mdl2_gam_smooth) %>% head(100)
+
+Epost_pred_smooth <- draws_smooth %>% select(starts_with("Y_hat")) %>%
+  apply(2, function(x) quantile(x, probs=c(0.055, 0.5, 0.945))) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp = mtcars$disp)
+
+rbind(Epost_pred %>% select(c("disp", `50%`)) %>% mutate(type="without smoothing prior"),
+      Epost_pred_smooth %>% select(c("disp", `50%`)) %>% mutate(type="with smoothing prior")) %>%
+  ggplot() +
+  geom_line( mapping=aes(x=disp, y=`50%`, linetype=type), color="blue" ) +
+  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg)) +
+  labs(y="mpg")
+
+```
+
+The plot above shows that even with a large number of knots (in this case 20), the model with the smoothing prior significantly reduces over-fitting when compared to the model without the smoothing prior.
 
 ## Session Info
 
