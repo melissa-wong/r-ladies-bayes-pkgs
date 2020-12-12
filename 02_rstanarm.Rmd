@@ -27,7 +27,7 @@ library(rstanarm)
 library(bayesplot)
 
 # Set number of cores
-options(mc.cores = parallel::detectCores()-1)
+options(mc.cores = parallel::detectCores())
 ```
 
 ## Linear Model (Default Priors)
@@ -54,7 +54,7 @@ Next, I'll examine the prior predictive distribution to see if the default prior
 prior_summary(mdl1)
 ```
 
-Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior means for this data.
+Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior for this data looks like.
 
 ```{r epa, echo=FALSE}
 epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
@@ -71,7 +71,7 @@ ggplot() +
 ```
 
 ```{r mdl1_prior_plot}
-# Plot prior predictive distribution using adjusted priors
+# Plot expected value of prior predictive distribution using adjusted priors
 N <- 100
 
 prior_samples <- data.frame(a = rnorm(N, 20, 15),
@@ -101,7 +101,7 @@ I'll walk through the steps for manually extracting the key diagnostic informati
 The `bayesplot` package provides the function `mcmc_trace` which plots the Markov Chain Monte Carlo (MCMC) draws.
 
 ```{r mdl1_trace}
-mcmc_trace(mdl1, pars=c("disp", "sigma"))
+mcmc_trace(mdl1)
 ```
 
 There are three things I am looking for in the trace plot of each chain:
@@ -119,7 +119,7 @@ The trace plots above look good.
 It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the `mcmc_rank_overlay` function.  This function plots a trace rank plot which is the distribution of the ranked samples; if the four chains have a roughly uniform distribution that indicates good mixing.
 
 ```{r mdl1_trank_plot}
-mcmc_rank_overlay(mdl1, pars=c("disp", "sigma"))
+mcmc_rank_overlay(mdl1)
 ```
 
 #### $\widehat{R}$ and Effective Sample Size
@@ -151,9 +151,13 @@ knitr::kable(posterior_interval(mdl1, prob=0.95))
 
 ### Posterior Predictive Distribution
 
-The `posterior_predict` function draws samples from the posterior predictive distribution. The `shinystan` package also generates nice plots of the posterior predictive distribution.
+The `posterior_predict` function draws samples from the posterior predictive distribution, and then the `ppc_dens_overlay` function plots the distribution of each draw overlaid with the observed distribution.
 
-In this case, I'm going to plot the expected value of the posterior predictive distribution and overlay the observations since I think it can be easier to understand for someone new to these methods. The `posterior_linpred` function returns the linear predictor, possibly transformed by the inverse-link function.  The `posterior_epred` function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
+```{r}
+ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, draws=50))
+```
+
+Below I also plot the _expected value_ of the posterior predictive distribution and overlay the observations as an alternative way to visualize the result. The `posterior_linpred` function returns the linear predictor, possibly transformed by the inverse-link function.  The `posterior_epred` function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
 
 ```{r mdl1_ppd}
 newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
@@ -168,66 +172,63 @@ y_rep %>%
   geom_point(data = mtcars) 
 ```
 
+As expected, the linear model is not a good fit to the data.
 
 ## Linear Model (User-Defined Priors)
 
-Now I'll specify priors which incorporate my prior knowledge that `mpg` is non-negative and is non-increasing as `disp` increases.  My new model is as follows:
+I'll specify priors which incorporate the prior knowledge from the EPA data as well as that `mpg` is non-negative and is non-increasing as `disp` increases.  My new model is as follows:
 
 \begin{align*}
   mpg &\sim N(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
-  a &\sim Normal(25,10^2) \\
+  a &\sim Normal(13.2,5.3^2) \\
   b &\sim Normal(-0.2, 0.1^2) \\
   \sigma &\sim Exponential(1)
 \end{align*}
 
 The differences from the default priors are
 
-1. The intercept prior has a slightly smaller variance so negative values of`mpg` are less likely.
+1. The intercept prior is now set to the mean and standard deviation from the EPA data .
 
-2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.2 so that positive values are less likely.
+2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.2 so that positive values are less likely. (A prior distribution such as exponential or log-normal might be preferred in this case; however this is a limitation of `rstanarm` as those options aren't available.)
 
 ### Define Model
 
 ```{r mdl2, results="hide"}
 mdl2 <- stan_glm(mpg ~ disp, data = mtcars,
-                 prior = normal(-0.2, 0.1), # prior for slope
-                 prior_intercept = normal(25,10), # prior for intercept
+                 prior = normal(-0.1, 0.05), # prior for slope
+                 prior_intercept = normal(13.2,5.3), # prior for intercept
                  prior_aux = exponential(1))  # prior for standard deviation
 ```
 
 ### Prior Predictive Distribution
 
-```{r}
-cdisp <- mtcars$disp - mean(mtcars$disp)
-tmp <- stan_glm(mpg ~ cdisp, data = mtcars,
-                 prior = normal(-0.2, 0.1), # prior for slope
-                 prior_intercept = normal(20,15), # prior for intercept
-                 prior_aux = exponential(1),  # prior for standard deviation
-                  prior_PD = TRUE, chains=1)
+Below is an alternative to manually constructing the prior predictive distribution like I did in the previously.
+```{r mdl2_prior, message=FALSE}
 
-prior_summary(tmp)
+mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 
-draws <- as.matrix(tmp) %>% head(100)
-colMeans(draws)
+D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
-y <- apply(draws, 1, function(x) x[1] + x[2] * (D - mean(mtcars$disp))) %>%
-  as_tibble() %>%
+draws <- posterior_epred(mdl2_prior, newdata=data.frame(disp=D), draws=50) %>%
+  t() %>%
+  as.tibble() %>%
   mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="iter", values_to="mpg")
+  pivot_longer(-disp, names_to="draw", values_to="mpg")
 
-y %>%
+draws %>%
   ggplot() +
-  geom_line(mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2)
+  geom_line(mapping=aes(x=disp, y=mpg, group=draw), alpha=0.2)
 
 ```
 
-```{r mdl2_prior_plot}
+```{r mdl2_prior_plot, include=FALSE}
+# Manual method
 # Plot prior predictive distribution using adjusted priors
-N <- 100
+N <- 50
 
-prior_samples <- data.frame(a = rnorm(N, 20, 15),
-                            b = rnorm(N, -0.2, 0.1))
+prior_samples <- data.frame(a = rnorm(N, 13.2, 5.3),
+                            b = rnorm(N, -0.1, 0.05))
 
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
@@ -242,12 +243,10 @@ res %>%
   labs(x="disp", y="prior predictive mpg")
 ```
 
-Compared to the prior predictive distribution with the default priors, this looks more consistent with my real-world knowledge that was reflected in the priors.
-
 ### Diagnostics
 
 ```{r mdl2_trace}
-mcmc_trace(mdl2, pars=c("disp", "sigma"))
+mcmc_rank_overlay(mdl2)
 ```
 
 ```{r}
@@ -275,7 +274,14 @@ In this case, there is sufficient data that the choice of prior really didn't ma
 
 ### Posterior Predictive Distribution
 
+```{r}
+ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl2, draws=50))
+```
+
+
 ```{r mdl2_ppd}
+
+# Expected value of posterior predictive
 newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
 
 y_rep <- as.data.frame(t(posterior_epred(mdl2, newdata=newdata, draws=50))) %>%
@@ -287,6 +293,8 @@ y_rep %>%
   geom_line(aes(group=grp), alpha=0.2) +
   geom_point(data = mtcars) 
 ```
+
+The results are very similar to those with the default priors.
 
 ## Semi-parametric Model
 
@@ -305,28 +313,22 @@ mdl3 <- stan_gamm4(mpg ~ s(disp, bs="cr", k=7),
 Unlike the linear model, it's not as straightforward to manually construct the prior predictive distribution.  Fortunately, `rstanarm` can automatically generate the prior predictive distribution too--we just refit the model _without_ conditioning on the data by setting `prior_PD = TRUE`.
 
 ```{r mdl3_prior, results="hide"}
-mdl3_prior_pred <- stan_gamm4(mpg ~ s(disp, bs="cr", k=7), 
-                   data = mtcars, 
-                   prior_PD = TRUE,
-                   adapt_delta = 0.99)
+mdl3_prior <- update(mdl3, prior_PD = TRUE, chains=1)
 ```
 
 ```{r}
-N <- 50
 
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
-prior_pred <- data.frame(t(posterior_epred(mdl3_prior_pred,
-                                newdata=data.frame(disp=D),
-                                draws=N)))
+draws <- posterior_epred(mdl3_prior, newdata=data.frame(disp=D), draws=50) %>%
+  t() %>%
+  as.tibble() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="draw", values_to="mpg")
 
-tmp <- prior_pred %>%
-  mutate(disp = D)%>%
-  pivot_longer(cols=-"disp", names_to="iter", values_to="mpg") 
-
-tmp %>%
+draws %>%
   ggplot() +
-  geom_line(mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
+  geom_line(mapping=aes(x=disp, y=mpg, group=draw), alpha=0.2) +
   geom_point(data=mtcars, mapping=aes(x=disp, y=mpg), color="blue")
 ```
 
@@ -335,7 +337,7 @@ This prior predictive distribution gives us some crazy possibilities. However we
 ### Diagnostics and Posterior
 
 ```{r}
-mcmc_trace(mdl3, regex_pars=c("disp", "sigma"))
+mcmc_rank_overlay(mdl3)
 ```
 
 ```{r}
@@ -345,6 +347,11 @@ summary(mdl3)
 The chains, `n_eff` and $\widehat{R}$ look good. In the Estimates section above, we also see the posteriors for the model parameters; there isn't an intuitive interpretation of the spline coefficients so I'll skip ahead to the posterior predictive distribution.
 
 ### Posterior Predictive Distribution
+
+```{r}
+ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl3, draws=50))
+```
+
 
 The expectation over the ppd is plotted below, along with a loess curve for comparison. This model is clearly a better fit to the data than the linear model.
 
