@@ -25,6 +25,9 @@ data(mtcars)
 
 library(rstanarm)
 library(bayesplot)
+
+# Set number of cores
+options(mc.cores = parallel::detectCores()-1)
 ```
 
 ## Linear Model (Default Priors)
@@ -49,6 +52,22 @@ Next, I'll examine the prior predictive distribution to see if the default prior
 
 ```{r mdl1_prior}
 prior_summary(mdl1)
+```
+
+Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior means for this data.
+
+```{r epa, echo=FALSE}
+epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
+
+ggplot() +
+  geom_histogram(data=epa, mapping=aes(x=mpg, y=..density..), binwidth = 1) +
+  stat_function(data=data.frame(x=c(0, 35)),
+                mapping=aes(x=x),
+                fun=dnorm, n=101, 
+                args=list(mean=20, 
+                          sd=15),
+                linetype="dashed",
+                color="blue")
 ```
 
 ```{r mdl1_prior_plot}
@@ -179,11 +198,35 @@ mdl2 <- stan_glm(mpg ~ disp, data = mtcars,
 
 ### Prior Predictive Distribution
 
+```{r}
+cdisp <- mtcars$disp - mean(mtcars$disp)
+tmp <- stan_glm(mpg ~ cdisp, data = mtcars,
+                 prior = normal(-0.2, 0.1), # prior for slope
+                 prior_intercept = normal(20,15), # prior for intercept
+                 prior_aux = exponential(1),  # prior for standard deviation
+                  prior_PD = TRUE, chains=1)
+
+prior_summary(tmp)
+
+draws <- as.matrix(tmp) %>% head(100)
+colMeans(draws)
+
+y <- apply(draws, 1, function(x) x[1] + x[2] * (D - mean(mtcars$disp))) %>%
+  as_tibble() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="iter", values_to="mpg")
+
+y %>%
+  ggplot() +
+  geom_line(mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2)
+
+```
+
 ```{r mdl2_prior_plot}
 # Plot prior predictive distribution using adjusted priors
 N <- 100
 
-prior_samples <- data.frame(a = rnorm(N, 25, 10),
+prior_samples <- data.frame(a = rnorm(N, 20, 15),
                             b = rnorm(N, -0.2, 0.1))
 
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)

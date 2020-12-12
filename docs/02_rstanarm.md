@@ -26,6 +26,9 @@ data(mtcars)
 
 library(rstanarm)
 library(bayesplot)
+
+# Set number of cores
+options(mc.cores = parallel::detectCores()-1)
 ```
 
 ## Linear Model (Default Priors)
@@ -77,6 +80,10 @@ prior_summary(mdl1)
 ## ------
 ## See help('prior_summary.stanreg') for more details
 ```
+
+Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior means for this data.
+
+<img src="02_rstanarm_files/figure-html/epa-1.png" width="672" />
 
 
 ```r
@@ -291,10 +298,99 @@ mdl2 <- stan_glm(mpg ~ disp, data = mtcars,
 
 
 ```r
+cdisp <- mtcars$disp - mean(mtcars$disp)
+tmp <- stan_glm(mpg ~ cdisp, data = mtcars,
+                 prior = normal(-0.2, 0.1), # prior for slope
+                 prior_intercept = normal(20,15), # prior for intercept
+                 prior_aux = exponential(1),  # prior for standard deviation
+                  prior_PD = TRUE, chains=1)
+```
+
+```
+## 
+## SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 7.5e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.75 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.036544 seconds (Warm-up)
+## Chain 1:                0.04268 seconds (Sampling)
+## Chain 1:                0.079224 seconds (Total)
+## Chain 1:
+```
+
+```r
+prior_summary(tmp)
+```
+
+```
+## Priors for model 'tmp' 
+## ------
+## Intercept (after predictors centered)
+##  ~ normal(location = 20, scale = 15)
+## 
+## Coefficients
+##  ~ normal(location = -0.2, scale = 0.1)
+## 
+## Auxiliary (sigma)
+##  ~ exponential(rate = 1)
+## ------
+## See help('prior_summary.stanreg') for more details
+```
+
+```r
+draws <- as.matrix(tmp) %>% head(100)
+colMeans(draws)
+```
+
+```
+## (Intercept)       cdisp       sigma 
+##     21.3987     -0.1943      0.9352
+```
+
+```r
+y <- apply(draws, 1, function(x) x[1] + x[2] * (D - mean(mtcars$disp))) %>%
+  as_tibble() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="iter", values_to="mpg")
+```
+
+```
+## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+## Using compatibility `.name_repair`.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```r
+y %>%
+  ggplot() +
+  geom_line(mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2)
+```
+
+<img src="02_rstanarm_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+
+
+```r
 # Plot prior predictive distribution using adjusted priors
 N <- 100
 
-prior_samples <- data.frame(a = rnorm(N, 25, 10),
+prior_samples <- data.frame(a = rnorm(N, 20, 15),
                             b = rnorm(N, -0.2, 0.1))
 
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
@@ -342,23 +438,23 @@ summary(mdl2)
 ## 
 ## Estimates:
 ##               mean   sd   10%   50%   90%
-## (Intercept) 29.7    1.2 28.1  29.7  31.2 
+## (Intercept) 29.7    1.3 28.1  29.7  31.3 
 ## disp         0.0    0.0  0.0   0.0   0.0 
-## sigma        3.2    0.4  2.7   3.2   3.8 
+## sigma        3.2    0.4  2.7   3.2   3.7 
 ## 
 ## Fit Diagnostics:
 ##            mean   sd   10%   50%   90%
-## mean_PPD 20.1    0.8 19.1  20.1  21.1 
+## mean_PPD 20.1    0.8 19.1  20.1  21.2 
 ## 
 ## The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
 ## 
 ## MCMC diagnostics
 ##               mcse Rhat n_eff
-## (Intercept)   0.0  1.0  3490 
-## disp          0.0  1.0  3554 
-## sigma         0.0  1.0  2908 
-## mean_PPD      0.0  1.0  3469 
-## log-posterior 0.0  1.0  1665 
+## (Intercept)   0.0  1.0  2856 
+## disp          0.0  1.0  2791 
+## sigma         0.0  1.0  2921 
+## mean_PPD      0.0  1.0  3370 
+## log-posterior 0.0  1.0  1656 
 ## 
 ## For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
@@ -386,12 +482,12 @@ knitr::kable(cbind(coef(mdl1), coef(mdl2)), col.names = c("Default", "Informativ
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
    <td style="text-align:right;"> 29.572 </td>
-   <td style="text-align:right;"> 29.6599 </td>
+   <td style="text-align:right;"> 29.6912 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> disp </td>
    <td style="text-align:right;"> -0.041 </td>
-   <td style="text-align:right;"> -0.0414 </td>
+   <td style="text-align:right;"> -0.0415 </td>
   </tr>
 </tbody>
 </table>
@@ -424,22 +520,22 @@ knitr::kable(cbind(posterior_interval(mdl1, prob=0.95),
    <td style="text-align:left;"> (Intercept) </td>
    <td style="text-align:right;"> 27.0319 </td>
    <td style="text-align:right;"> 32.1255 </td>
-   <td style="text-align:right;"> 27.2755 </td>
-   <td style="text-align:right;"> 32.059 </td>
+   <td style="text-align:right;"> 27.180 </td>
+   <td style="text-align:right;"> 32.1083 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> disp </td>
    <td style="text-align:right;"> -0.0509 </td>
    <td style="text-align:right;"> -0.0313 </td>
-   <td style="text-align:right;"> -0.0509 </td>
-   <td style="text-align:right;"> -0.032 </td>
+   <td style="text-align:right;"> -0.051 </td>
+   <td style="text-align:right;"> -0.0322 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> sigma </td>
    <td style="text-align:right;"> 2.6281 </td>
    <td style="text-align:right;"> 4.3876 </td>
-   <td style="text-align:right;"> 2.5155 </td>
-   <td style="text-align:right;"> 4.151 </td>
+   <td style="text-align:right;"> 2.531 </td>
+   <td style="text-align:right;"> 4.1268 </td>
   </tr>
 </tbody>
 </table>
@@ -509,7 +605,7 @@ tmp %>%
   geom_point(data=mtcars, mapping=aes(x=disp, y=mpg), color="blue")
 ```
 
-<img src="02_rstanarm_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 This prior predictive distribution gives us some crazy possibilities. However we saw earlier that there is enough data that the model isn't very sensitive to the choice of prior, so let's continue and see what happens.
 
@@ -520,7 +616,7 @@ This prior predictive distribution gives us some crazy possibilities. However we
 mcmc_trace(mdl3, regex_pars=c("disp", "sigma"))
 ```
 
-<img src="02_rstanarm_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 
 ```r
@@ -540,37 +636,37 @@ summary(mdl3)
 ## 
 ## Estimates:
 ##                       mean   sd   10%   50%   90%
-## (Intercept)         20.1    0.4 19.6  20.1  20.6 
-## s(disp).1            0.1    1.2 -1.2   0.1   1.5 
-## s(disp).2           -0.9    1.0 -2.3  -0.7   0.3 
-## s(disp).3            0.0    0.5 -0.7   0.0   0.7 
+## (Intercept)         20.1    0.4 19.5  20.1  20.6 
+## s(disp).1            0.2    1.3 -1.2   0.2   1.6 
+## s(disp).2           -0.9    1.1 -2.3  -0.8   0.3 
+## s(disp).3            0.0    0.6 -0.7   0.0   0.7 
 ## s(disp).4            1.2    0.4  0.7   1.2   1.6 
 ## s(disp).5            0.4    0.1  0.2   0.4   0.6 
 ## s(disp).6           -3.1    0.3 -3.5  -3.1  -2.8 
-## sigma                2.4    0.3  2.0   2.4   2.8 
-## smooth_sd[s(disp)1]  1.2    0.7  0.5   1.0   2.0 
-## smooth_sd[s(disp)2]  3.6    2.0  1.7   3.1   6.1 
+## sigma                2.4    0.3  2.0   2.4   2.9 
+## smooth_sd[s(disp)1]  1.2    0.7  0.5   1.0   2.1 
+## smooth_sd[s(disp)2]  3.5    2.0  1.7   3.0   6.0 
 ## 
 ## Fit Diagnostics:
 ##            mean   sd   10%   50%   90%
-## mean_PPD 20.1    0.6 19.3  20.1  20.8 
+## mean_PPD 20.1    0.6 19.3  20.1  20.9 
 ## 
 ## The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
 ## 
 ## MCMC diagnostics
 ##                     mcse Rhat n_eff
-## (Intercept)         0.0  1.0  4153 
-## s(disp).1           0.0  1.0  3329 
-## s(disp).2           0.0  1.0  2097 
-## s(disp).3           0.0  1.0  3947 
-## s(disp).4           0.0  1.0  3090 
-## s(disp).5           0.0  1.0  4789 
-## s(disp).6           0.0  1.0  3662 
-## sigma               0.0  1.0  2754 
-## smooth_sd[s(disp)1] 0.0  1.0  1222 
-## smooth_sd[s(disp)2] 0.0  1.0  2170 
-## mean_PPD            0.0  1.0  4207 
-## log-posterior       0.1  1.0   855 
+## (Intercept)         0.0  1.0  3357 
+## s(disp).1           0.0  1.0  3086 
+## s(disp).2           0.0  1.0  2252 
+## s(disp).3           0.0  1.0  4115 
+## s(disp).4           0.0  1.0  2455 
+## s(disp).5           0.0  1.0  4283 
+## s(disp).6           0.0  1.0  3509 
+## sigma               0.0  1.0  2720 
+## smooth_sd[s(disp)1] 0.0  1.0  1229 
+## smooth_sd[s(disp)2] 0.0  1.0  2250 
+## mean_PPD            0.0  1.0  3322 
+## log-posterior       0.1  1.0   842 
 ## 
 ## For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```

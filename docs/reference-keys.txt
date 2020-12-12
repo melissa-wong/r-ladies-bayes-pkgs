@@ -4,6 +4,7 @@ resources
 a-motivating-example
 workflow
 data
+prior-information
 rstanarm
 resources-1
 description

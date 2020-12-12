@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-08" />
+<meta name="date" content="2020-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -144,6 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>2.2</b> A Motivating Example</a></li>
 <li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
 <li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>2.4</b> Data</a></li>
+<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#prior-information"><i class="fa fa-check"></i><b>2.5</b> Prior Information</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>3</b> rstanarm</a><ul>
 <li class="chapter" data-level="3.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
@@ -324,6 +325,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-5"><a href="intro.html#cb1-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
 <span id="cb1-6"><a href="intro.html#cb1-6"></a><span class="st">  </span><span class="kw">geom_point</span>() </span></code></pre></div>
 <p><img src="01_intro_files/figure-html/mtcars-1.png" width="672" /></p>
+</div>
+<div id="prior-information" class="section level2">
+<h2><span class="header-section-number">2.5</span> Prior Information</h2>
+<p>The <code>mtcars</code> dataset was extracted for Motor Trend magazine data on 1973-1974 models. The <a href="https://www.fueleconomy.gov/feg/pdfs/guides/FEG1974.pdf">1974 EPA Car Mileage Guide</a> lists the mpg and engine size (i.e displacement) for U.S. cars and light duty trucks. The data is plotted below.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="intro.html#cb2-1"></a><span class="kw">library</span>(gridExtra)</span>
+<span id="cb2-2"><a href="intro.html#cb2-2"></a></span>
+<span id="cb2-3"><a href="intro.html#cb2-3"></a>epa &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;./data/EPA_1974.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>)</span>
+<span id="cb2-4"><a href="intro.html#cb2-4"></a></span>
+<span id="cb2-5"><a href="intro.html#cb2-5"></a>p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb2-6"><a href="intro.html#cb2-6"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">data=</span>epa, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>mpg), <span class="dt">binwidth =</span> <span class="dv">1</span>)</span>
+<span id="cb2-7"><a href="intro.html#cb2-7"></a></span>
+<span id="cb2-8"><a href="intro.html#cb2-8"></a>p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(epa) <span class="op">+</span></span>
+<span id="cb2-9"><a href="intro.html#cb2-9"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>Displacement), <span class="dt">binwidth=</span><span class="dv">20</span>) </span>
+<span id="cb2-10"><a href="intro.html#cb2-10"></a></span>
+<span id="cb2-11"><a href="intro.html#cb2-11"></a>p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(epa) <span class="op">+</span></span>
+<span id="cb2-12"><a href="intro.html#cb2-12"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>Displacement, <span class="dt">y=</span>mpg))</span>
+<span id="cb2-13"><a href="intro.html#cb2-13"></a></span>
+<span id="cb2-14"><a href="intro.html#cb2-14"></a><span class="kw">grid.arrange</span>(p1, p2, <span class="dt">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb2-15"><a href="intro.html#cb2-15"></a>p3</span></code></pre></div>
+<p><img src="01_intro_files/figure-html/epa-1.png" width="672" /><img src="01_intro_files/figure-html/epa-2.png" width="672" /></p>
 
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-08" />
+<meta name="date" content="2020-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -144,6 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>2.2</b> A Motivating Example</a></li>
 <li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
 <li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>2.4</b> Data</a></li>
+<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#prior-information"><i class="fa fa-check"></i><b>2.5</b> Prior Information</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>3</b> rstanarm</a><ul>
 <li class="chapter" data-level="3.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
@@ -280,17 +281,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="environment-setup-2" class="section level2">
 <h2><span class="header-section-number">5.3</span> Environment Setup</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="brms.html#cb52-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
-<span id="cb52-2"><a href="brms.html#cb52-2"></a></span>
-<span id="cb52-3"><a href="brms.html#cb52-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb52-4"><a href="brms.html#cb52-4"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
-<span id="cb52-5"><a href="brms.html#cb52-5"></a></span>
-<span id="cb52-6"><a href="brms.html#cb52-6"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb52-7"><a href="brms.html#cb52-7"></a><span class="kw">library</span>(datasets)</span>
-<span id="cb52-8"><a href="brms.html#cb52-8"></a><span class="kw">data</span>(mtcars)</span>
-<span id="cb52-9"><a href="brms.html#cb52-9"></a></span>
-<span id="cb52-10"><a href="brms.html#cb52-10"></a><span class="kw">library</span>(brms)</span>
-<span id="cb52-11"><a href="brms.html#cb52-11"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="brms.html#cb66-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
+<span id="cb66-2"><a href="brms.html#cb66-2"></a></span>
+<span id="cb66-3"><a href="brms.html#cb66-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb66-4"><a href="brms.html#cb66-4"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb66-5"><a href="brms.html#cb66-5"></a></span>
+<span id="cb66-6"><a href="brms.html#cb66-6"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb66-7"><a href="brms.html#cb66-7"></a><span class="kw">library</span>(datasets)</span>
+<span id="cb66-8"><a href="brms.html#cb66-8"></a><span class="kw">data</span>(mtcars)</span>
+<span id="cb66-9"><a href="brms.html#cb66-9"></a></span>
+<span id="cb66-10"><a href="brms.html#cb66-10"></a><span class="kw">library</span>(brms)</span>
+<span id="cb66-11"><a href="brms.html#cb66-11"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
 </div>
 <div id="linear-model-1" class="section level2">
 <h2><span class="header-section-number">5.4</span> Linear Model</h2>
@@ -323,30 +324,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="define-model-6" class="section level3">
 <h3><span class="header-section-number">5.5.1</span> Define Model</h3>
 <p>First, I’ll define the splines just as I did with the <code>rethinking</code> package.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="brms.html#cb53-1"></a><span class="kw">library</span>(splines)</span>
-<span id="cb53-2"><a href="brms.html#cb53-2"></a></span>
-<span id="cb53-3"><a href="brms.html#cb53-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
-<span id="cb53-4"><a href="brms.html#cb53-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
-<span id="cb53-5"><a href="brms.html#cb53-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb53-6"><a href="brms.html#cb53-6"></a></span>
-<span id="cb53-7"><a href="brms.html#cb53-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp, B) <span class="op">%&gt;%</span></span>
-<span id="cb53-8"><a href="brms.html#cb53-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb53-9"><a href="brms.html#cb53-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb53-10"><a href="brms.html#cb53-10"></a></span>
-<span id="cb53-11"><a href="brms.html#cb53-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
-<span id="cb53-12"><a href="brms.html#cb53-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb53-13"><a href="brms.html#cb53-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb53-14"><a href="brms.html#cb53-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
-<span id="cb53-15"><a href="brms.html#cb53-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
-<span id="cb53-16"><a href="brms.html#cb53-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb53-17"><a href="brms.html#cb53-17"></a></span>
-<span id="cb53-18"><a href="brms.html#cb53-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
-<span id="cb53-19"><a href="brms.html#cb53-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb53-20"><a href="brms.html#cb53-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb53-21"><a href="brms.html#cb53-21"></a></span>
-<span id="cb53-22"><a href="brms.html#cb53-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
-<span id="cb53-23"><a href="brms.html#cb53-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
-<span id="cb53-24"><a href="brms.html#cb53-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="brms.html#cb67-1"></a><span class="kw">library</span>(splines)</span>
+<span id="cb67-2"><a href="brms.html#cb67-2"></a></span>
+<span id="cb67-3"><a href="brms.html#cb67-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
+<span id="cb67-4"><a href="brms.html#cb67-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
+<span id="cb67-5"><a href="brms.html#cb67-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb67-6"><a href="brms.html#cb67-6"></a></span>
+<span id="cb67-7"><a href="brms.html#cb67-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp, B) <span class="op">%&gt;%</span></span>
+<span id="cb67-8"><a href="brms.html#cb67-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb67-9"><a href="brms.html#cb67-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb67-10"><a href="brms.html#cb67-10"></a></span>
+<span id="cb67-11"><a href="brms.html#cb67-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
+<span id="cb67-12"><a href="brms.html#cb67-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb67-13"><a href="brms.html#cb67-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb67-14"><a href="brms.html#cb67-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
+<span id="cb67-15"><a href="brms.html#cb67-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
+<span id="cb67-16"><a href="brms.html#cb67-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb67-17"><a href="brms.html#cb67-17"></a></span>
+<span id="cb67-18"><a href="brms.html#cb67-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
+<span id="cb67-19"><a href="brms.html#cb67-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb67-20"><a href="brms.html#cb67-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb67-21"><a href="brms.html#cb67-21"></a></span>
+<span id="cb67-22"><a href="brms.html#cb67-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
+<span id="cb67-23"><a href="brms.html#cb67-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
+<span id="cb67-24"><a href="brms.html#cb67-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
 <p><img src="04_brms_files/figure-html/splines-1.png" width="672" /></p>
 <p>Note: the dashed lines are the splines and the points are the values of the spline at the specific values of <code>mtcars$disp</code>; the points are inputs into the <code>stan</code> model.</p>
 </div>
@@ -383,7 +384,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="session-info-2" class="section level2">
 <h2><span class="header-section-number">5.7</span> Session Info</h2>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="brms.html#cb54-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="brms.html#cb68-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Big Sur 10.16

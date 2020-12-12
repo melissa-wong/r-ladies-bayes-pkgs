@@ -67,6 +67,30 @@ mtcars %>%
 
 <img src="01_intro_files/figure-html/mtcars-1.png" width="672" />
 
+## Prior Information
+
+The `mtcars` dataset was extracted for Motor Trend magazine data on 1973-1974 models. The [1974 EPA Car Mileage Guide](https://www.fueleconomy.gov/feg/pdfs/guides/FEG1974.pdf) lists the mpg and engine size (i.e displacement) for U.S. cars and light duty trucks.  The data is plotted below.
+
+
+```r
+library(gridExtra)
+
+epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
+
+p1 <- ggplot() +
+  geom_histogram(data=epa, mapping=aes(x=mpg), binwidth = 1)
+
+p2 <- ggplot(epa) +
+  geom_histogram(mapping=aes(x=Displacement), binwidth=20) 
+
+p3 <- ggplot(epa) +
+  geom_point(mapping=aes(x=Displacement, y=mpg))
+
+grid.arrange(p1, p2, ncol=2)
+p3
+```
+
+<img src="01_intro_files/figure-html/epa-1.png" width="672" /><img src="01_intro_files/figure-html/epa-2.png" width="672" />
 
 
 

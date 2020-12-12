@@ -119,8 +119,8 @@ mdl_prior <- '
   }
 generated quantities{
   real a_sim = normal_rng(25, 10);
-  real b_sim = uniform_rng(-0.1, 0.0);
-  real sigma_sim = exponential_rng(0.2);
+  real b_sim = normal_rng(-0.2, 0.1);
+  real sigma_sim = exponential_rng(1);
   real mpg_sim[N] = normal_rng(a_sim + b_sim * disp, sigma_sim);
 }
 '
@@ -140,10 +140,10 @@ mdl_prior <- stan(model_code=mdl_prior, data=mdl_data_prior, model_name="mdl_pri
 
 ```r
 draws <- as.data.frame(mdl_prior) %>%
-  head(100)
+  head(50)
 
 # Expected value prior predictive distribution
-exp_mpg_sim <- apply(draws, 1, function(x) x["a_sim"] + x["b_sim"]*D) %>%
+exp_mpg_sim <- apply(draws, 1, function(x) x["a_sim"] + x["b_sim"] * (D-mean(mtcars$disp))) %>%
   as.data.frame() %>%
   mutate(disp = D) %>%
   pivot_longer(-c("disp"), names_to="iter", values_to="mpg") 
@@ -179,7 +179,7 @@ print(mdl1)
 ## sigma   3.19    0.01 0.40   2.53   2.92   3.15   3.41   4.07  1553    1
 ## lp__  -57.58    0.04 1.28 -60.90 -58.16 -57.23 -56.64 -56.15  1298    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec  8 19:00:30 2020.
+## Samples were drawn using NUTS(diag_e) at Sat Dec 12 10:29:46 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -217,11 +217,165 @@ draws <- as.data.frame(mdl1) %>%
   head(50)
 
 # Expected value posterior predictive distribution
-post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*D) %>%
+post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*(D-mtcars$disp)) %>%
   as.data.frame() %>%
   mutate(disp = D) %>%
   pivot_longer(-c("disp"), names_to="iter", values_to="mpg") 
+```
 
+```
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+
+## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
+## object length
+```
+
+```r
 ggplot() +
   geom_line(data=post_pred, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
   geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
@@ -245,7 +399,7 @@ mdl_code_ppd <- '
   }
   parameters{
     real a;
-    real<lower=-0.1, upper=0.0> b;
+    real b;
     real<lower=0.0> sigma;
   }
   transformed parameters{
@@ -257,8 +411,8 @@ mdl_code_ppd <- '
     mpg ~ normal(Y_hat, sigma);
     // Priors
     a ~ normal(25, 10);
-    b ~ uniform(-0.1, 0.0);
-    sigma ~ exponential(0.2);
+    b ~ normal(-0.2, 0.1);
+    sigma ~ exponential(1);
   }
   generated quantities{
     // Posterior Predictive
@@ -487,7 +641,7 @@ print(mdl1_gam, pars=c("a", "sigma", "w"))
 ## w[5]  -2.47    0.08 3.03  -8.47  -4.52 -2.41 -0.46  3.59  1536    1
 ## w[6]  -8.91    0.07 2.53 -13.84 -10.64 -8.88 -7.11 -4.02  1487    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec  8 19:02:25 2020.
+## Samples were drawn using NUTS(diag_e) at Sat Dec 12 10:31:44 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -585,7 +739,7 @@ mdl_smooth_code <- '
     mpg ~ normal(Y_hat, sigma);
     // Priors
     a ~ normal(25, 10);
-    sigma ~ exponential(0.2);
+    sigma ~ exponential(1);
     w_raw ~ normal(0, 1);
     tau ~ normal(0,1);
   }
@@ -631,37 +785,37 @@ print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
 ```
 
 ```
-## Inference for Stan model: 23823b707cfe5dba6123c91e263dff37.
+## Inference for Stan model: 38c293991ee2b9bb0106a5b740561b9f.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## a      31.87    0.04 2.03  27.82  30.49  31.86  33.22  35.93  3017    1
-## sigma   2.28    0.01 0.37   1.67   2.01   2.24   2.49   3.10  2402    1
-## w[1]    0.07    0.01 0.97  -1.87  -0.58   0.06   0.72   1.95  4655    1
-## w[2]   -0.98    0.03 1.89  -4.69  -2.22  -0.97   0.27   2.72  4062    1
-## w[3]   -2.13    0.03 2.16  -6.46  -3.53  -2.05  -0.73   2.01  3973    1
-## w[4]   -3.45    0.04 2.37  -8.12  -5.01  -3.46  -1.90   1.20  3901    1
-## w[5]   -5.84    0.04 2.50 -10.73  -7.51  -5.83  -4.13  -1.01  3698    1
-## w[6]   -8.13    0.04 2.45 -12.87  -9.82  -8.18  -6.48  -3.22  3100    1
-## w[7]   -8.98    0.04 2.52 -13.94 -10.67  -9.00  -7.31  -3.98  3251    1
-## w[8]   -9.61    0.04 2.40 -14.33 -11.18  -9.62  -7.99  -4.84  3883    1
-## w[9]  -10.40    0.04 2.43 -15.09 -12.00 -10.41  -8.80  -5.71  4040    1
-## w[10] -11.83    0.04 2.34 -16.36 -13.44 -11.82 -10.29  -7.21  3313    1
-## w[11] -12.79    0.04 2.57 -17.95 -14.49 -12.80 -11.08  -7.85  3693    1
-## w[12] -13.16    0.04 2.58 -18.29 -14.86 -13.19 -11.47  -8.08  4218    1
-## w[13] -13.75    0.04 2.32 -18.24 -15.30 -13.75 -12.22  -9.15  3995    1
-## w[14] -15.46    0.04 2.45 -20.21 -17.11 -15.44 -13.82 -10.69  3350    1
-## w[15] -16.21    0.04 2.45 -21.21 -17.83 -16.18 -14.53 -11.59  3137    1
-## w[16] -16.43    0.04 2.55 -21.42 -18.14 -16.41 -14.75 -11.35  3394    1
-## w[17] -16.53    0.04 2.46 -21.40 -18.18 -16.51 -14.88 -11.72  3291    1
-## w[18] -15.83    0.04 2.35 -20.39 -17.39 -15.86 -14.24 -11.24  3589    1
-## w[19] -15.78    0.04 2.49 -20.55 -17.37 -15.80 -14.14 -10.99  3690    1
-## w[20] -17.31    0.04 2.50 -22.29 -18.97 -17.28 -15.60 -12.54  3971    1
-## w[21] -19.34    0.05 2.67 -24.66 -21.11 -19.31 -17.60 -14.06  2659    1
-## w[22] -20.30    0.05 2.81 -25.93 -22.12 -20.33 -18.42 -14.80  2876    1
+## a      32.01    0.04 2.02  28.08  30.69  32.04  33.36  35.97  3196    1
+## sigma   2.17    0.01 0.32   1.64   1.95   2.13   2.37   2.90  2955    1
+## w[1]    0.06    0.01 1.01  -1.89  -0.60   0.06   0.72   2.00  4659    1
+## w[2]   -1.07    0.03 1.93  -4.92  -2.33  -1.03   0.20   2.65  3383    1
+## w[3]   -2.20    0.04 2.14  -6.49  -3.65  -2.20  -0.81   2.04  3624    1
+## w[4]   -3.52    0.04 2.36  -8.15  -5.11  -3.57  -1.97   1.08  3938    1
+## w[5]   -5.96    0.04 2.47 -10.99  -7.56  -5.92  -4.27  -1.35  3354    1
+## w[6]   -8.29    0.04 2.37 -12.92  -9.82  -8.31  -6.71  -3.69  3078    1
+## w[7]   -9.18    0.04 2.50 -14.17 -10.84  -9.18  -7.46  -4.38  3507    1
+## w[8]   -9.75    0.04 2.41 -14.48 -11.33  -9.77  -8.14  -5.01  3846    1
+## w[9]  -10.53    0.04 2.43 -15.40 -12.09 -10.52  -8.93  -5.75  3839    1
+## w[10] -11.98    0.04 2.27 -16.47 -13.46 -11.99 -10.45  -7.47  3228    1
+## w[11] -12.99    0.05 2.57 -18.13 -14.63 -12.97 -11.24  -8.06  3187    1
+## w[12] -13.31    0.04 2.57 -18.42 -14.98 -13.29 -11.64  -8.22  3449    1
+## w[13] -13.84    0.04 2.38 -18.49 -15.38 -13.82 -12.31  -9.16  3797    1
+## w[14] -15.60    0.04 2.42 -20.37 -17.17 -15.59 -14.01 -10.84  2957    1
+## w[15] -16.38    0.05 2.44 -21.20 -17.98 -16.40 -14.74 -11.46  2802    1
+## w[16] -16.61    0.04 2.52 -21.62 -18.30 -16.61 -14.91 -11.71  3392    1
+## w[17] -16.68    0.04 2.42 -21.39 -18.29 -16.66 -15.06 -12.05  3295    1
+## w[18] -15.90    0.04 2.31 -20.49 -17.40 -15.93 -14.37 -11.36  3491    1
+## w[19] -15.83    0.04 2.47 -20.86 -17.40 -15.80 -14.24 -10.98  4198    1
+## w[20] -17.44    0.04 2.52 -22.56 -19.10 -17.44 -15.75 -12.64  4156    1
+## w[21] -19.55    0.05 2.64 -24.68 -21.32 -19.56 -17.77 -14.40  3178    1
+## w[22] -20.51    0.05 2.75 -25.90 -22.40 -20.52 -18.65 -15.02  3126    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec  8 19:03:46 2020.
+## Samples were drawn using NUTS(diag_e) at Sat Dec 12 10:33:24 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).

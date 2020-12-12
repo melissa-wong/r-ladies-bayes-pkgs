@@ -110,8 +110,8 @@ mdl_prior <- '
   }
 generated quantities{
   real a_sim = normal_rng(25, 10);
-  real b_sim = uniform_rng(-0.1, 0.0);
-  real sigma_sim = exponential_rng(0.2);
+  real b_sim = normal_rng(-0.2, 0.1);
+  real sigma_sim = exponential_rng(1);
   real mpg_sim[N] = normal_rng(a_sim + b_sim * disp, sigma_sim);
 }
 '
@@ -127,10 +127,10 @@ mdl_prior <- stan(model_code=mdl_prior, data=mdl_data_prior, model_name="mdl_pri
 
 ```{r mdl1_prior_plot}
 draws <- as.data.frame(mdl_prior) %>%
-  head(100)
+  head(50)
 
 # Expected value prior predictive distribution
-exp_mpg_sim <- apply(draws, 1, function(x) x["a_sim"] + x["b_sim"]*D) %>%
+exp_mpg_sim <- apply(draws, 1, function(x) x["a_sim"] + x["b_sim"] * (D-mean(mtcars$disp))) %>%
   as.data.frame() %>%
   mutate(disp = D) %>%
   pivot_longer(-c("disp"), names_to="iter", values_to="mpg") 
@@ -170,7 +170,7 @@ draws <- as.data.frame(mdl1) %>%
   head(50)
 
 # Expected value posterior predictive distribution
-post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*D) %>%
+post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*(D-mtcars$disp)) %>%
   as.data.frame() %>%
   mutate(disp = D) %>%
   pivot_longer(-c("disp"), names_to="iter", values_to="mpg") 
@@ -195,7 +195,7 @@ mdl_code_ppd <- '
   }
   parameters{
     real a;
-    real<lower=-0.1, upper=0.0> b;
+    real b;
     real<lower=0.0> sigma;
   }
   transformed parameters{
@@ -207,8 +207,8 @@ mdl_code_ppd <- '
     mpg ~ normal(Y_hat, sigma);
     // Priors
     a ~ normal(25, 10);
-    b ~ uniform(-0.1, 0.0);
-    sigma ~ exponential(0.2);
+    b ~ normal(-0.2, 0.1);
+    sigma ~ exponential(1);
   }
   generated quantities{
     // Posterior Predictive
@@ -471,7 +471,7 @@ mdl_smooth_code <- '
     mpg ~ normal(Y_hat, sigma);
     // Priors
     a ~ normal(25, 10);
-    sigma ~ exponential(0.2);
+    sigma ~ exponential(1);
     w_raw ~ normal(0, 1);
     tau ~ normal(0,1);
   }
