@@ -12,7 +12,7 @@
 
 _Statistical Rethinking_ was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the `rethinking` package. It uses the familiar formula syntax for defining models. However, unlike `rstanarm` the functions are not close mirrors of familiar frequentist functions. Another difference from `rstanarm` is you must specify all priors--there are no defaults. 
 
-The `rethinking` package has some nice extras. One is the `stancode` function returns the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax! Second `map2stan` returns an object that contains a `stanfit` object which you can access with the `\@stanfit` accessor.  Most of the `bayesplot` functions work with that `stanfit` object. Alternatively, the `rethinking` package includes its own functions that work directly on the returned `map2stan` object; see the _Statistical Rethinking_ book for details.
+The `rethinking` package has some nice extras. One is the `stancode` function returns the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax! Second `map2stan` returns an object that contains a `stanfit` object which you can access with the `\@stanfit` accessor.  Most of the `bayesplot` and `shinystan` functions work with that `stanfit` object. Alternatively, the `rethinking` package includes its own functions that work directly on the returned `map2stan` object; see the _Statistical Rethinking_ book for details.
 
 I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that it's also a very good option for getting started.
 
@@ -29,7 +29,7 @@ library(datasets)
 data(mtcars)
 
 library(rethinking)
-
+library(bayesplot)
 ```
 
 ## Linear Model
