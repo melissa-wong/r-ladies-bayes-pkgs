@@ -6,6 +6,8 @@
 
 - [rstanarm online documentation](https://mc-stan.org/users/interfaces/rstanarm)
 
+-[User-friendly Bayesian regression modeling: A tutorial with _rstanarm_ and _shinystan_](https://www.tqmp.org/RegularArticles/vol14-2/p099/p099.pdf) by Muth, Oravecz and Gabry
+
 ## Description
 
 The `rstanarm` package is one of the easiest ways to get started with Bayesian models. The functions parallel the frequentist functions you're probably already familiar with, and the syntax will also be familiar. You aren't required to explicitly choose priors because all of the functions have weakly informative priors by default (although some might argue _not_ being required to specify priors is a drawback). The primary limitation I've found thus far is the supported types for user-defined priors is somewhat limited.
