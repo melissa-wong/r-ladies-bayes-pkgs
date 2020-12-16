@@ -6,6 +6,8 @@
 
 - [rstanarm online documentation](https://mc-stan.org/users/interfaces/rstanarm)
 
+-[User-friendly Bayesian regression modeling: A tutorial with _rstanarm_ and _shinystan_](https://www.tqmp.org/RegularArticles/vol14-2/p099/p099.pdf) by Muth, Oravecz and Gabry
+
 ## Description
 
 The `rstanarm` package is one of the easiest ways to get started with Bayesian models. The functions parallel the frequentist functions you're probably already familiar with, and the syntax will also be familiar. You aren't required to explicitly choose priors because all of the functions have weakly informative priors by default (although some might argue _not_ being required to specify priors is a drawback). The primary limitation I've found thus far is the supported types for user-defined priors is somewhat limited.
@@ -314,8 +316,8 @@ mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 ## 
 ## SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 0.000174 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.74 seconds.
+## Chain 1: Gradient evaluation took 7.5e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.75 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -332,9 +334,9 @@ mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 ## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.02768 seconds (Warm-up)
-## Chain 1:                0.024681 seconds (Sampling)
-## Chain 1:                0.052361 seconds (Total)
+## Chain 1:  Elapsed Time: 0.030597 seconds (Warm-up)
+## Chain 1:                0.022865 seconds (Sampling)
+## Chain 1:                0.053462 seconds (Total)
 ## Chain 1:
 ```
 

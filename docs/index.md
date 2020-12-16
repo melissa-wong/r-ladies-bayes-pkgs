@@ -1,7 +1,7 @@
 --- 
 title: "Intro to R Bayes Packages"
 author: "Melissa Wong"
-date: "2020-12-12"
+date: "2020-12-15"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -13,6 +13,8 @@ github-repo: melissa-wong/r-ladies-rtp-bayes-pkgs
 description: "This is an introduction to several R packages for Bayesian analysis."
 ---
 
-# Prerequisites
 
 
+# Preface {-}
+
+TBD...

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 rethinking | Intro to R Bayes Packages</title>
+  <title>Chapter 3 rethinking | Intro to R Bayes Packages</title>
   <meta name="description" content="This is an introduction to several R packages for Bayesian analysis." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 rethinking | Intro to R Bayes Packages" />
+  <meta property="og:title" content="Chapter 3 rethinking | Intro to R Bayes Packages" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="melissa-wong/r-ladies-rtp-bayes-pkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 rethinking | Intro to R Bayes Packages" />
+  <meta name="twitter:title" content="Chapter 3 rethinking | Intro to R Bayes Packages" />
   
   <meta name="twitter:description" content="This is an introduction to several R packages for Bayesian analysis." />
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-12" />
+<meta name="date" content="2020-12-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="rstanarm.html"/>
-<link rel="next" href="brms.html"/>
+<link rel="next" href="rstan.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -138,111 +138,84 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Intro to R Bayes Packages</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
-<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#resources"><i class="fa fa-check"></i><b>2.1</b> Resources</a></li>
-<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>2.2</b> A Motivating Example</a></li>
-<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
-<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>2.4</b> Data</a></li>
-<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#prior-information"><i class="fa fa-check"></i><b>2.5</b> Prior Information</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#resources"><i class="fa fa-check"></i><b>1.1</b> Resources</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>1.2</b> A Motivating Example</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>1.3</b> Workflow</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.4</b> Data</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#prior-information"><i class="fa fa-check"></i><b>1.5</b> Prior Information</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>3</b> rstanarm</a><ul>
-<li class="chapter" data-level="3.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
-<li class="chapter" data-level="3.2" data-path="rstanarm.html"><a href="rstanarm.html#description"><i class="fa fa-check"></i><b>3.2</b> Description</a></li>
-<li class="chapter" data-level="3.3" data-path="rstanarm.html"><a href="rstanarm.html#environment-setup"><i class="fa fa-check"></i><b>3.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="3.4" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-default-priors"><i class="fa fa-check"></i><b>3.4</b> Linear Model (Default Priors)</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model"><i class="fa fa-check"></i><b>3.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="3.4.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution"><i class="fa fa-check"></i><b>3.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="3.4.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics"><i class="fa fa-check"></i><b>3.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="3.4.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution"><i class="fa fa-check"></i><b>3.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="3.4.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>3.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="2" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>2</b> rstanarm</a><ul>
+<li class="chapter" data-level="2.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>2.1</b> Resources</a></li>
+<li class="chapter" data-level="2.2" data-path="rstanarm.html"><a href="rstanarm.html#description"><i class="fa fa-check"></i><b>2.2</b> Description</a></li>
+<li class="chapter" data-level="2.3" data-path="rstanarm.html"><a href="rstanarm.html#environment-setup"><i class="fa fa-check"></i><b>2.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="2.4" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-default-priors"><i class="fa fa-check"></i><b>2.4</b> Linear Model (Default Priors)</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model"><i class="fa fa-check"></i><b>2.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="2.4.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution"><i class="fa fa-check"></i><b>2.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.4.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics"><i class="fa fa-check"></i><b>2.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="2.4.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution"><i class="fa fa-check"></i><b>2.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="2.4.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-user-defined-priors"><i class="fa fa-check"></i><b>3.5</b> Linear Model (User-Defined Priors)</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-1"><i class="fa fa-check"></i><b>3.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="3.5.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-1"><i class="fa fa-check"></i><b>3.5.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="3.5.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-1"><i class="fa fa-check"></i><b>3.5.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="3.5.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution-1"><i class="fa fa-check"></i><b>3.5.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="3.5.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-1"><i class="fa fa-check"></i><b>3.5.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.5" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-user-defined-priors"><i class="fa fa-check"></i><b>2.5</b> Linear Model (User-Defined Priors)</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-1"><i class="fa fa-check"></i><b>2.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="2.5.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-1"><i class="fa fa-check"></i><b>2.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.5.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-1"><i class="fa fa-check"></i><b>2.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="2.5.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution-1"><i class="fa fa-check"></i><b>2.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="2.5.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-1"><i class="fa fa-check"></i><b>2.5.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="rstanarm.html"><a href="rstanarm.html#semi-parametric-model"><i class="fa fa-check"></i><b>3.6</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-2"><i class="fa fa-check"></i><b>3.6.1</b> Define model</a></li>
-<li class="chapter" data-level="3.6.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-2"><i class="fa fa-check"></i><b>3.6.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="3.6.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-and-posterior"><i class="fa fa-check"></i><b>3.6.3</b> Diagnostics and Posterior</a></li>
-<li class="chapter" data-level="3.6.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-2"><i class="fa fa-check"></i><b>3.6.4</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.6" data-path="rstanarm.html"><a href="rstanarm.html#semi-parametric-model"><i class="fa fa-check"></i><b>2.6</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-2"><i class="fa fa-check"></i><b>2.6.1</b> Define model</a></li>
+<li class="chapter" data-level="2.6.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-2"><i class="fa fa-check"></i><b>2.6.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.6.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-and-posterior"><i class="fa fa-check"></i><b>2.6.3</b> Diagnostics and Posterior</a></li>
+<li class="chapter" data-level="2.6.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-2"><i class="fa fa-check"></i><b>2.6.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="rstanarm.html"><a href="rstanarm.html#session-info"><i class="fa fa-check"></i><b>3.7</b> Session Info</a></li>
+<li class="chapter" data-level="2.7" data-path="rstanarm.html"><a href="rstanarm.html#session-info"><i class="fa fa-check"></i><b>2.7</b> Session Info</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="rethinking.html"><a href="rethinking.html"><i class="fa fa-check"></i><b>4</b> rethinking</a><ul>
-<li class="chapter" data-level="4.1" data-path="rethinking.html"><a href="rethinking.html#resources-2"><i class="fa fa-check"></i><b>4.1</b> Resources</a></li>
-<li class="chapter" data-level="4.2" data-path="rethinking.html"><a href="rethinking.html#description-1"><i class="fa fa-check"></i><b>4.2</b> Description</a></li>
-<li class="chapter" data-level="4.3" data-path="rethinking.html"><a href="rethinking.html#environment-setup-1"><i class="fa fa-check"></i><b>4.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="4.4" data-path="rethinking.html"><a href="rethinking.html#linear-model"><i class="fa fa-check"></i><b>4.4</b> Linear Model</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="rethinking.html"><a href="rethinking.html#define-model-3"><i class="fa fa-check"></i><b>4.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="4.4.2" data-path="rethinking.html"><a href="rethinking.html#rethinkingprior"><i class="fa fa-check"></i><b>4.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="4.4.3" data-path="rethinking.html"><a href="rethinking.html#diagnostics-2"><i class="fa fa-check"></i><b>4.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="4.4.4" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-2"><i class="fa fa-check"></i><b>4.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="4.4.5" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-3"><i class="fa fa-check"></i><b>4.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="3" data-path="rethinking.html"><a href="rethinking.html"><i class="fa fa-check"></i><b>3</b> rethinking</a><ul>
+<li class="chapter" data-level="3.1" data-path="rethinking.html"><a href="rethinking.html#resources-2"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
+<li class="chapter" data-level="3.2" data-path="rethinking.html"><a href="rethinking.html#description-1"><i class="fa fa-check"></i><b>3.2</b> Description</a></li>
+<li class="chapter" data-level="3.3" data-path="rethinking.html"><a href="rethinking.html#environment-setup-1"><i class="fa fa-check"></i><b>3.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="3.4" data-path="rethinking.html"><a href="rethinking.html#linear-model"><i class="fa fa-check"></i><b>3.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="rethinking.html"><a href="rethinking.html#define-model-3"><i class="fa fa-check"></i><b>3.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="3.4.2" data-path="rethinking.html"><a href="rethinking.html#rethinkingprior"><i class="fa fa-check"></i><b>3.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.4.3" data-path="rethinking.html"><a href="rethinking.html#diagnostics-2"><i class="fa fa-check"></i><b>3.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.4.4" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-2"><i class="fa fa-check"></i><b>3.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="3.4.5" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-3"><i class="fa fa-check"></i><b>3.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="rethinking.html"><a href="rethinking.html#GAM"><i class="fa fa-check"></i><b>4.5</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="4.5.1" data-path="rethinking.html"><a href="rethinking.html#define-model-4"><i class="fa fa-check"></i><b>4.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="4.5.2" data-path="rethinking.html"><a href="rethinking.html#diagnostics-3"><i class="fa fa-check"></i><b>4.5.2</b> Diagnostics</a></li>
-<li class="chapter" data-level="4.5.3" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-3"><i class="fa fa-check"></i><b>4.5.3</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="4.5.4" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-4"><i class="fa fa-check"></i><b>4.5.4</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.5" data-path="rethinking.html"><a href="rethinking.html#GAM"><i class="fa fa-check"></i><b>3.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="rethinking.html"><a href="rethinking.html#define-model-4"><i class="fa fa-check"></i><b>3.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="rethinking.html"><a href="rethinking.html#diagnostics-3"><i class="fa fa-check"></i><b>3.5.2</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.5.3" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-3"><i class="fa fa-check"></i><b>3.5.3</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="3.5.4" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-4"><i class="fa fa-check"></i><b>3.5.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="4.6" data-path="rethinking.html"><a href="rethinking.html#session-info-1"><i class="fa fa-check"></i><b>4.6</b> Session Info</a></li>
+<li class="chapter" data-level="3.6" data-path="rethinking.html"><a href="rethinking.html#session-info-1"><i class="fa fa-check"></i><b>3.6</b> Session Info</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="brms.html"><a href="brms.html"><i class="fa fa-check"></i><b>5</b> brms</a><ul>
-<li class="chapter" data-level="5.1" data-path="brms.html"><a href="brms.html#resources-3"><i class="fa fa-check"></i><b>5.1</b> Resources</a></li>
-<li class="chapter" data-level="5.2" data-path="brms.html"><a href="brms.html#description-2"><i class="fa fa-check"></i><b>5.2</b> Description</a></li>
-<li class="chapter" data-level="5.3" data-path="brms.html"><a href="brms.html#environment-setup-2"><i class="fa fa-check"></i><b>5.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="5.4" data-path="brms.html"><a href="brms.html#linear-model-1"><i class="fa fa-check"></i><b>5.4</b> Linear Model</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="brms.html"><a href="brms.html#define-model-5"><i class="fa fa-check"></i><b>5.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="5.4.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-3"><i class="fa fa-check"></i><b>5.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="5.4.3" data-path="brms.html"><a href="brms.html#diagnostics-4"><i class="fa fa-check"></i><b>5.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="5.4.4" data-path="brms.html"><a href="brms.html#posterior-distribution-4"><i class="fa fa-check"></i><b>5.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="5.4.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-5"><i class="fa fa-check"></i><b>5.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="4" data-path="rstan.html"><a href="rstan.html"><i class="fa fa-check"></i><b>4</b> rstan</a><ul>
+<li class="chapter" data-level="4.1" data-path="rstan.html"><a href="rstan.html#resources-3"><i class="fa fa-check"></i><b>4.1</b> Resources</a></li>
+<li class="chapter" data-level="4.2" data-path="rstan.html"><a href="rstan.html#description-2"><i class="fa fa-check"></i><b>4.2</b> Description</a></li>
+<li class="chapter" data-level="4.3" data-path="rstan.html"><a href="rstan.html#environment-setup-2"><i class="fa fa-check"></i><b>4.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="4.4" data-path="rstan.html"><a href="rstan.html#linear-model-1"><i class="fa fa-check"></i><b>4.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="rstan.html"><a href="rstan.html#define-model-5"><i class="fa fa-check"></i><b>4.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-3"><i class="fa fa-check"></i><b>4.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.4.3" data-path="rstan.html"><a href="rstan.html#diagnostics-4"><i class="fa fa-check"></i><b>4.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.4.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-4"><i class="fa fa-check"></i><b>4.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.4.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-5"><i class="fa fa-check"></i><b>4.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="brms.html"><a href="brms.html#semi-parametric-model-1"><i class="fa fa-check"></i><b>5.5</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="5.5.1" data-path="brms.html"><a href="brms.html#define-model-6"><i class="fa fa-check"></i><b>5.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="5.5.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-4"><i class="fa fa-check"></i><b>5.5.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="5.5.3" data-path="brms.html"><a href="brms.html#diagnostics-5"><i class="fa fa-check"></i><b>5.5.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="5.5.4" data-path="brms.html"><a href="brms.html#posterior-distribution-5"><i class="fa fa-check"></i><b>5.5.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="5.5.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-6"><i class="fa fa-check"></i><b>5.5.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-1"><i class="fa fa-check"></i><b>4.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="rstan.html"><a href="rstan.html#define-model-6"><i class="fa fa-check"></i><b>4.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.5.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-4"><i class="fa fa-check"></i><b>4.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.5.3" data-path="rstan.html"><a href="rstan.html#diagnostics-5"><i class="fa fa-check"></i><b>4.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.5.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-5"><i class="fa fa-check"></i><b>4.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.5.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-6"><i class="fa fa-check"></i><b>4.5.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="5.6" data-path="brms.html"><a href="brms.html#semi-parametric-model-random-walk-prior"><i class="fa fa-check"></i><b>5.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
-<li class="chapter" data-level="5.6.1" data-path="brms.html"><a href="brms.html#define-model-7"><i class="fa fa-check"></i><b>5.6.1</b> Define Model</a></li>
-<li class="chapter" data-level="5.6.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-5"><i class="fa fa-check"></i><b>5.6.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="5.6.3" data-path="brms.html"><a href="brms.html#diagnostics-6"><i class="fa fa-check"></i><b>5.6.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="5.6.4" data-path="brms.html"><a href="brms.html#posterior-distribution-6"><i class="fa fa-check"></i><b>5.6.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="5.6.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-7"><i class="fa fa-check"></i><b>5.6.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.6" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-random-walk-prior"><i class="fa fa-check"></i><b>4.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="rstan.html"><a href="rstan.html#define-model-7"><i class="fa fa-check"></i><b>4.6.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.6.2" data-path="rstan.html"><a href="rstan.html#diagnostics-6"><i class="fa fa-check"></i><b>4.6.2</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.6.3" data-path="rstan.html"><a href="rstan.html#posterior-distribution-6"><i class="fa fa-check"></i><b>4.6.3</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.6.4" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-7"><i class="fa fa-check"></i><b>4.6.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="brms.html"><a href="brms.html#session-info-2"><i class="fa fa-check"></i><b>5.7</b> Session Info</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="rstan.html"><a href="rstan.html"><i class="fa fa-check"></i><b>6</b> rstan</a><ul>
-<li class="chapter" data-level="6.1" data-path="rstan.html"><a href="rstan.html#resources-4"><i class="fa fa-check"></i><b>6.1</b> Resources</a></li>
-<li class="chapter" data-level="6.2" data-path="rstan.html"><a href="rstan.html#description-3"><i class="fa fa-check"></i><b>6.2</b> Description</a></li>
-<li class="chapter" data-level="6.3" data-path="rstan.html"><a href="rstan.html#environment-setup-3"><i class="fa fa-check"></i><b>6.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="6.4" data-path="rstan.html"><a href="rstan.html#linear-model-2"><i class="fa fa-check"></i><b>6.4</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.4.1" data-path="rstan.html"><a href="rstan.html#define-model-8"><i class="fa fa-check"></i><b>6.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.4.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-6"><i class="fa fa-check"></i><b>6.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="6.4.3" data-path="rstan.html"><a href="rstan.html#diagnostics-7"><i class="fa fa-check"></i><b>6.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.4.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-7"><i class="fa fa-check"></i><b>6.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.4.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-8"><i class="fa fa-check"></i><b>6.4.5</b> Posterior Predictive Distribution</a></li>
-</ul></li>
-<li class="chapter" data-level="6.5" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-2"><i class="fa fa-check"></i><b>6.5</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="6.5.1" data-path="rstan.html"><a href="rstan.html#define-model-9"><i class="fa fa-check"></i><b>6.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.5.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-7"><i class="fa fa-check"></i><b>6.5.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="6.5.3" data-path="rstan.html"><a href="rstan.html#diagnostics-8"><i class="fa fa-check"></i><b>6.5.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.5.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-8"><i class="fa fa-check"></i><b>6.5.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.5.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-9"><i class="fa fa-check"></i><b>6.5.5</b> Posterior Predictive Distribution</a></li>
-</ul></li>
-<li class="chapter" data-level="6.6" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-random-walk-prior-1"><i class="fa fa-check"></i><b>6.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
-<li class="chapter" data-level="6.6.1" data-path="rstan.html"><a href="rstan.html#define-model-10"><i class="fa fa-check"></i><b>6.6.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.6.2" data-path="rstan.html"><a href="rstan.html#diagnostics-9"><i class="fa fa-check"></i><b>6.6.2</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.6.3" data-path="rstan.html"><a href="rstan.html#posterior-distribution-9"><i class="fa fa-check"></i><b>6.6.3</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.6.4" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-10"><i class="fa fa-check"></i><b>6.6.4</b> Posterior Predictive Distribution</a></li>
-</ul></li>
-<li class="chapter" data-level="6.7" data-path="rstan.html"><a href="rstan.html#session-info-3"><i class="fa fa-check"></i><b>6.7</b> Session Info</a></li>
+<li class="chapter" data-level="4.7" data-path="rstan.html"><a href="rstan.html#session-info-2"><i class="fa fa-check"></i><b>4.7</b> Session Info</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -266,9 +239,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="rethinking" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> rethinking</h1>
+<h1><span class="header-section-number">Chapter 3</span> rethinking</h1>
 <div id="resources-2" class="section level2">
-<h2><span class="header-section-number">4.1</span> Resources</h2>
+<h2><span class="header-section-number">3.1</span> Resources</h2>
 <ul>
 <li><p><a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking</a> by McElreath</p></li>
 <li><p><a href="https://www.youtube.com/channel/UCNJK6_DZvcMqNSzQdEkzvzA/featured">Statistical Rethinking Lectures on YouTube</a></p></li>
@@ -276,13 +249,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 </div>
 <div id="description-1" class="section level2">
-<h2><span class="header-section-number">4.2</span> Description</h2>
-<p><em>Statistical Rethinking</em> was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the <code>rethinking</code> package. It uses the familiar formula syntax for defining models. However, unlike <code>rstanarm</code> the functions are not close mirrors of familiar frequentist functions. Another difference from <code>rstanarm</code> is you must specify all priors–there are no defaults.</p>
-<p>The <code>rethinking</code> package has some nice extras. One is the <code>stancode</code> function returns the <code>stan</code> code generated for the model. This is a great way to start getting familiar with <code>stan</code> syntax! Second <code>map2stan</code> returns an object that contains a <code>stanfit</code> object which you can access with the <code>\@stanfit</code> accessor. Most of the <code>bayesplot</code> functions work with that <code>stanfit</code> object. Alternatively, the <code>rethinking</code> package includes its own functions that work directly on the returned <code>map2stan</code> object; see the <em>Statistical Rethinking</em> book for details.</p>
-<p>I ran into some difficulty with the semi-parametric regression (<a href="rethinking.html#GAM">4.5</a>), but aside from that it’s also a very good option for getting started.</p>
+<h2><span class="header-section-number">3.2</span> Description</h2>
+<p><em>Statistical Rethinking</em> was one of the first books I read on Bayesian methods, and I highly recommend it. McElreath uses a lot of practical examples which I found very helpful. All of the problems in the book are done with the <code>rethinking</code> package which uses the familiar formula syntax for defining models. However, unlike <code>rstanarm</code> the functions are not close mirrors of familiar frequentist functions. Another difference from <code>rstanarm</code> is you must specify all priors–there are no defaults.</p>
+<p>The <code>rethinking</code> package has some nice extras. One is the <code>stancode</code> function which returns the <code>stan</code> code generated for the model. This is a great way to start getting familiar with <code>stan</code> syntax! Second <code>map2stan</code> returns an object that contains a <code>stanfit</code> object which you can access with the <code>\@stanfit</code> accessor. Most of the <code>bayesplot</code> and <code>shinystan</code> functions work with that <code>stanfit</code> object. Alternatively, the <code>rethinking</code> package includes its own functions that work directly on the returned <code>map2stan</code> object (see the book for details).</p>
+<p>I ran into some difficulty with the semi-parametric regression (<a href="rethinking.html#GAM">3.5</a>), but aside from that the <em>rethinking</em> package is also a very good option for getting started.</p>
 </div>
 <div id="environment-setup-1" class="section level2">
-<h2><span class="header-section-number">4.3</span> Environment Setup</h2>
+<h2><span class="header-section-number">3.3</span> Environment Setup</h2>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="rethinking.html#cb41-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
 <span id="cb41-2"><a href="rethinking.html#cb41-2"></a></span>
 <span id="cb41-3"><a href="rethinking.html#cb41-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
@@ -296,14 +269,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb41-11"><a href="rethinking.html#cb41-11"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
 </div>
 <div id="linear-model" class="section level2">
-<h2><span class="header-section-number">4.4</span> Linear Model</h2>
+<h2><span class="header-section-number">3.4</span> Linear Model</h2>
 <div id="define-model-3" class="section level3">
-<h3><span class="header-section-number">4.4.1</span> Define Model</h3>
+<h3><span class="header-section-number">3.4.1</span> Define Model</h3>
 <p>The <code>rethinking</code> package does not have default priors so I need to explicitly choose them. Again I’ll use the following model:</p>
 <p><span class="math display">\[\begin{align*}
   mpg &amp;\sim N(\mu, \sigma^2) \\
   \mu &amp;= a + b*disp \\
-  a &amp;\sim Normal(13.2,5.3^2) \\
+  a &amp;\sim Normal(13.2, 5.3^2) \\
   b &amp;\sim Normal(-0.1, 0.05^2) \\
   \sigma &amp;\sim Exponential(1)
 \end{align*}\]</span></p>
@@ -323,7 +296,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## Computing WAIC</code></pre>
 <p>The automatically generated <code>stan</code> code:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rethinking.html#cb45-1"></a><span class="kw">stancode</span>(mdl1)</span></code></pre></div>
-<pre><code>## //2020-12-12 15:51:13
+<pre><code>## //2020-12-15 20:39:53
 ## data{
 ##     int&lt;lower=1&gt; N;
 ##     real mpg[N];
@@ -352,7 +325,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## }</code></pre>
 </div>
 <div id="rethinkingprior" class="section level3">
-<h3><span class="header-section-number">4.4.2</span> Prior Predictive Distribution</h3>
+<h3><span class="header-section-number">3.4.2</span> Prior Predictive Distribution</h3>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rethinking.html#cb47-1"></a><span class="co"># Plot prior predictive distribution</span></span>
 <span id="cb47-2"><a href="rethinking.html#cb47-2"></a>N &lt;-<span class="st"> </span><span class="dv">50</span></span>
 <span id="cb47-3"><a href="rethinking.html#cb47-3"></a></span>
@@ -371,7 +344,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="03_rethinking_files/figure-html/mdl1_prior-1.png" width="672" /></p>
 </div>
 <div id="diagnostics-2" class="section level3">
-<h3><span class="header-section-number">4.4.3</span> Diagnostics</h3>
+<h3><span class="header-section-number">3.4.3</span> Diagnostics</h3>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="rethinking.html#cb48-1"></a><span class="kw">mcmc_trace</span>(mdl1<span class="op">@</span>stanfit, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_trace-1.png" width="672" /></p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="rethinking.html#cb49-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1<span class="op">@</span>stanfit, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
@@ -384,15 +357,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sigma  3.21343 0.403748  2.50514  4.12205  1769 1.001</code></pre>
 </div>
 <div id="posterior-distribution-2" class="section level3">
-<h3><span class="header-section-number">4.4.4</span> Posterior Distribution</h3>
+<h3><span class="header-section-number">3.4.4</span> Posterior Distribution</h3>
 <p>The <code>precis</code> function above also displays both the posterior point estimate and credible interval.</p>
 </div>
 <div id="posterior-predictive-distribution-3" class="section level3">
-<h3><span class="header-section-number">4.4.5</span> Posterior Predictive Distribution</h3>
+<h3><span class="header-section-number">3.4.5</span> Posterior Predictive Distribution</h3>
 <p>Finally, I’ll check the posterior predictive distribution. The <code>rethinking</code> package includes the <code>postcheck</code> function which displays a plot for posterior predictive checking.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="rethinking.html#cb52-1"></a><span class="kw">postcheck</span>(mdl1, <span class="dt">window=</span><span class="kw">nrow</span>(mtcars))</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_ppd-1.png" width="672" /></p>
-<p>Personally, I find the <code>postcheck</code> plot hard to interpret. Instead, I’ll plot the expectation of the posterior predictive distribution (i.e., <span class="math inline">\(\mu\)</span>) like I did with <code>rstanarm</code> . The <code>sim</code> function draws samples from the posterior predictive distribution, and the <code>link</code> function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the <code>sim</code> and <code>link</code> functions return identical results.</p>
+<p>Personally, I find the <code>postcheck</code> plot hard to use because I can never remember what the different symbols represent. Instead, I’ll plot the expectation of the posterior predictive distribution (i.e., <span class="math inline">\(\mu\)</span>) like I did with <code>rstanarm</code> . The <code>sim</code> function draws samples from the posterior predictive distribution, and the <code>link</code> function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the <code>sim</code> and <code>link</code> functions return identical results.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="rethinking.html#cb53-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp)))</span>
 <span id="cb53-2"><a href="rethinking.html#cb53-2"></a></span>
 <span id="cb53-3"><a href="rethinking.html#cb53-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">link</span>(mdl1, <span class="dt">data=</span>newdata, <span class="dt">n=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
@@ -407,9 +380,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div id="GAM" class="section level2">
-<h2><span class="header-section-number">4.5</span> Semi-parametric Model</h2>
+<h2><span class="header-section-number">3.5</span> Semi-parametric Model</h2>
 <div id="define-model-4" class="section level3">
-<h3><span class="header-section-number">4.5.1</span> Define Model</h3>
+<h3><span class="header-section-number">3.5.1</span> Define Model</h3>
 <p>Setting up the semi-parametric model is a bit more work in the <code>rethinking</code> package. First, I explicitly create the splines. The component splines are plotted below.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="rethinking.html#cb54-1"></a><span class="kw">library</span>(splines)</span>
 <span id="cb54-2"><a href="rethinking.html#cb54-2"></a></span>
@@ -445,17 +418,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb55-6"><a href="rethinking.html#cb55-6"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
 <span id="cb55-7"><a href="rethinking.html#cb55-7"></a>)</span>
 <span id="cb55-8"><a href="rethinking.html#cb55-8"></a></span>
-<span id="cb55-9"><a href="rethinking.html#cb55-9"></a></span>
-<span id="cb55-10"><a href="rethinking.html#cb55-10"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">quap</span>(f, <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">mpg=</span>mtcars<span class="op">$</span>mpg, <span class="dt">B=</span>B),</span>
-<span id="cb55-11"><a href="rethinking.html#cb55-11"></a>             <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">w=</span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">ncol</span>(B)))</span>
-<span id="cb55-12"><a href="rethinking.html#cb55-12"></a>            )</span></code></pre></div>
+<span id="cb55-9"><a href="rethinking.html#cb55-9"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">quap</span>(f, <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">mpg=</span>mtcars<span class="op">$</span>mpg, <span class="dt">B=</span>B),</span>
+<span id="cb55-10"><a href="rethinking.html#cb55-10"></a>             <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">w=</span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">ncol</span>(B)))</span>
+<span id="cb55-11"><a href="rethinking.html#cb55-11"></a>            )</span></code></pre></div>
 </div>
 <div id="diagnostics-3" class="section level3">
-<h3><span class="header-section-number">4.5.2</span> Diagnostics</h3>
+<h3><span class="header-section-number">3.5.2</span> Diagnostics</h3>
 <p>Since MCMC was not used to fit the model, there are no chain diagnostics to examine.</p>
 </div>
 <div id="posterior-distribution-3" class="section level3">
-<h3><span class="header-section-number">4.5.3</span> Posterior Distribution</h3>
+<h3><span class="header-section-number">3.5.3</span> Posterior Distribution</h3>
 <p>I can still use the <code>precis</code> function to look at the posterior distribution, although there’s really no intuitive interpretation for the spline weights.</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="rethinking.html#cb56-1"></a><span class="kw">precis</span>(mdl2, <span class="dt">depth=</span><span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##           mean     sd    5.5%   94.5%
@@ -469,7 +441,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sigma   1.9638 0.2397   1.581  2.3469</code></pre>
 </div>
 <div id="posterior-predictive-distribution-4" class="section level3">
-<h3><span class="header-section-number">4.5.4</span> Posterior Predictive Distribution</h3>
+<h3><span class="header-section-number">3.5.4</span> Posterior Predictive Distribution</h3>
 <p>Finally, the posterior predictive distribution and LOESS for comparison:</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="rethinking.html#cb58-1"></a>mu &lt;-<span class="st"> </span><span class="kw">link</span>(mdl2)</span>
 <span id="cb58-2"><a href="rethinking.html#cb58-2"></a>mu_mean &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(mu, <span class="dv">2</span>, mean)) <span class="op">%&gt;%</span></span>
@@ -496,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div id="session-info-1" class="section level2">
-<h2><span class="header-section-number">4.6</span> Session Info</h2>
+<h2><span class="header-section-number">3.6</span> Session Info</h2>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="rethinking.html#cb59-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
@@ -550,7 +522,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="rstanarm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="brms.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rstan.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

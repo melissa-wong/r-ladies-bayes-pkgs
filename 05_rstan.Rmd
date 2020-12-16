@@ -38,9 +38,9 @@ Like the `rethinking` package, `rstan` doesn't have default priors, so I need to
 \begin{align*}
   mpg &\sim N(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
-  a &\sim N(25,10) \\
-  b &\sim N(-0.2, 0.1) \\
-  \sigma &\sim Exp(1)
+  a &\sim Normal(13.2, 5.3^2) \\
+  b &\sim Normal(-0.1, 0.05^2) \\
+  \sigma &\sim Exponential(1)
 \end{align*}
 
 For a simple linear model there are three sections to the model definition:
@@ -69,8 +69,8 @@ mdl_code <- '
     // Likelihood
     mpg ~ normal(a + b * disp, sigma);
     // Priors
-    a ~ normal(25, 10);
-    b ~ normal(-0.2, 0.1);
+    a ~ normal(13.2, 5.3);
+    b ~ normal(-0.1, 0.05);
     sigma ~ exponential(1);
   }
 '
@@ -109,8 +109,8 @@ mdl_prior <- '
     vector[N] disp;
   }
 generated quantities{
-  real a_sim = normal_rng(25, 10);
-  real b_sim = normal_rng(-0.2, 0.1);
+  real a_sim = normal_rng(13.2, 5.3);
+  real b_sim = normal_rng(-0.1, 0.05);
   real sigma_sim = exponential_rng(1);
   real mpg_sim[N] = normal_rng(a_sim + b_sim * disp, sigma_sim);
 }
@@ -170,7 +170,7 @@ draws <- as.data.frame(mdl1) %>%
   head(50)
 
 # Expected value posterior predictive distribution
-post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*(D-mtcars$disp)) %>%
+post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*(D)) %>%
   as.data.frame() %>%
   mutate(disp = D) %>%
   pivot_longer(-c("disp"), names_to="iter", values_to="mpg") 
@@ -206,8 +206,8 @@ mdl_code_ppd <- '
     // Likelihood
     mpg ~ normal(Y_hat, sigma);
     // Priors
-    a ~ normal(25, 10);
-    b ~ normal(-0.2, 0.1);
+    a ~ normal(13.2, 5.3);
+    b ~ normal(-0.1, 0.05);
     sigma ~ exponential(1);
   }
   generated quantities{
@@ -246,6 +246,17 @@ ggplot() +
 ```
 
 The darker blue area is a 95% credible interval for the expected value of the posterior predictive distribution and the lighter blue area is the 95% credible interval for the posterior predictive distribution.
+
+And we can also plot the density overlay using the posterior predictive draws.
+
+```{r}
+yrep <- draws %>%
+  head(50) %>%
+  select(starts_with("mpg_ppd")) %>%
+  as.matrix()
+
+ppc_dens_overlay(mtcars$mpg, yrep)
+```
 
 ## Semi-parametric Model
 

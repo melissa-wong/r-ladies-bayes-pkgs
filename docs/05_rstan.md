@@ -39,9 +39,9 @@ Like the `rethinking` package, `rstan` doesn't have default priors, so I need to
 \begin{align*}
   mpg &\sim N(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
-  a &\sim N(25,10) \\
-  b &\sim N(-0.2, 0.1) \\
-  \sigma &\sim Exp(1)
+  a &\sim Normal(13.2, 5.3^2) \\
+  b &\sim Normal(-0.1, 0.05^2) \\
+  \sigma &\sim Exponential(1)
 \end{align*}
 
 For a simple linear model there are three sections to the model definition:
@@ -71,8 +71,8 @@ mdl_code <- '
     // Likelihood
     mpg ~ normal(a + b * disp, sigma);
     // Priors
-    a ~ normal(25, 10);
-    b ~ normal(-0.2, 0.1);
+    a ~ normal(13.2, 5.3);
+    b ~ normal(-0.1, 0.05);
     sigma ~ exponential(1);
   }
 '
@@ -118,8 +118,8 @@ mdl_prior <- '
     vector[N] disp;
   }
 generated quantities{
-  real a_sim = normal_rng(25, 10);
-  real b_sim = normal_rng(-0.2, 0.1);
+  real a_sim = normal_rng(13.2, 5.3);
+  real b_sim = normal_rng(-0.1, 0.05);
   real sigma_sim = exponential_rng(1);
   real mpg_sim[N] = normal_rng(a_sim + b_sim * disp, sigma_sim);
 }
@@ -174,12 +174,12 @@ print(mdl1)
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## a      29.58    0.03 1.21  27.17  28.80  29.56  30.39  31.93  1394    1
-## b      -0.04    0.00 0.00  -0.05  -0.04  -0.04  -0.04  -0.03  1444    1
-## sigma   3.19    0.01 0.40   2.53   2.92   3.15   3.41   4.07  1553    1
-## lp__  -57.58    0.04 1.28 -60.90 -58.16 -57.23 -56.64 -56.15  1298    1
+## a      28.85    0.03 1.19  26.47  28.05  28.84  29.64  31.22  1681    1
+## b      -0.04    0.00 0.00  -0.05  -0.04  -0.04  -0.04  -0.03  1743    1
+## sigma   3.21    0.01 0.40   2.56   2.93   3.18   3.45   4.14  1789    1
+## lp__  -61.51    0.04 1.25 -64.85 -62.06 -61.18 -60.60 -60.11  1190    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Dec 12 15:52:54 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec 15 20:41:10 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -217,165 +217,11 @@ draws <- as.data.frame(mdl1) %>%
   head(50)
 
 # Expected value posterior predictive distribution
-post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*(D-mtcars$disp)) %>%
+post_pred <- apply(draws, 1, function(x) x["a"] + x["b"]*(D)) %>%
   as.data.frame() %>%
   mutate(disp = D) %>%
   pivot_longer(-c("disp"), names_to="iter", values_to="mpg") 
-```
 
-```
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-
-## Warning in D - mtcars$disp: longer object length is not a multiple of shorter
-## object length
-```
-
-```r
 ggplot() +
   geom_line(data=post_pred, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
   geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
@@ -410,8 +256,8 @@ mdl_code_ppd <- '
     // Likelihood
     mpg ~ normal(Y_hat, sigma);
     // Priors
-    a ~ normal(25, 10);
-    b ~ normal(-0.2, 0.1);
+    a ~ normal(13.2, 5.3);
+    b ~ normal(-0.1, 0.05);
     sigma ~ exponential(1);
   }
   generated quantities{
@@ -458,6 +304,20 @@ ggplot() +
 <img src="05_rstan_files/figure-html/mdl1_ppd_alternate-1.png" width="672" />
 
 The darker blue area is a 95% credible interval for the expected value of the posterior predictive distribution and the lighter blue area is the 95% credible interval for the posterior predictive distribution.
+
+And we can also plot the density overlay using the posterior predictive draws.
+
+
+```r
+yrep <- draws %>%
+  head(50) %>%
+  select(starts_with("mpg_ppd")) %>%
+  as.matrix()
+
+ppc_dens_overlay(mtcars$mpg, yrep)
+```
+
+<img src="05_rstan_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
 ## Semi-parametric Model
 
@@ -641,7 +501,7 @@ print(mdl1_gam, pars=c("a", "sigma", "w"))
 ## w[5]  -2.47    0.08 3.03  -8.47  -4.52 -2.41 -0.46  3.59  1536    1
 ## w[6]  -8.91    0.07 2.53 -13.84 -10.64 -8.88 -7.11 -4.02  1487    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Dec 12 15:54:45 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec 15 20:42:48 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -776,7 +636,7 @@ mdl2_gam <- stan(model_code = mdl_code, data=mdl_data,
 mcmc_rank_overlay(mdl2_gam_smooth, pars=vars("a", "sigma", starts_with("w")))
 ```
 
-<img src="05_rstan_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<img src="05_rstan_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 
@@ -815,7 +675,7 @@ print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
 ## w[21] -19.55    0.05 2.64 -24.68 -21.32 -19.56 -17.77 -14.40  3178    1
 ## w[22] -20.51    0.05 2.75 -25.90 -22.40 -20.52 -18.65 -15.02  3126    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Dec 12 15:56:16 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec 15 20:43:58 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -859,7 +719,7 @@ rbind(Epost_pred %>% select(c("disp", `50%`)) %>% mutate(type="without smoothing
   labs(y="mpg")
 ```
 
-<img src="05_rstan_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="05_rstan_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 The plot above shows that even with a large number of knots (in this case 20), the model with the smoothing prior significantly reduces over-fitting when compared to the model without the smoothing prior.
 
