@@ -10,11 +10,11 @@
 
 ## Description
 
-_Statistical Rethinking_ was the first book I read on Bayesian methods, and I highly recommend it. All of the problems in the book are done with the `rethinking` package. It uses the familiar formula syntax for defining models. However, unlike `rstanarm` the functions are not close mirrors of familiar frequentist functions. Another difference from `rstanarm` is you must specify all priors--there are no defaults. 
+_Statistical Rethinking_ was one of the first books I read on Bayesian methods, and I highly recommend it. McElreath uses a lot of practical examples which I found very helpful. All of the problems in the book are done with the `rethinking` package which uses the familiar formula syntax for defining models. However, unlike `rstanarm` the functions are not close mirrors of familiar frequentist functions. Another difference from `rstanarm` is you must specify all priors--there are no defaults. 
 
-The `rethinking` package has some nice extras. One is the `stancode` function returns the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax! Second `map2stan` returns an object that contains a `stanfit` object which you can access with the `\@stanfit` accessor.  Most of the `bayesplot` and `shinystan` functions work with that `stanfit` object. Alternatively, the `rethinking` package includes its own functions that work directly on the returned `map2stan` object; see the _Statistical Rethinking_ book for details.
+The `rethinking` package has some nice extras. One is the `stancode` function which returns the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax! Second `map2stan` returns an object that contains a `stanfit` object which you can access with the `\@stanfit` accessor.  Most of the `bayesplot` and `shinystan` functions work with that `stanfit` object. Alternatively, the `rethinking` package includes its own functions that work directly on the returned `map2stan` object (see the book for details).
 
-I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that it's also a very good option for getting started.
+I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that the _rethinking_ package is also a very good option for getting started.
 
 ## Environment Setup
 
@@ -116,7 +116,7 @@ Finally, I'll check the posterior predictive distribution. The `rethinking` pack
 postcheck(mdl1, window=nrow(mtcars))
 ```
 
-Personally, I find the `postcheck` plot hard to interpret.  Instead, I'll plot the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with `rstanarm` . The `sim` function draws samples from the posterior predictive distribution, and the `link` function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the `sim` and `link` functions return identical results.
+Personally, I find the `postcheck` plot hard to use because I can never remember what the different symbols represent.  Instead, I'll plot the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with `rstanarm` . The `sim` function draws samples from the posterior predictive distribution, and the `link` function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the `sim` and `link` functions return identical results.
 
 ```{r mdl1_eppd, results="hide"}
 newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
@@ -174,7 +174,6 @@ f <- alist(
   w ~ dnorm(0,5),
   sigma ~ dexp(1)
 )
-
 
 mdl2 <- quap(f, data=list(mpg=mtcars$mpg, B=B),
              start=list(w=rep(1, ncol(B)))
