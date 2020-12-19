@@ -74,8 +74,9 @@ The `mtcars` dataset was extracted for Motor Trend magazine data on 1973-1974 mo
 
 ```r
 library(gridExtra)
+library(here)
 
-epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
+epa <- read.csv(here("data", "EPA_1974.csv"), header=TRUE)
 
 p1 <- ggplot() +
   geom_histogram(data=epa, mapping=aes(x=mpg), binwidth = 1)

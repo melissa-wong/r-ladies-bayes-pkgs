@@ -6,7 +6,7 @@
 
 - [rstanarm online documentation](https://mc-stan.org/users/interfaces/rstanarm)
 
--[User-friendly Bayesian regression modeling: A tutorial with _rstanarm_ and _shinystan_](https://www.tqmp.org/RegularArticles/vol14-2/p099/p099.pdf) by Muth, Oravecz and Gabry
+- [User-friendly Bayesian regression modeling: A tutorial with _rstanarm_ and _shinystan_](https://www.tqmp.org/RegularArticles/vol14-2/p099/p099.pdf) by Muth, Oravecz and Gabry
 
 ## Description
 
@@ -14,7 +14,6 @@ The `rstanarm` package is one of the easiest ways to get started with Bayesian m
 
 ## Environment Setup
 ```{r setup, results="hide", message=FALSE}
-rm(list=ls())
 
 set.seed(123)
 options("scipen" = 1, "digits" = 4)
@@ -59,7 +58,8 @@ prior_summary(mdl1)
 Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior for this data looks like.
 
 ```{r epa, echo=FALSE}
-epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
+library("here")
+epa <- read.csv(here("data", "EPA_1974.csv"), header=TRUE)
 
 ggplot() +
   geom_histogram(data=epa, mapping=aes(x=mpg, y=..density..), binwidth = 1) +
@@ -190,9 +190,30 @@ I'll specify priors which incorporate the prior knowledge from the EPA data as w
 
 The differences from the default priors are
 
-1. The intercept prior is now set to the mean and standard deviation from the EPA data .
+1. The intercept prior is now set to the mean and standard deviation from the EPA data (see plot below for comparison to EPA data and default prior).
 
-2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.2 so that positive values are less likely. (A prior distribution such as exponential or log-normal might be preferred in this case; however this is a limitation of `rstanarm` as those options aren't available.)
+2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.1 so that positive values are less likely. (A prior distribution such as exponential or log-normal might be preferred in this case; however this is a limitation of `rstanarm` as those options aren't available.)
+
+```{r epa_inform, echo=FALSE}
+epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
+
+ggplot() +
+  geom_histogram(data=epa, mapping=aes(x=mpg, y=..density..), binwidth = 1) +
+  stat_function(data=data.frame(x=c(0, 35)),
+                mapping=aes(x=x),
+                fun=dnorm, n=101, 
+                args=list(mean=20, 
+                          sd=15),
+                linetype="dashed",
+                color="blue") +
+  stat_function(data=data.frame(x=c(0, 35)),
+                mapping=aes(x=x),
+                fun=dnorm, n=101, 
+                args=list(mean=13.2, 
+                          sd=5.3),
+                linetype="dashed",
+                color="red")
+```
 
 ### Define Model
 
@@ -206,7 +227,7 @@ mdl2 <- stan_glm(mpg ~ disp, data = mtcars,
 ### Prior Predictive Distribution
 
 Below is an alternative to manually constructing the prior predictive distribution like I did in the previously.
-```{r mdl2_prior, message=FALSE}
+```{r mdl2_prior, results="hide", message=FALSE}
 
 mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 
@@ -214,7 +235,7 @@ D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
 draws <- posterior_epred(mdl2_prior, newdata=data.frame(disp=D), draws=50) %>%
   t() %>%
-  as.tibble() %>%
+  as.data.frame() %>%
   mutate(disp=D) %>%
   pivot_longer(-disp, names_to="draw", values_to="mpg")
 

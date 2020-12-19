@@ -12,7 +12,6 @@
 ## Environment Setup
 
 ```{r setup, results="hide", message=FALSE}
-rm(list=ls())
 
 set.seed(123)
 options("scipen" = 1, "digits" = 4)

@@ -27,7 +27,7 @@ library(bayesplot)
 # Saves compiled version of model so it only has to be recompiled if the model is changed
 rstan_options(auto_write = TRUE)
 # Set number of cores
-options(mc.cores = parallel::detectCores()-1)
+options(mc.cores = parallel::detectCores())
 ```
 
 ## Linear Model
@@ -101,10 +101,6 @@ And this is the call to fit the model.
 mdl1 <- stan(model_code=mdl_code, data=mdl_data, model_name="mdl1")
 ```
 
-```
-## Trying to compile a simple C file
-```
-
 ### Prior Predictive Distribution
 
 I could manually construct the prior predictive distribution like I did in \@ref(rethinkingprior).  Instead I'll have `stan` generate the prior predictive distribution which will be useful for more complex models. First, create another model with just the `data` and `generated quantities` section.  The `generated quantities` section mirrors the `model` section except it is now drawing samples from the priors without conditioning on the observed data. Also, in the `stan` call set the sampling algorithm for fixed parameters.
@@ -131,10 +127,6 @@ mdl_data_prior <- list(N = N, disp=D)
 
 mdl_prior <- stan(model_code=mdl_prior, data=mdl_data_prior, model_name="mdl_prior",
              chains=1, algorithm="Fixed_param")
-```
-
-```
-## Trying to compile a simple C file
 ```
 
 
@@ -174,12 +166,12 @@ print(mdl1)
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## a      28.85    0.03 1.19  26.47  28.05  28.84  29.64  31.22  1681    1
-## b      -0.04    0.00 0.00  -0.05  -0.04  -0.04  -0.04  -0.03  1743    1
-## sigma   3.21    0.01 0.40   2.56   2.93   3.18   3.45   4.14  1789    1
-## lp__  -61.51    0.04 1.25 -64.85 -62.06 -61.18 -60.60 -60.11  1190    1
+## a      28.92    0.03 1.26  26.39  28.12  28.92  29.74  31.34  1477    1
+## b      -0.04    0.00 0.00  -0.05  -0.04  -0.04  -0.04  -0.03  1498    1
+## sigma   3.22    0.01 0.41   2.53   2.93   3.18   3.47   4.15  1775    1
+## lp__  -61.60    0.04 1.36 -65.15 -62.16 -61.26 -60.62 -60.09  1321    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec 15 20:41:10 2020.
+## Samples were drawn using NUTS(diag_e) at Sat Dec 19 11:49:25 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -268,13 +260,7 @@ mdl_code_ppd <- '
 
 # Fit model
 mdl1_ppd <- stan(model_code=mdl_code_ppd, data=mdl_data)
-```
 
-```
-## Trying to compile a simple C file
-```
-
-```r
 draws <- as.data.frame(mdl1_ppd)
 
 # 95% credible interval for expected value of ppd
@@ -401,10 +387,6 @@ mdl_data <- list(N=nrow(mtcars),
 mdl1_gam <- stan(model_code=mdl_code, data=mdl_data)
 ```
 
-```
-## Trying to compile a simple C file
-```
-
 ### Prior Predictive Distribution
 
 
@@ -437,13 +419,7 @@ mdl_gam_prior <- stan(model_code=mdl2,
                                 num_basis=ncol(B_plot),
                                 B=B_plot),
                       chains=1, algorithm="Fixed_param")
-```
 
-```
-## Trying to compile a simple C file
-```
-
-```r
 draws <- as.data.frame(mdl_gam_prior) %>%
   head(50)
 
@@ -475,7 +451,7 @@ ggplot() +
 
 ```r
 # Note that bayesplot methods support tidy selection of parameters
-mcmc_rank_overlay(mdl1_gam, pars=vars(a, sigma, starts_with("w")))
+mcmc_rank_overlay(mdl1_gam, pars=vars(a, sigma, starts_with("w[")))
 ```
 
 <img src="05_rstan_files/figure-html/mdl1_gam_trankplot-1.png" width="672" />
@@ -492,16 +468,16 @@ print(mdl1_gam, pars=c("a", "sigma", "w"))
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##        mean se_mean   sd   2.5%    25%   50%   75% 97.5% n_eff Rhat
-## a     20.30    0.06 2.06  16.49  18.88 20.28 21.70 24.31  1063    1
-## sigma  2.23    0.01 0.32   1.71   2.01  2.20  2.42  2.98  1929    1
-## w[1]  11.77    0.07 2.42   7.13  10.13 11.78 13.42 16.43  1210    1
-## w[2]   4.25    0.07 2.66  -1.11   2.49  4.28  6.07  9.47  1603    1
-## w[3]  -0.69    0.08 2.85  -6.23  -2.64 -0.66  1.26  4.79  1372    1
-## w[4]  -5.78    0.07 3.00 -11.67  -7.75 -5.80 -3.80  0.18  1618    1
-## w[5]  -2.47    0.08 3.03  -8.47  -4.52 -2.41 -0.46  3.59  1536    1
-## w[6]  -8.91    0.07 2.53 -13.84 -10.64 -8.88 -7.11 -4.02  1487    1
+## a     20.26    0.06 2.06  16.20  18.87 20.26 21.69 24.32  1065 1.01
+## sigma  2.23    0.01 0.30   1.74   2.01  2.20  2.42  2.92  2509 1.00
+## w[1]  11.84    0.06 2.36   7.15  10.29 11.87 13.42 16.43  1408 1.00
+## w[2]   4.23    0.07 2.65  -0.88   2.41  4.22  5.99  9.50  1497 1.01
+## w[3]  -0.56    0.07 2.81  -6.19  -2.44 -0.54  1.34  4.95  1528 1.00
+## w[4]  -5.87    0.08 3.06 -11.62  -7.94 -5.96 -3.79  0.31  1570 1.01
+## w[5]  -2.31    0.07 2.91  -7.95  -4.28 -2.37 -0.31  3.48  1705 1.00
+## w[6]  -8.91    0.07 2.56 -13.80 -10.66 -8.97 -7.17 -3.91  1343 1.01
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec 15 20:42:48 2020.
+## Samples were drawn using NUTS(diag_e) at Sat Dec 19 11:50:54 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -617,13 +593,7 @@ mdl_data <- list(N=nrow(mtcars),
 # Fit model with smoothing prior
 mdl2_gam_smooth <- stan(model_code=mdl_smooth_code, data=mdl_data,
                  control=list(adapt_delta=0.99))
-```
 
-```
-## Trying to compile a simple C file
-```
-
-```r
 # Fit model without smoothing prior
 mdl2_gam <- stan(model_code = mdl_code, data=mdl_data,
                  control=list(adapt_delta=0.99))
@@ -650,32 +620,32 @@ print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## a      32.01    0.04 2.02  28.08  30.69  32.04  33.36  35.97  3196    1
-## sigma   2.17    0.01 0.32   1.64   1.95   2.13   2.37   2.90  2955    1
-## w[1]    0.06    0.01 1.01  -1.89  -0.60   0.06   0.72   2.00  4659    1
-## w[2]   -1.07    0.03 1.93  -4.92  -2.33  -1.03   0.20   2.65  3383    1
-## w[3]   -2.20    0.04 2.14  -6.49  -3.65  -2.20  -0.81   2.04  3624    1
-## w[4]   -3.52    0.04 2.36  -8.15  -5.11  -3.57  -1.97   1.08  3938    1
-## w[5]   -5.96    0.04 2.47 -10.99  -7.56  -5.92  -4.27  -1.35  3354    1
-## w[6]   -8.29    0.04 2.37 -12.92  -9.82  -8.31  -6.71  -3.69  3078    1
-## w[7]   -9.18    0.04 2.50 -14.17 -10.84  -9.18  -7.46  -4.38  3507    1
-## w[8]   -9.75    0.04 2.41 -14.48 -11.33  -9.77  -8.14  -5.01  3846    1
-## w[9]  -10.53    0.04 2.43 -15.40 -12.09 -10.52  -8.93  -5.75  3839    1
-## w[10] -11.98    0.04 2.27 -16.47 -13.46 -11.99 -10.45  -7.47  3228    1
-## w[11] -12.99    0.05 2.57 -18.13 -14.63 -12.97 -11.24  -8.06  3187    1
-## w[12] -13.31    0.04 2.57 -18.42 -14.98 -13.29 -11.64  -8.22  3449    1
-## w[13] -13.84    0.04 2.38 -18.49 -15.38 -13.82 -12.31  -9.16  3797    1
-## w[14] -15.60    0.04 2.42 -20.37 -17.17 -15.59 -14.01 -10.84  2957    1
-## w[15] -16.38    0.05 2.44 -21.20 -17.98 -16.40 -14.74 -11.46  2802    1
-## w[16] -16.61    0.04 2.52 -21.62 -18.30 -16.61 -14.91 -11.71  3392    1
-## w[17] -16.68    0.04 2.42 -21.39 -18.29 -16.66 -15.06 -12.05  3295    1
-## w[18] -15.90    0.04 2.31 -20.49 -17.40 -15.93 -14.37 -11.36  3491    1
-## w[19] -15.83    0.04 2.47 -20.86 -17.40 -15.80 -14.24 -10.98  4198    1
-## w[20] -17.44    0.04 2.52 -22.56 -19.10 -17.44 -15.75 -12.64  4156    1
-## w[21] -19.55    0.05 2.64 -24.68 -21.32 -19.56 -17.77 -14.40  3178    1
-## w[22] -20.51    0.05 2.75 -25.90 -22.40 -20.52 -18.65 -15.02  3126    1
+## a      31.98    0.04 2.03  27.97  30.60  32.01  33.33  35.93  2700    1
+## sigma   2.18    0.01 0.32   1.62   1.94   2.15   2.38   2.88  2662    1
+## w[1]    0.06    0.01 1.01  -1.90  -0.63   0.05   0.72   2.06  4668    1
+## w[2]   -1.03    0.03 1.88  -4.79  -2.27  -1.02   0.25   2.60  3222    1
+## w[3]   -2.18    0.04 2.16  -6.50  -3.66  -2.21  -0.71   2.10  3317    1
+## w[4]   -3.49    0.04 2.39  -8.17  -5.12  -3.53  -1.89   1.28  3409    1
+## w[5]   -5.92    0.04 2.46 -10.75  -7.54  -5.95  -4.27  -1.13  3291    1
+## w[6]   -8.30    0.05 2.40 -12.93  -9.93  -8.31  -6.72  -3.54  2827    1
+## w[7]   -9.15    0.04 2.54 -14.12 -10.88  -9.17  -7.38  -4.27  3295    1
+## w[8]   -9.75    0.04 2.45 -14.54 -11.41  -9.76  -8.08  -4.96  3392    1
+## w[9]  -10.48    0.04 2.41 -15.28 -12.00 -10.47  -8.85  -5.88  3492    1
+## w[10] -11.93    0.04 2.31 -16.59 -13.48 -11.92 -10.41  -7.40  2913    1
+## w[11] -12.91    0.05 2.59 -18.21 -14.61 -12.84 -11.18  -7.89  3102    1
+## w[12] -13.30    0.04 2.55 -18.43 -15.02 -13.26 -11.52  -8.41  3402    1
+## w[13] -13.80    0.04 2.35 -18.35 -15.40 -13.81 -12.21  -9.10  3373    1
+## w[14] -15.54    0.04 2.40 -20.22 -17.19 -15.50 -13.95 -10.81  2995    1
+## w[15] -16.32    0.04 2.45 -21.13 -18.00 -16.33 -14.61 -11.53  3071    1
+## w[16] -16.59    0.04 2.49 -21.33 -18.29 -16.59 -14.89 -11.68  3172    1
+## w[17] -16.65    0.05 2.49 -21.67 -18.36 -16.62 -14.97 -11.88  2990    1
+## w[18] -15.91    0.04 2.30 -20.44 -17.46 -15.89 -14.38 -11.39  3519    1
+## w[19] -15.83    0.04 2.40 -20.63 -17.40 -15.78 -14.21 -11.27  3354    1
+## w[20] -17.40    0.04 2.46 -22.25 -19.05 -17.40 -15.75 -12.54  3469    1
+## w[21] -19.50    0.05 2.66 -24.75 -21.29 -19.46 -17.75 -14.32  2565    1
+## w[22] -20.51    0.05 2.82 -26.02 -22.46 -20.52 -18.60 -14.94  2939    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Tue Dec 15 20:43:58 2020.
+## Samples were drawn using NUTS(diag_e) at Sat Dec 19 11:51:58 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).

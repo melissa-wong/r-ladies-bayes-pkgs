@@ -12,7 +12,7 @@
 
 _Statistical Rethinking_ was one of the first books I read on Bayesian methods, and I highly recommend it. McElreath uses a lot of practical examples which I found very helpful. All of the problems in the book are done with the `rethinking` package which uses the familiar formula syntax for defining models. However, unlike `rstanarm` the functions are not close mirrors of familiar frequentist functions. Another difference from `rstanarm` is you must specify all priors--there are no defaults. 
 
-The `rethinking` package has some nice extras. One is the `stancode` function which returns the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax! Second `map2stan` returns an object that contains a `stanfit` object which you can access with the `\@stanfit` accessor.  Most of the `bayesplot` and `shinystan` functions work with that `stanfit` object. Alternatively, the `rethinking` package includes its own functions that work directly on the returned `map2stan` object (see the book for details).
+The `rethinking` package has some nice extras. One is the `stancode` function which returns the `stan` code generated for the model.  This is a great way to start getting familiar with `stan` syntax! Second `map2stan` returns an object that contains a `stanfit` object which you can access with the `@stanfit` accessor.  Most of the `bayesplot` and `shinystan` functions work with that `stanfit` object. Alternatively, the `rethinking` package includes its own functions that work directly on the returned `map2stan` object (see the book for details).
 
 I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but aside from that the _rethinking_ package is also a very good option for getting started.
 
@@ -64,10 +64,6 @@ mdl1 <- map2stan(f,mtcars, chains=parallel::detectCores())
 ```
 
 ```
-## Trying to compile a simple C file
-```
-
-```
 ## Computing WAIC
 ```
 
@@ -79,7 +75,7 @@ stancode(mdl1)
 ```
 
 ```
-## //2020-12-15 20:39:53
+## //2020-12-19 11:48:13
 ## data{
 ##     int<lower=1> N;
 ##     real mpg[N];
@@ -148,7 +144,7 @@ mcmc_rank_overlay(mdl1@stanfit, pars=c("a", "b", "sigma"))
 
 <img src="03_rethinking_files/figure-html/mdl1_trank-1.png" width="672" />
 
-The `precis` function is displays `n_eff` and $\widehat{R}$.
+The `precis` function displays `n_eff` and $\widehat{R}$.
 
 
 ```r

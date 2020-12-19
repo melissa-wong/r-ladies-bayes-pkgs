@@ -6,7 +6,7 @@
 
 - [rstanarm online documentation](https://mc-stan.org/users/interfaces/rstanarm)
 
--[User-friendly Bayesian regression modeling: A tutorial with _rstanarm_ and _shinystan_](https://www.tqmp.org/RegularArticles/vol14-2/p099/p099.pdf) by Muth, Oravecz and Gabry
+- [User-friendly Bayesian regression modeling: A tutorial with _rstanarm_ and _shinystan_](https://www.tqmp.org/RegularArticles/vol14-2/p099/p099.pdf) by Muth, Oravecz and Gabry
 
 ## Description
 
@@ -15,8 +15,6 @@ The `rstanarm` package is one of the easiest ways to get started with Bayesian m
 ## Environment Setup
 
 ```r
-rm(list=ls())
-
 set.seed(123)
 options("scipen" = 1, "digits" = 4)
 
@@ -84,6 +82,11 @@ prior_summary(mdl1)
 ```
 
 Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior for this data looks like.
+
+
+```
+## here() starts at /Users/melissa/r-ladies-bayes-pkgs
+```
 
 <img src="02_rstanarm_files/figure-html/epa-1.png" width="672" />
 
@@ -290,9 +293,11 @@ I'll specify priors which incorporate the prior knowledge from the EPA data as w
 
 The differences from the default priors are
 
-1. The intercept prior is now set to the mean and standard deviation from the EPA data .
+1. The intercept prior is now set to the mean and standard deviation from the EPA data (see plot below for comparison to EPA data and default prior).
 
-2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.2 so that positive values are less likely. (A prior distribution such as exponential or log-normal might be preferred in this case; however this is a limitation of `rstanarm` as those options aren't available.)
+2. The slope prior is no longer symmetric about 0, but rather it is centered at -0.1 so that positive values are less likely. (A prior distribution such as exponential or log-normal might be preferred in this case; however this is a limitation of `rstanarm` as those options aren't available.)
+
+<img src="02_rstanarm_files/figure-html/epa_inform-1.png" width="672" />
 
 ### Define Model
 
@@ -310,62 +315,15 @@ Below is an alternative to manually constructing the prior predictive distributi
 
 ```r
 mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
-```
 
-```
-## 
-## SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-## Chain 1: 
-## Chain 1: Gradient evaluation took 7.5e-05 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.75 seconds.
-## Chain 1: Adjust your expectations accordingly!
-## Chain 1: 
-## Chain 1: 
-## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 1: 
-## Chain 1:  Elapsed Time: 0.030597 seconds (Warm-up)
-## Chain 1:                0.022865 seconds (Sampling)
-## Chain 1:                0.053462 seconds (Total)
-## Chain 1:
-```
-
-```r
 D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
 
 draws <- posterior_epred(mdl2_prior, newdata=data.frame(disp=D), draws=50) %>%
   t() %>%
-  as.tibble() %>%
+  as.data.frame() %>%
   mutate(disp=D) %>%
   pivot_longer(-disp, names_to="draw", values_to="mpg")
-```
 
-```
-## Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
-## Please use `as_tibble()` instead.
-## The signature and semantics have changed, see `?as_tibble`.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```
-## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
-## Using compatibility `.name_repair`.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```r
 draws %>%
   ggplot() +
   geom_line(mapping=aes(x=disp, y=mpg, group=draw), alpha=0.2)
@@ -567,7 +525,24 @@ draws <- posterior_epred(mdl3_prior, newdata=data.frame(disp=D), draws=50) %>%
   as.tibble() %>%
   mutate(disp=D) %>%
   pivot_longer(-disp, names_to="draw", values_to="mpg")
+```
 
+```
+## Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
+## Please use `as_tibble()` instead.
+## The signature and semantics have changed, see `?as_tibble`.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```
+## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+## Using compatibility `.name_repair`.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```r
 draws %>%
   ggplot() +
   geom_line(mapping=aes(x=disp, y=mpg, group=draw), alpha=0.2) +
@@ -694,47 +669,48 @@ sessionInfo()
 ## [1] stats     graphics  grDevices datasets  utils     methods   base     
 ## 
 ## other attached packages:
-##  [1] bayesplot_1.7.2  rstanarm_2.21.1  Rcpp_1.0.5       kableExtra_1.3.1
-##  [5] gridExtra_2.3    forcats_0.5.0    stringr_1.4.0    dplyr_1.0.2     
-##  [9] purrr_0.3.4      readr_1.4.0      tidyr_1.1.2      tibble_3.0.4    
-## [13] ggplot2_3.3.2    tidyverse_1.3.0 
+##  [1] here_1.0.1       bayesplot_1.7.2  rstanarm_2.21.1  Rcpp_1.0.5      
+##  [5] kableExtra_1.3.1 gridExtra_2.3    forcats_0.5.0    stringr_1.4.0   
+##  [9] dplyr_1.0.2      purrr_0.3.4      readr_1.4.0      tidyr_1.1.2     
+## [13] tibble_3.0.4     ggplot2_3.3.2    tidyverse_1.3.0 
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] minqa_1.2.4          colorspace_2.0-0     ellipsis_0.3.1      
-##   [4] ggridges_0.5.2       rsconnect_0.8.16     markdown_1.1        
-##   [7] base64enc_0.1-3      fs_1.5.0             rstudioapi_0.13     
-##  [10] farver_2.0.3         rstan_2.21.2         DT_0.16             
-##  [13] fansi_0.4.1          lubridate_1.7.9.2    xml2_1.3.2          
-##  [16] splines_4.0.3        codetools_0.2-16     knitr_1.30          
-##  [19] shinythemes_1.1.2    jsonlite_1.7.1       nloptr_1.2.2.2      
-##  [22] broom_0.7.2          dbplyr_2.0.0         shiny_1.5.0         
-##  [25] compiler_4.0.3       httr_1.4.2           backports_1.2.0     
-##  [28] Matrix_1.2-18        assertthat_0.2.1     fastmap_1.0.1       
-##  [31] cli_2.2.0            later_1.1.0.1        htmltools_0.5.0     
-##  [34] prettyunits_1.1.1    tools_4.0.3          igraph_1.2.6        
-##  [37] gtable_0.3.0         glue_1.4.2           reshape2_1.4.4      
-##  [40] V8_3.4.0             cellranger_1.1.0     vctrs_0.3.5         
-##  [43] nlme_3.1-149         crosstalk_1.1.0.1    xfun_0.19           
-##  [46] ps_1.4.0             lme4_1.1-26          rvest_0.3.6         
-##  [49] mime_0.9             miniUI_0.1.1.1       lifecycle_0.2.0     
-##  [52] renv_0.12.0          gtools_3.8.2         statmod_1.4.35      
-##  [55] MASS_7.3-53          zoo_1.8-8            scales_1.1.1        
-##  [58] colourpicker_1.1.0   hms_0.5.3            promises_1.1.1      
-##  [61] parallel_4.0.3       inline_0.3.17        shinystan_2.5.0     
-##  [64] yaml_2.2.1           curl_4.3             loo_2.3.1           
-##  [67] StanHeaders_2.21.0-6 stringi_1.5.3        highr_0.8           
-##  [70] dygraphs_1.1.1.6     boot_1.3-25          pkgbuild_1.1.0      
-##  [73] rlang_0.4.9          pkgconfig_2.0.3      matrixStats_0.57.0  
-##  [76] evaluate_0.14        lattice_0.20-41      labeling_0.4.2      
-##  [79] rstantools_2.1.1     htmlwidgets_1.5.2    tidyselect_1.1.0    
-##  [82] processx_3.4.5       plyr_1.8.6           magrittr_2.0.1      
-##  [85] bookdown_0.21        R6_2.5.0             generics_0.1.0      
-##  [88] DBI_1.1.0            mgcv_1.8-33          pillar_1.4.7        
-##  [91] haven_2.3.1          withr_2.3.0          xts_0.12.1          
-##  [94] survival_3.2-7       modelr_0.1.8         crayon_1.3.4        
-##  [97] rmarkdown_2.5        grid_4.0.3           readxl_1.3.1        
-## [100] callr_3.5.1          threejs_0.3.3        reprex_0.3.0        
-## [103] digest_0.6.27        webshot_0.5.2        xtable_1.8-4        
-## [106] httpuv_1.5.4         RcppParallel_5.0.2   stats4_4.0.3        
-## [109] munsell_0.5.0        viridisLite_0.3.0    shinyjs_2.0.0
+##   [4] ggridges_0.5.2       rprojroot_2.0.2      rsconnect_0.8.16    
+##   [7] markdown_1.1         base64enc_0.1-3      fs_1.5.0            
+##  [10] rstudioapi_0.13      farver_2.0.3         rstan_2.21.2        
+##  [13] DT_0.16              fansi_0.4.1          lubridate_1.7.9.2   
+##  [16] xml2_1.3.2           splines_4.0.3        codetools_0.2-16    
+##  [19] knitr_1.30           shinythemes_1.1.2    jsonlite_1.7.1      
+##  [22] nloptr_1.2.2.2       broom_0.7.2          dbplyr_2.0.0        
+##  [25] shiny_1.5.0          compiler_4.0.3       httr_1.4.2          
+##  [28] backports_1.2.0      Matrix_1.2-18        assertthat_0.2.1    
+##  [31] fastmap_1.0.1        cli_2.2.0            later_1.1.0.1       
+##  [34] htmltools_0.5.0      prettyunits_1.1.1    tools_4.0.3         
+##  [37] igraph_1.2.6         gtable_0.3.0         glue_1.4.2          
+##  [40] reshape2_1.4.4       V8_3.4.0             cellranger_1.1.0    
+##  [43] vctrs_0.3.5          nlme_3.1-149         crosstalk_1.1.0.1   
+##  [46] xfun_0.19            ps_1.4.0             lme4_1.1-26         
+##  [49] rvest_0.3.6          mime_0.9             miniUI_0.1.1.1      
+##  [52] lifecycle_0.2.0      renv_0.12.0          gtools_3.8.2        
+##  [55] statmod_1.4.35       MASS_7.3-53          zoo_1.8-8           
+##  [58] scales_1.1.1         colourpicker_1.1.0   hms_0.5.3           
+##  [61] promises_1.1.1       parallel_4.0.3       inline_0.3.17       
+##  [64] shinystan_2.5.0      yaml_2.2.1           curl_4.3            
+##  [67] loo_2.3.1            StanHeaders_2.21.0-6 stringi_1.5.3       
+##  [70] highr_0.8            dygraphs_1.1.1.6     boot_1.3-25         
+##  [73] pkgbuild_1.1.0       rlang_0.4.9          pkgconfig_2.0.3     
+##  [76] matrixStats_0.57.0   evaluate_0.14        lattice_0.20-41     
+##  [79] labeling_0.4.2       rstantools_2.1.1     htmlwidgets_1.5.2   
+##  [82] tidyselect_1.1.0     processx_3.4.5       plyr_1.8.6          
+##  [85] magrittr_2.0.1       bookdown_0.21        R6_2.5.0            
+##  [88] generics_0.1.0       DBI_1.1.0            mgcv_1.8-33         
+##  [91] pillar_1.4.7         haven_2.3.1          withr_2.3.0         
+##  [94] xts_0.12.1           survival_3.2-7       modelr_0.1.8        
+##  [97] crayon_1.3.4         rmarkdown_2.5        grid_4.0.3          
+## [100] readxl_1.3.1         callr_3.5.1          threejs_0.3.3       
+## [103] reprex_0.3.0         digest_0.6.27        webshot_0.5.2       
+## [106] xtable_1.8-4         httpuv_1.5.4         RcppParallel_5.0.2  
+## [109] stats4_4.0.3         munsell_0.5.0        viridisLite_0.3.0   
+## [112] shinyjs_2.0.0
 ```
