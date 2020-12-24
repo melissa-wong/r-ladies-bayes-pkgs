@@ -38,7 +38,7 @@ options(mc.cores = parallel::detectCores())
 Let's start with the following simple linear model:
 
 \begin{align*}
-  mpg &\sim N(\mu, \sigma^2) \\
+  mpg &\sim Normal(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
 \end{align*}
 
@@ -284,7 +284,7 @@ As expected, the linear model is not a good fit to the data.
 I'll specify priors which incorporate the prior knowledge from the EPA data as well as that `mpg` is non-negative and is non-increasing as `disp` increases.  My new model is as follows:
 
 \begin{align*}
-  mpg &\sim N(\mu, \sigma^2) \\
+  mpg &\sim Normal(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
   a &\sim Normal(13.2,5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\

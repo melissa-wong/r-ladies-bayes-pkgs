@@ -35,7 +35,7 @@ options(mc.cores = parallel::detectCores())
 Like the `rethinking` package, `rstan` doesn't have default priors, so I need to explicitly choose them:
 
 \begin{align*}
-  mpg &\sim N(\mu, \sigma^2) \\
+  mpg &\sim Normal(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
   a &\sim Normal(13.2, 5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\

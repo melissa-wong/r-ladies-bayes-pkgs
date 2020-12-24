@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # brms {#brms}
 
 ## Resources
@@ -13,10 +18,9 @@
 
 
 ```r
-rm(list=ls())
-
 set.seed(123)
 options("scipen" = 1, "digits" = 4)
+knitr::opts_chunk$set(message=FALSE)
 
 library(tidyverse)
 library(datasets)
@@ -24,36 +28,186 @@ data(mtcars)
 
 library(brms)
 library(bayesplot)
+
+
+# Set number of cores
+options(mc.cores = parallel::detectCores())
 ```
 
 ## Linear Model
 
 ### Define Model
 
-Like the `rethinking` package, `rstan` doesn't have default priors, so I need to explicitly choose them:
+The `brms` package default priors are improper flat priors over the real line. However, there is a strong case to be made against this type of non-informative prior ^[https://mc-stan.org/users/documentation/case-studies/weakly_informative_shapes.html]. So I'll proceed directly to specifying priors based on the EPA data.
 
 \begin{align*}
-  mpg &\sim N(\mu, \sigma^2) \\
+  mpg &\sim Normal(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
-  a &\sim N(25,10) \\
-  b &\sim N(-0.2, 0.1) \\
-  \sigma &\sim Exp(1)
+  a &\sim Normal(13.2, 5.3^2) \\
+  b &\sim Normal(-0.1, 0.05^2) \\
+  \sigma &\sim Exponential(1)
 \end{align*}
+
+
+```r
+mdl1 <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
+                    set_prior("normal(13.2, 5.3)", class="Intercept")))
+```
+
+
+```r
+stancode(mdl1)
+```
+
+```
+## // generated with brms 2.14.4
+## functions {
+## }
+## data {
+##   int<lower=1> N;  // total number of observations
+##   vector[N] Y;  // response variable
+##   int<lower=1> K;  // number of population-level effects
+##   matrix[N, K] X;  // population-level design matrix
+##   int prior_only;  // should the likelihood be ignored?
+## }
+## transformed data {
+##   int Kc = K - 1;
+##   matrix[N, Kc] Xc;  // centered version of X without an intercept
+##   vector[Kc] means_X;  // column means of X before centering
+##   for (i in 2:K) {
+##     means_X[i - 1] = mean(X[, i]);
+##     Xc[, i - 1] = X[, i] - means_X[i - 1];
+##   }
+## }
+## parameters {
+##   vector[Kc] b;  // population-level effects
+##   real Intercept;  // temporary intercept for centered predictors
+##   real<lower=0> sigma;  // residual SD
+## }
+## transformed parameters {
+## }
+## model {
+##   // likelihood including all constants
+##   if (!prior_only) {
+##     target += normal_id_glm_lpdf(Y | Xc, Intercept, b, sigma);
+##   }
+##   // priors including all constants
+##   target += normal_lpdf(b[1] | -0.1, 0.05);
+##   target += normal_lpdf(Intercept | 13.2, 5.3);
+##   target += student_t_lpdf(sigma | 3, 0, 5.4)
+##     - 1 * student_t_lccdf(0 | 3, 0, 5.4);
+## }
+## generated quantities {
+##   // actual population-level intercept
+##   real b_Intercept = Intercept - dot_product(means_X, b);
+## }
+```
 
 
 ### Prior Predictive Distribution
 
 
+```r
+D <- seq(min(mtcars$disp), max(mtcars$disp))
+
+mdl1_prior <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
+                    set_prior("normal(13.2, 5.3)", class="Intercept")),
+            sample_prior="only")
+
+# Samples from posterior predictive distribution
+ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(disp=D)))
+# Samples from expected value of posterior predictive distribution
+eppd <- posterior_epred(mdl1_prior, newdata=data.frame(disp=D), summary=FALSE) %>%
+  head(50) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="iter", values_to="mpg")
+
+
+ggplot() +
+  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
+  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) 
+```
+
+<img src="04_brms_files/figure-html/mdl1_prior-1.png" width="672" />
+
 
 ### Diagnostics
 
 
+```r
+mcmc_rank_overlay(mdl1, pars=c("b_Intercept", "b_disp", "sigma"))
+```
+
+<img src="04_brms_files/figure-html/mdl1_trankplot-1.png" width="672" />
+
+
+```r
+summary(mdl1)
+```
+
+```
+##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: mpg ~ disp 
+##    Data: mtcars (Number of observations: 32) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    29.62      1.28    27.08    32.16 1.00     3956     2991
+## disp         -0.04      0.00    -0.05    -0.03 1.00     4111     2878
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     3.37      0.46     2.60     4.41 1.00     2946     2875
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+```
+
 ### Posterior Distribution
 
 
+```r
+fixef(mdl1)
+```
+
+```
+##           Estimate Est.Error     Q2.5    Q97.5
+## Intercept 29.61988  1.279003 27.08427 32.15781
+## disp      -0.04166  0.004944 -0.05134 -0.03175
+```
 
 ### Posterior Predictive Distribution
 
+
+```r
+D <- seq(min(mtcars$disp), max(mtcars$disp))
+
+# Samples from posterior predictive distribution
+ppd <- as.data.frame(predict(mdl1, newdata=data.frame(disp=D)))
+# Samples from expected value of posterior predictive distribution
+eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), summary=FALSE) %>%
+  head(50) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="iter", values_to="mpg")
+
+
+ggplot() +
+  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
+  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
+  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
+```
+
+<img src="04_brms_files/figure-html/mdl1_ppd-1.png" width="672" />
 
 ## Semi-parametric Model
 

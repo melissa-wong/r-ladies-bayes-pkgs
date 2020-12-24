@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # brms {#brms}
 
 ## Resources
@@ -15,6 +20,7 @@
 
 set.seed(123)
 options("scipen" = 1, "digits" = 4)
+knitr::opts_chunk$set(message=FALSE)
 
 library(tidyverse)
 library(datasets)
@@ -23,36 +29,103 @@ data(mtcars)
 library(brms)
 library(bayesplot)
 
+
+# Set number of cores
+options(mc.cores = parallel::detectCores())
 ```
 
 ## Linear Model
 
 ### Define Model
 
-Like the `rethinking` package, `rstan` doesn't have default priors, so I need to explicitly choose them:
+The `brms` package default priors are improper flat priors over the real line. However, there is a strong case to be made against this type of non-informative prior ^[https://mc-stan.org/users/documentation/case-studies/weakly_informative_shapes.html]. So I'll proceed directly to specifying priors based on the EPA data.
 
 \begin{align*}
-  mpg &\sim N(\mu, \sigma^2) \\
+  mpg &\sim Normal(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
-  a &\sim N(25,10) \\
-  b &\sim N(-0.2, 0.1) \\
-  \sigma &\sim Exp(1)
+  a &\sim Normal(13.2, 5.3^2) \\
+  b &\sim Normal(-0.1, 0.05^2) \\
+  \sigma &\sim Exponential(1)
 \end{align*}
+
+```{r mdl1, results="hide"}
+
+mdl1 <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
+                    set_prior("normal(13.2, 5.3)", class="Intercept")))
+
+```
+
+```{r mdl1_stancode}
+stancode(mdl1)
+```
 
 
 ### Prior Predictive Distribution
 
+```{r mdl1_prior, results="hide"}
+D <- seq(min(mtcars$disp), max(mtcars$disp))
+
+mdl1_prior <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
+                    set_prior("normal(13.2, 5.3)", class="Intercept")),
+            sample_prior="only")
+
+# Samples from posterior predictive distribution
+ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(disp=D)))
+# Samples from expected value of posterior predictive distribution
+eppd <- posterior_epred(mdl1_prior, newdata=data.frame(disp=D), summary=FALSE) %>%
+  head(50) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="iter", values_to="mpg")
+
+
+ggplot() +
+  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
+  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) 
+```
 
 
 ### Diagnostics
 
+```{r mdl1_trankplot}
+mcmc_rank_overlay(mdl1, pars=c("b_Intercept", "b_disp", "sigma"))
+```
+
+```{r mdl1_summary}
+summary(mdl1)
+```
 
 ### Posterior Distribution
 
-
+```{r mdl1_post}
+fixef(mdl1)
+```
 
 ### Posterior Predictive Distribution
 
+```{r mdl1_ppd, results="hide"}
+
+D <- seq(min(mtcars$disp), max(mtcars$disp))
+
+# Samples from posterior predictive distribution
+ppd <- as.data.frame(predict(mdl1, newdata=data.frame(disp=D)))
+# Samples from expected value of posterior predictive distribution
+eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), summary=FALSE) %>%
+  head(50) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(disp=D) %>%
+  pivot_longer(-disp, names_to="iter", values_to="mpg")
+
+
+ggplot() +
+  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
+  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
+  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
+```
 
 ## Semi-parametric Model
 

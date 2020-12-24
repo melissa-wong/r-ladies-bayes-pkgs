@@ -20,8 +20,6 @@ I ran into some difficulty with the semi-parametric regression (\@ref(GAM)), but
 
 
 ```r
-rm(list=ls())
-
 set.seed(123)
 options("scipen" = 1, "digits" = 4)
 
@@ -40,7 +38,7 @@ library(bayesplot)
 The `rethinking` package does not have default priors so I need to explicitly choose them.  Again I'll use the following model:
 
 \begin{align*}
-  mpg &\sim N(\mu, \sigma^2) \\
+  mpg &\sim Normal(\mu, \sigma^2) \\
   \mu &= a + b*disp \\
   a &\sim Normal(13.2, 5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\
@@ -64,6 +62,10 @@ mdl1 <- map2stan(f,mtcars, chains=parallel::detectCores())
 ```
 
 ```
+## Trying to compile a simple C file
+```
+
+```
 ## Computing WAIC
 ```
 
@@ -75,7 +77,7 @@ stancode(mdl1)
 ```
 
 ```
-## //2020-12-19 11:48:13
+## //2020-12-24 17:01:56
 ## data{
 ##     int<lower=1> N;
 ##     real mpg[N];

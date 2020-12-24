@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 brms | Intro to R Bayes Packages</title>
+  <title>Chapter 4 brms | Intro to R Bayes Packages</title>
   <meta name="description" content="This is an introduction to several R packages for Bayesian analysis." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 brms | Intro to R Bayes Packages" />
+  <meta property="og:title" content="Chapter 4 brms | Intro to R Bayes Packages" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="melissa-wong/r-ladies-rtp-bayes-pkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 brms | Intro to R Bayes Packages" />
+  <meta name="twitter:title" content="Chapter 4 brms | Intro to R Bayes Packages" />
   
   <meta name="twitter:description" content="This is an introduction to several R packages for Bayesian analysis." />
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-12" />
+<meta name="date" content="2020-12-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,111 +138,111 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Intro to R Bayes Packages</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
-<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#resources"><i class="fa fa-check"></i><b>2.1</b> Resources</a></li>
-<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>2.2</b> A Motivating Example</a></li>
-<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
-<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>2.4</b> Data</a></li>
-<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#prior-information"><i class="fa fa-check"></i><b>2.5</b> Prior Information</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#resources"><i class="fa fa-check"></i><b>1.1</b> Resources</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#a-motivating-example"><i class="fa fa-check"></i><b>1.2</b> A Motivating Example</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#workflow"><i class="fa fa-check"></i><b>1.3</b> Workflow</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.4</b> Data</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#prior-information"><i class="fa fa-check"></i><b>1.5</b> Prior Information</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>3</b> rstanarm</a><ul>
-<li class="chapter" data-level="3.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
-<li class="chapter" data-level="3.2" data-path="rstanarm.html"><a href="rstanarm.html#description"><i class="fa fa-check"></i><b>3.2</b> Description</a></li>
-<li class="chapter" data-level="3.3" data-path="rstanarm.html"><a href="rstanarm.html#environment-setup"><i class="fa fa-check"></i><b>3.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="3.4" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-default-priors"><i class="fa fa-check"></i><b>3.4</b> Linear Model (Default Priors)</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model"><i class="fa fa-check"></i><b>3.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="3.4.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution"><i class="fa fa-check"></i><b>3.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="3.4.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics"><i class="fa fa-check"></i><b>3.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="3.4.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution"><i class="fa fa-check"></i><b>3.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="3.4.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>3.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="2" data-path="rstanarm.html"><a href="rstanarm.html"><i class="fa fa-check"></i><b>2</b> rstanarm</a><ul>
+<li class="chapter" data-level="2.1" data-path="rstanarm.html"><a href="rstanarm.html#resources-1"><i class="fa fa-check"></i><b>2.1</b> Resources</a></li>
+<li class="chapter" data-level="2.2" data-path="rstanarm.html"><a href="rstanarm.html#description"><i class="fa fa-check"></i><b>2.2</b> Description</a></li>
+<li class="chapter" data-level="2.3" data-path="rstanarm.html"><a href="rstanarm.html#environment-setup"><i class="fa fa-check"></i><b>2.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="2.4" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-default-priors"><i class="fa fa-check"></i><b>2.4</b> Linear Model (Default Priors)</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model"><i class="fa fa-check"></i><b>2.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="2.4.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution"><i class="fa fa-check"></i><b>2.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.4.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics"><i class="fa fa-check"></i><b>2.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="2.4.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution"><i class="fa fa-check"></i><b>2.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="2.4.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution"><i class="fa fa-check"></i><b>2.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-user-defined-priors"><i class="fa fa-check"></i><b>3.5</b> Linear Model (User-Defined Priors)</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-1"><i class="fa fa-check"></i><b>3.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="3.5.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-1"><i class="fa fa-check"></i><b>3.5.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="3.5.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-1"><i class="fa fa-check"></i><b>3.5.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="3.5.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution-1"><i class="fa fa-check"></i><b>3.5.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="3.5.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-1"><i class="fa fa-check"></i><b>3.5.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.5" data-path="rstanarm.html"><a href="rstanarm.html#linear-model-user-defined-priors"><i class="fa fa-check"></i><b>2.5</b> Linear Model (User-Defined Priors)</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-1"><i class="fa fa-check"></i><b>2.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="2.5.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-1"><i class="fa fa-check"></i><b>2.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.5.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-1"><i class="fa fa-check"></i><b>2.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="2.5.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-distribution-1"><i class="fa fa-check"></i><b>2.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="2.5.5" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-1"><i class="fa fa-check"></i><b>2.5.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="rstanarm.html"><a href="rstanarm.html#semi-parametric-model"><i class="fa fa-check"></i><b>3.6</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-2"><i class="fa fa-check"></i><b>3.6.1</b> Define model</a></li>
-<li class="chapter" data-level="3.6.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-2"><i class="fa fa-check"></i><b>3.6.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="3.6.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-and-posterior"><i class="fa fa-check"></i><b>3.6.3</b> Diagnostics and Posterior</a></li>
-<li class="chapter" data-level="3.6.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-2"><i class="fa fa-check"></i><b>3.6.4</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.6" data-path="rstanarm.html"><a href="rstanarm.html#semi-parametric-model"><i class="fa fa-check"></i><b>2.6</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="rstanarm.html"><a href="rstanarm.html#define-model-2"><i class="fa fa-check"></i><b>2.6.1</b> Define model</a></li>
+<li class="chapter" data-level="2.6.2" data-path="rstanarm.html"><a href="rstanarm.html#prior-predictive-distribution-2"><i class="fa fa-check"></i><b>2.6.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="2.6.3" data-path="rstanarm.html"><a href="rstanarm.html#diagnostics-and-posterior"><i class="fa fa-check"></i><b>2.6.3</b> Diagnostics and Posterior</a></li>
+<li class="chapter" data-level="2.6.4" data-path="rstanarm.html"><a href="rstanarm.html#posterior-predictive-distribution-2"><i class="fa fa-check"></i><b>2.6.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="rstanarm.html"><a href="rstanarm.html#session-info"><i class="fa fa-check"></i><b>3.7</b> Session Info</a></li>
+<li class="chapter" data-level="2.7" data-path="rstanarm.html"><a href="rstanarm.html#session-info"><i class="fa fa-check"></i><b>2.7</b> Session Info</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="rethinking.html"><a href="rethinking.html"><i class="fa fa-check"></i><b>4</b> rethinking</a><ul>
-<li class="chapter" data-level="4.1" data-path="rethinking.html"><a href="rethinking.html#resources-2"><i class="fa fa-check"></i><b>4.1</b> Resources</a></li>
-<li class="chapter" data-level="4.2" data-path="rethinking.html"><a href="rethinking.html#description-1"><i class="fa fa-check"></i><b>4.2</b> Description</a></li>
-<li class="chapter" data-level="4.3" data-path="rethinking.html"><a href="rethinking.html#environment-setup-1"><i class="fa fa-check"></i><b>4.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="4.4" data-path="rethinking.html"><a href="rethinking.html#linear-model"><i class="fa fa-check"></i><b>4.4</b> Linear Model</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="rethinking.html"><a href="rethinking.html#define-model-3"><i class="fa fa-check"></i><b>4.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="4.4.2" data-path="rethinking.html"><a href="rethinking.html#rethinkingprior"><i class="fa fa-check"></i><b>4.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="4.4.3" data-path="rethinking.html"><a href="rethinking.html#diagnostics-2"><i class="fa fa-check"></i><b>4.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="4.4.4" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-2"><i class="fa fa-check"></i><b>4.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="4.4.5" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-3"><i class="fa fa-check"></i><b>4.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="3" data-path="rethinking.html"><a href="rethinking.html"><i class="fa fa-check"></i><b>3</b> rethinking</a><ul>
+<li class="chapter" data-level="3.1" data-path="rethinking.html"><a href="rethinking.html#resources-2"><i class="fa fa-check"></i><b>3.1</b> Resources</a></li>
+<li class="chapter" data-level="3.2" data-path="rethinking.html"><a href="rethinking.html#description-1"><i class="fa fa-check"></i><b>3.2</b> Description</a></li>
+<li class="chapter" data-level="3.3" data-path="rethinking.html"><a href="rethinking.html#environment-setup-1"><i class="fa fa-check"></i><b>3.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="3.4" data-path="rethinking.html"><a href="rethinking.html#linear-model"><i class="fa fa-check"></i><b>3.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="rethinking.html"><a href="rethinking.html#define-model-3"><i class="fa fa-check"></i><b>3.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="3.4.2" data-path="rethinking.html"><a href="rethinking.html#rethinkingprior"><i class="fa fa-check"></i><b>3.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.4.3" data-path="rethinking.html"><a href="rethinking.html#diagnostics-2"><i class="fa fa-check"></i><b>3.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.4.4" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-2"><i class="fa fa-check"></i><b>3.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="3.4.5" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-3"><i class="fa fa-check"></i><b>3.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="rethinking.html"><a href="rethinking.html#GAM"><i class="fa fa-check"></i><b>4.5</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="4.5.1" data-path="rethinking.html"><a href="rethinking.html#define-model-4"><i class="fa fa-check"></i><b>4.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="4.5.2" data-path="rethinking.html"><a href="rethinking.html#diagnostics-3"><i class="fa fa-check"></i><b>4.5.2</b> Diagnostics</a></li>
-<li class="chapter" data-level="4.5.3" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-3"><i class="fa fa-check"></i><b>4.5.3</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="4.5.4" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-4"><i class="fa fa-check"></i><b>4.5.4</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="3.5" data-path="rethinking.html"><a href="rethinking.html#GAM"><i class="fa fa-check"></i><b>3.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="rethinking.html"><a href="rethinking.html#define-model-4"><i class="fa fa-check"></i><b>3.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="rethinking.html"><a href="rethinking.html#diagnostics-3"><i class="fa fa-check"></i><b>3.5.2</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.5.3" data-path="rethinking.html"><a href="rethinking.html#posterior-distribution-3"><i class="fa fa-check"></i><b>3.5.3</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="3.5.4" data-path="rethinking.html"><a href="rethinking.html#posterior-predictive-distribution-4"><i class="fa fa-check"></i><b>3.5.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="4.6" data-path="rethinking.html"><a href="rethinking.html#session-info-1"><i class="fa fa-check"></i><b>4.6</b> Session Info</a></li>
+<li class="chapter" data-level="3.6" data-path="rethinking.html"><a href="rethinking.html#session-info-1"><i class="fa fa-check"></i><b>3.6</b> Session Info</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="brms.html"><a href="brms.html"><i class="fa fa-check"></i><b>5</b> brms</a><ul>
-<li class="chapter" data-level="5.1" data-path="brms.html"><a href="brms.html#resources-3"><i class="fa fa-check"></i><b>5.1</b> Resources</a></li>
-<li class="chapter" data-level="5.2" data-path="brms.html"><a href="brms.html#description-2"><i class="fa fa-check"></i><b>5.2</b> Description</a></li>
-<li class="chapter" data-level="5.3" data-path="brms.html"><a href="brms.html#environment-setup-2"><i class="fa fa-check"></i><b>5.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="5.4" data-path="brms.html"><a href="brms.html#linear-model-1"><i class="fa fa-check"></i><b>5.4</b> Linear Model</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="brms.html"><a href="brms.html#define-model-5"><i class="fa fa-check"></i><b>5.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="5.4.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-3"><i class="fa fa-check"></i><b>5.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="5.4.3" data-path="brms.html"><a href="brms.html#diagnostics-4"><i class="fa fa-check"></i><b>5.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="5.4.4" data-path="brms.html"><a href="brms.html#posterior-distribution-4"><i class="fa fa-check"></i><b>5.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="5.4.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-5"><i class="fa fa-check"></i><b>5.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="4" data-path="brms.html"><a href="brms.html"><i class="fa fa-check"></i><b>4</b> brms</a><ul>
+<li class="chapter" data-level="4.1" data-path="brms.html"><a href="brms.html#resources-3"><i class="fa fa-check"></i><b>4.1</b> Resources</a></li>
+<li class="chapter" data-level="4.2" data-path="brms.html"><a href="brms.html#description-2"><i class="fa fa-check"></i><b>4.2</b> Description</a></li>
+<li class="chapter" data-level="4.3" data-path="brms.html"><a href="brms.html#environment-setup-2"><i class="fa fa-check"></i><b>4.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="4.4" data-path="brms.html"><a href="brms.html#linear-model-1"><i class="fa fa-check"></i><b>4.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="brms.html"><a href="brms.html#define-model-5"><i class="fa fa-check"></i><b>4.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-3"><i class="fa fa-check"></i><b>4.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.4.3" data-path="brms.html"><a href="brms.html#diagnostics-4"><i class="fa fa-check"></i><b>4.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.4.4" data-path="brms.html"><a href="brms.html#posterior-distribution-4"><i class="fa fa-check"></i><b>4.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.4.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-5"><i class="fa fa-check"></i><b>4.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="brms.html"><a href="brms.html#semi-parametric-model-1"><i class="fa fa-check"></i><b>5.5</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="5.5.1" data-path="brms.html"><a href="brms.html#define-model-6"><i class="fa fa-check"></i><b>5.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="5.5.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-4"><i class="fa fa-check"></i><b>5.5.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="5.5.3" data-path="brms.html"><a href="brms.html#diagnostics-5"><i class="fa fa-check"></i><b>5.5.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="5.5.4" data-path="brms.html"><a href="brms.html#posterior-distribution-5"><i class="fa fa-check"></i><b>5.5.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="5.5.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-6"><i class="fa fa-check"></i><b>5.5.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="brms.html"><a href="brms.html#semi-parametric-model-1"><i class="fa fa-check"></i><b>4.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="brms.html"><a href="brms.html#define-model-6"><i class="fa fa-check"></i><b>4.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.5.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-4"><i class="fa fa-check"></i><b>4.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.5.3" data-path="brms.html"><a href="brms.html#diagnostics-5"><i class="fa fa-check"></i><b>4.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.5.4" data-path="brms.html"><a href="brms.html#posterior-distribution-5"><i class="fa fa-check"></i><b>4.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.5.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-6"><i class="fa fa-check"></i><b>4.5.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="5.6" data-path="brms.html"><a href="brms.html#semi-parametric-model-random-walk-prior"><i class="fa fa-check"></i><b>5.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
-<li class="chapter" data-level="5.6.1" data-path="brms.html"><a href="brms.html#define-model-7"><i class="fa fa-check"></i><b>5.6.1</b> Define Model</a></li>
-<li class="chapter" data-level="5.6.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-5"><i class="fa fa-check"></i><b>5.6.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="5.6.3" data-path="brms.html"><a href="brms.html#diagnostics-6"><i class="fa fa-check"></i><b>5.6.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="5.6.4" data-path="brms.html"><a href="brms.html#posterior-distribution-6"><i class="fa fa-check"></i><b>5.6.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="5.6.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-7"><i class="fa fa-check"></i><b>5.6.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.6" data-path="brms.html"><a href="brms.html#semi-parametric-model-random-walk-prior"><i class="fa fa-check"></i><b>4.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="brms.html"><a href="brms.html#define-model-7"><i class="fa fa-check"></i><b>4.6.1</b> Define Model</a></li>
+<li class="chapter" data-level="4.6.2" data-path="brms.html"><a href="brms.html#prior-predictive-distribution-5"><i class="fa fa-check"></i><b>4.6.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="4.6.3" data-path="brms.html"><a href="brms.html#diagnostics-6"><i class="fa fa-check"></i><b>4.6.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="4.6.4" data-path="brms.html"><a href="brms.html#posterior-distribution-6"><i class="fa fa-check"></i><b>4.6.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="4.6.5" data-path="brms.html"><a href="brms.html#posterior-predictive-distribution-7"><i class="fa fa-check"></i><b>4.6.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="brms.html"><a href="brms.html#session-info-2"><i class="fa fa-check"></i><b>5.7</b> Session Info</a></li>
+<li class="chapter" data-level="4.7" data-path="brms.html"><a href="brms.html#session-info-2"><i class="fa fa-check"></i><b>4.7</b> Session Info</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="rstan.html"><a href="rstan.html"><i class="fa fa-check"></i><b>6</b> rstan</a><ul>
-<li class="chapter" data-level="6.1" data-path="rstan.html"><a href="rstan.html#resources-4"><i class="fa fa-check"></i><b>6.1</b> Resources</a></li>
-<li class="chapter" data-level="6.2" data-path="rstan.html"><a href="rstan.html#description-3"><i class="fa fa-check"></i><b>6.2</b> Description</a></li>
-<li class="chapter" data-level="6.3" data-path="rstan.html"><a href="rstan.html#environment-setup-3"><i class="fa fa-check"></i><b>6.3</b> Environment Setup</a></li>
-<li class="chapter" data-level="6.4" data-path="rstan.html"><a href="rstan.html#linear-model-2"><i class="fa fa-check"></i><b>6.4</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.4.1" data-path="rstan.html"><a href="rstan.html#define-model-8"><i class="fa fa-check"></i><b>6.4.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.4.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-6"><i class="fa fa-check"></i><b>6.4.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="6.4.3" data-path="rstan.html"><a href="rstan.html#diagnostics-7"><i class="fa fa-check"></i><b>6.4.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.4.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-7"><i class="fa fa-check"></i><b>6.4.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.4.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-8"><i class="fa fa-check"></i><b>6.4.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="5" data-path="rstan.html"><a href="rstan.html"><i class="fa fa-check"></i><b>5</b> rstan</a><ul>
+<li class="chapter" data-level="5.1" data-path="rstan.html"><a href="rstan.html#resources-4"><i class="fa fa-check"></i><b>5.1</b> Resources</a></li>
+<li class="chapter" data-level="5.2" data-path="rstan.html"><a href="rstan.html#description-3"><i class="fa fa-check"></i><b>5.2</b> Description</a></li>
+<li class="chapter" data-level="5.3" data-path="rstan.html"><a href="rstan.html#environment-setup-3"><i class="fa fa-check"></i><b>5.3</b> Environment Setup</a></li>
+<li class="chapter" data-level="5.4" data-path="rstan.html"><a href="rstan.html#linear-model-2"><i class="fa fa-check"></i><b>5.4</b> Linear Model</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="rstan.html"><a href="rstan.html#define-model-8"><i class="fa fa-check"></i><b>5.4.1</b> Define Model</a></li>
+<li class="chapter" data-level="5.4.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-6"><i class="fa fa-check"></i><b>5.4.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.4.3" data-path="rstan.html"><a href="rstan.html#diagnostics-7"><i class="fa fa-check"></i><b>5.4.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="5.4.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-7"><i class="fa fa-check"></i><b>5.4.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="5.4.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-8"><i class="fa fa-check"></i><b>5.4.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-2"><i class="fa fa-check"></i><b>6.5</b> Semi-parametric Model</a><ul>
-<li class="chapter" data-level="6.5.1" data-path="rstan.html"><a href="rstan.html#define-model-9"><i class="fa fa-check"></i><b>6.5.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.5.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-7"><i class="fa fa-check"></i><b>6.5.2</b> Prior Predictive Distribution</a></li>
-<li class="chapter" data-level="6.5.3" data-path="rstan.html"><a href="rstan.html#diagnostics-8"><i class="fa fa-check"></i><b>6.5.3</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.5.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-8"><i class="fa fa-check"></i><b>6.5.4</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.5.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-9"><i class="fa fa-check"></i><b>6.5.5</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.5" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-2"><i class="fa fa-check"></i><b>5.5</b> Semi-parametric Model</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="rstan.html"><a href="rstan.html#define-model-9"><i class="fa fa-check"></i><b>5.5.1</b> Define Model</a></li>
+<li class="chapter" data-level="5.5.2" data-path="rstan.html"><a href="rstan.html#prior-predictive-distribution-7"><i class="fa fa-check"></i><b>5.5.2</b> Prior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.5.3" data-path="rstan.html"><a href="rstan.html#diagnostics-8"><i class="fa fa-check"></i><b>5.5.3</b> Diagnostics</a></li>
+<li class="chapter" data-level="5.5.4" data-path="rstan.html"><a href="rstan.html#posterior-distribution-8"><i class="fa fa-check"></i><b>5.5.4</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="5.5.5" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-9"><i class="fa fa-check"></i><b>5.5.5</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="6.6" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-random-walk-prior-1"><i class="fa fa-check"></i><b>6.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
-<li class="chapter" data-level="6.6.1" data-path="rstan.html"><a href="rstan.html#define-model-10"><i class="fa fa-check"></i><b>6.6.1</b> Define Model</a></li>
-<li class="chapter" data-level="6.6.2" data-path="rstan.html"><a href="rstan.html#diagnostics-9"><i class="fa fa-check"></i><b>6.6.2</b> Diagnostics</a></li>
-<li class="chapter" data-level="6.6.3" data-path="rstan.html"><a href="rstan.html#posterior-distribution-9"><i class="fa fa-check"></i><b>6.6.3</b> Posterior Distribution</a></li>
-<li class="chapter" data-level="6.6.4" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-10"><i class="fa fa-check"></i><b>6.6.4</b> Posterior Predictive Distribution</a></li>
+<li class="chapter" data-level="5.6" data-path="rstan.html"><a href="rstan.html#semi-parametric-model-random-walk-prior-1"><i class="fa fa-check"></i><b>5.6</b> Semi-parametric Model (Random Walk Prior)</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="rstan.html"><a href="rstan.html#define-model-10"><i class="fa fa-check"></i><b>5.6.1</b> Define Model</a></li>
+<li class="chapter" data-level="5.6.2" data-path="rstan.html"><a href="rstan.html#diagnostics-9"><i class="fa fa-check"></i><b>5.6.2</b> Diagnostics</a></li>
+<li class="chapter" data-level="5.6.3" data-path="rstan.html"><a href="rstan.html#posterior-distribution-9"><i class="fa fa-check"></i><b>5.6.3</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="5.6.4" data-path="rstan.html"><a href="rstan.html#posterior-predictive-distribution-10"><i class="fa fa-check"></i><b>5.6.4</b> Posterior Predictive Distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="6.7" data-path="rstan.html"><a href="rstan.html#session-info-3"><i class="fa fa-check"></i><b>6.7</b> Session Info</a></li>
+<li class="chapter" data-level="5.7" data-path="rstan.html"><a href="rstan.html#session-info-3"><i class="fa fa-check"></i><b>5.7</b> Session Info</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -266,123 +266,237 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="brms" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> brms</h1>
+<h1><span class="header-section-number">Chapter 4</span> brms</h1>
 <div id="resources-3" class="section level2">
-<h2><span class="header-section-number">5.1</span> Resources</h2>
+<h2><span class="header-section-number">4.1</span> Resources</h2>
 <ul>
 <li><p><a href="https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf">Overview of brms</a></p></li>
 <li><p><a href="https://bookdown.org/content/4857/">Solomon Kurz’s translation of <em>Statistical Rethinking</em></a></p></li>
 </ul>
 </div>
 <div id="description-2" class="section level2">
-<h2><span class="header-section-number">5.2</span> Description</h2>
+<h2><span class="header-section-number">4.2</span> Description</h2>
 </div>
 <div id="environment-setup-2" class="section level2">
-<h2><span class="header-section-number">5.3</span> Environment Setup</h2>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="brms.html#cb61-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
-<span id="cb61-2"><a href="brms.html#cb61-2"></a></span>
-<span id="cb61-3"><a href="brms.html#cb61-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb61-4"><a href="brms.html#cb61-4"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
-<span id="cb61-5"><a href="brms.html#cb61-5"></a></span>
-<span id="cb61-6"><a href="brms.html#cb61-6"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb61-7"><a href="brms.html#cb61-7"></a><span class="kw">library</span>(datasets)</span>
-<span id="cb61-8"><a href="brms.html#cb61-8"></a><span class="kw">data</span>(mtcars)</span>
-<span id="cb61-9"><a href="brms.html#cb61-9"></a></span>
-<span id="cb61-10"><a href="brms.html#cb61-10"></a><span class="kw">library</span>(brms)</span>
-<span id="cb61-11"><a href="brms.html#cb61-11"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
+<h2><span class="header-section-number">4.3</span> Environment Setup</h2>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="brms.html#cb60-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb60-2"><a href="brms.html#cb60-2"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb60-3"><a href="brms.html#cb60-3"></a>knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(<span class="dt">message=</span><span class="ot">FALSE</span>)</span>
+<span id="cb60-4"><a href="brms.html#cb60-4"></a></span>
+<span id="cb60-5"><a href="brms.html#cb60-5"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb60-6"><a href="brms.html#cb60-6"></a><span class="kw">library</span>(datasets)</span>
+<span id="cb60-7"><a href="brms.html#cb60-7"></a><span class="kw">data</span>(mtcars)</span>
+<span id="cb60-8"><a href="brms.html#cb60-8"></a></span>
+<span id="cb60-9"><a href="brms.html#cb60-9"></a><span class="kw">library</span>(brms)</span>
+<span id="cb60-10"><a href="brms.html#cb60-10"></a><span class="kw">library</span>(bayesplot)</span>
+<span id="cb60-11"><a href="brms.html#cb60-11"></a></span>
+<span id="cb60-12"><a href="brms.html#cb60-12"></a></span>
+<span id="cb60-13"><a href="brms.html#cb60-13"></a><span class="co"># Set number of cores</span></span>
+<span id="cb60-14"><a href="brms.html#cb60-14"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
 </div>
 <div id="linear-model-1" class="section level2">
-<h2><span class="header-section-number">5.4</span> Linear Model</h2>
+<h2><span class="header-section-number">4.4</span> Linear Model</h2>
 <div id="define-model-5" class="section level3">
-<h3><span class="header-section-number">5.4.1</span> Define Model</h3>
-<p>Like the <code>rethinking</code> package, <code>rstan</code> doesn’t have default priors, so I need to explicitly choose them:</p>
+<h3><span class="header-section-number">4.4.1</span> Define Model</h3>
+<p>The <code>brms</code> package default priors are improper flat priors over the real line. However, there is a strong case to be made against this type of non-informative prior.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> So I’ll proceed directly to specifying priors based on the EPA data.</p>
 <p><span class="math display">\[\begin{align*}
-  mpg &amp;\sim N(\mu, \sigma^2) \\
+  mpg &amp;\sim Normal(\mu, \sigma^2) \\
   \mu &amp;= a + b*disp \\
-  a &amp;\sim N(25,10) \\
-  b &amp;\sim N(-0.2, 0.1) \\
-  \sigma &amp;\sim Exp(1)
+  a &amp;\sim Normal(13.2, 5.3^2) \\
+  b &amp;\sim Normal(-0.1, 0.05^2) \\
+  \sigma &amp;\sim Exponential(1)
 \end{align*}\]</span></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="brms.html#cb61-1"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">brm</span>(mpg <span class="op">~</span><span class="st"> </span>disp, <span class="dt">data=</span>mtcars, <span class="dt">family=</span><span class="kw">gaussian</span>(), </span>
+<span id="cb61-2"><a href="brms.html#cb61-2"></a>            <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(-0.1, 0.05)&quot;</span>, <span class="dt">class=</span><span class="st">&quot;b&quot;</span>, <span class="dt">coef =</span> <span class="st">&quot;disp&quot;</span>),</span>
+<span id="cb61-3"><a href="brms.html#cb61-3"></a>                    <span class="kw">set_prior</span>(<span class="st">&quot;normal(13.2, 5.3)&quot;</span>, <span class="dt">class=</span><span class="st">&quot;Intercept&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="brms.html#cb62-1"></a><span class="kw">stancode</span>(mdl1)</span></code></pre></div>
+<pre><code>## // generated with brms 2.14.4
+## functions {
+## }
+## data {
+##   int&lt;lower=1&gt; N;  // total number of observations
+##   vector[N] Y;  // response variable
+##   int&lt;lower=1&gt; K;  // number of population-level effects
+##   matrix[N, K] X;  // population-level design matrix
+##   int prior_only;  // should the likelihood be ignored?
+## }
+## transformed data {
+##   int Kc = K - 1;
+##   matrix[N, Kc] Xc;  // centered version of X without an intercept
+##   vector[Kc] means_X;  // column means of X before centering
+##   for (i in 2:K) {
+##     means_X[i - 1] = mean(X[, i]);
+##     Xc[, i - 1] = X[, i] - means_X[i - 1];
+##   }
+## }
+## parameters {
+##   vector[Kc] b;  // population-level effects
+##   real Intercept;  // temporary intercept for centered predictors
+##   real&lt;lower=0&gt; sigma;  // residual SD
+## }
+## transformed parameters {
+## }
+## model {
+##   // likelihood including all constants
+##   if (!prior_only) {
+##     target += normal_id_glm_lpdf(Y | Xc, Intercept, b, sigma);
+##   }
+##   // priors including all constants
+##   target += normal_lpdf(b[1] | -0.1, 0.05);
+##   target += normal_lpdf(Intercept | 13.2, 5.3);
+##   target += student_t_lpdf(sigma | 3, 0, 5.4)
+##     - 1 * student_t_lccdf(0 | 3, 0, 5.4);
+## }
+## generated quantities {
+##   // actual population-level intercept
+##   real b_Intercept = Intercept - dot_product(means_X, b);
+## }</code></pre>
 </div>
 <div id="prior-predictive-distribution-3" class="section level3">
-<h3><span class="header-section-number">5.4.2</span> Prior Predictive Distribution</h3>
+<h3><span class="header-section-number">4.4.2</span> Prior Predictive Distribution</h3>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="brms.html#cb64-1"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp))</span>
+<span id="cb64-2"><a href="brms.html#cb64-2"></a></span>
+<span id="cb64-3"><a href="brms.html#cb64-3"></a>mdl1_prior &lt;-<span class="st"> </span><span class="kw">brm</span>(mpg <span class="op">~</span><span class="st"> </span>disp, <span class="dt">data=</span>mtcars, <span class="dt">family=</span><span class="kw">gaussian</span>(), </span>
+<span id="cb64-4"><a href="brms.html#cb64-4"></a>            <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(-0.1, 0.05)&quot;</span>, <span class="dt">class=</span><span class="st">&quot;b&quot;</span>, <span class="dt">coef =</span> <span class="st">&quot;disp&quot;</span>),</span>
+<span id="cb64-5"><a href="brms.html#cb64-5"></a>                    <span class="kw">set_prior</span>(<span class="st">&quot;normal(13.2, 5.3)&quot;</span>, <span class="dt">class=</span><span class="st">&quot;Intercept&quot;</span>)),</span>
+<span id="cb64-6"><a href="brms.html#cb64-6"></a>            <span class="dt">sample_prior=</span><span class="st">&quot;only&quot;</span>)</span>
+<span id="cb64-7"><a href="brms.html#cb64-7"></a></span>
+<span id="cb64-8"><a href="brms.html#cb64-8"></a><span class="co"># Samples from posterior predictive distribution</span></span>
+<span id="cb64-9"><a href="brms.html#cb64-9"></a>ppd &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">predict</span>(mdl1_prior, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">disp=</span>D)))</span>
+<span id="cb64-10"><a href="brms.html#cb64-10"></a><span class="co"># Samples from expected value of posterior predictive distribution</span></span>
+<span id="cb64-11"><a href="brms.html#cb64-11"></a>eppd &lt;-<span class="st"> </span><span class="kw">posterior_epred</span>(mdl1_prior, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">disp=</span>D), <span class="dt">summary=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb64-12"><a href="brms.html#cb64-12"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>) <span class="op">%&gt;%</span></span>
+<span id="cb64-13"><a href="brms.html#cb64-13"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb64-14"><a href="brms.html#cb64-14"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb64-15"><a href="brms.html#cb64-15"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp=</span>D) <span class="op">%&gt;%</span></span>
+<span id="cb64-16"><a href="brms.html#cb64-16"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
+<span id="cb64-17"><a href="brms.html#cb64-17"></a></span>
+<span id="cb64-18"><a href="brms.html#cb64-18"></a></span>
+<span id="cb64-19"><a href="brms.html#cb64-19"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb64-20"><a href="brms.html#cb64-20"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>ppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>D, <span class="dt">ymin=</span>Q2<span class="fl">.5</span>, <span class="dt">ymax=</span>Q97<span class="fl">.5</span>), <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span></span>
+<span id="cb64-21"><a href="brms.html#cb64-21"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) </span></code></pre></div>
+<p><img src="04_brms_files/figure-html/mdl1_prior-1.png" width="672" /></p>
 </div>
 <div id="diagnostics-4" class="section level3">
-<h3><span class="header-section-number">5.4.3</span> Diagnostics</h3>
+<h3><span class="header-section-number">4.4.3</span> Diagnostics</h3>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="brms.html#cb65-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;b_Intercept&quot;</span>, <span class="st">&quot;b_disp&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<p><img src="04_brms_files/figure-html/mdl1_trankplot-1.png" width="672" /></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="brms.html#cb66-1"></a><span class="kw">summary</span>(mdl1)</span></code></pre></div>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: mpg ~ disp 
+##    Data: mtcars (Number of observations: 32) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    29.62      1.28    27.08    32.16 1.00     3956     2991
+## disp         -0.04      0.00    -0.05    -0.03 1.00     4111     2878
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     3.37      0.46     2.60     4.41 1.00     2946     2875
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
 <div id="posterior-distribution-4" class="section level3">
-<h3><span class="header-section-number">5.4.4</span> Posterior Distribution</h3>
+<h3><span class="header-section-number">4.4.4</span> Posterior Distribution</h3>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="brms.html#cb68-1"></a><span class="kw">fixef</span>(mdl1)</span></code></pre></div>
+<pre><code>##           Estimate Est.Error     Q2.5    Q97.5
+## Intercept 29.61988  1.279003 27.08427 32.15781
+## disp      -0.04166  0.004944 -0.05134 -0.03175</code></pre>
 </div>
 <div id="posterior-predictive-distribution-5" class="section level3">
-<h3><span class="header-section-number">5.4.5</span> Posterior Predictive Distribution</h3>
+<h3><span class="header-section-number">4.4.5</span> Posterior Predictive Distribution</h3>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="brms.html#cb70-1"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp))</span>
+<span id="cb70-2"><a href="brms.html#cb70-2"></a></span>
+<span id="cb70-3"><a href="brms.html#cb70-3"></a><span class="co"># Samples from posterior predictive distribution</span></span>
+<span id="cb70-4"><a href="brms.html#cb70-4"></a>ppd &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">predict</span>(mdl1, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">disp=</span>D)))</span>
+<span id="cb70-5"><a href="brms.html#cb70-5"></a><span class="co"># Samples from expected value of posterior predictive distribution</span></span>
+<span id="cb70-6"><a href="brms.html#cb70-6"></a>eppd &lt;-<span class="st"> </span><span class="kw">posterior_epred</span>(mdl1, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">disp=</span>D), <span class="dt">summary=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb70-7"><a href="brms.html#cb70-7"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>) <span class="op">%&gt;%</span></span>
+<span id="cb70-8"><a href="brms.html#cb70-8"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb70-9"><a href="brms.html#cb70-9"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb70-10"><a href="brms.html#cb70-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">disp=</span>D) <span class="op">%&gt;%</span></span>
+<span id="cb70-11"><a href="brms.html#cb70-11"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
+<span id="cb70-12"><a href="brms.html#cb70-12"></a></span>
+<span id="cb70-13"><a href="brms.html#cb70-13"></a></span>
+<span id="cb70-14"><a href="brms.html#cb70-14"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb70-15"><a href="brms.html#cb70-15"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>ppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>D, <span class="dt">ymin=</span>Q2<span class="fl">.5</span>, <span class="dt">ymax=</span>Q97<span class="fl">.5</span>), <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span></span>
+<span id="cb70-16"><a href="brms.html#cb70-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb70-17"><a href="brms.html#cb70-17"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg))</span></code></pre></div>
+<p><img src="04_brms_files/figure-html/mdl1_ppd-1.png" width="672" /></p>
 </div>
 </div>
 <div id="semi-parametric-model-1" class="section level2">
-<h2><span class="header-section-number">5.5</span> Semi-parametric Model</h2>
+<h2><span class="header-section-number">4.5</span> Semi-parametric Model</h2>
 <div id="define-model-6" class="section level3">
-<h3><span class="header-section-number">5.5.1</span> Define Model</h3>
+<h3><span class="header-section-number">4.5.1</span> Define Model</h3>
 <p>First, I’ll define the splines just as I did with the <code>rethinking</code> package.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="brms.html#cb62-1"></a><span class="kw">library</span>(splines)</span>
-<span id="cb62-2"><a href="brms.html#cb62-2"></a></span>
-<span id="cb62-3"><a href="brms.html#cb62-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
-<span id="cb62-4"><a href="brms.html#cb62-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
-<span id="cb62-5"><a href="brms.html#cb62-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb62-6"><a href="brms.html#cb62-6"></a></span>
-<span id="cb62-7"><a href="brms.html#cb62-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp, B) <span class="op">%&gt;%</span></span>
-<span id="cb62-8"><a href="brms.html#cb62-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb62-9"><a href="brms.html#cb62-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb62-10"><a href="brms.html#cb62-10"></a></span>
-<span id="cb62-11"><a href="brms.html#cb62-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
-<span id="cb62-12"><a href="brms.html#cb62-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb62-13"><a href="brms.html#cb62-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb62-14"><a href="brms.html#cb62-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
-<span id="cb62-15"><a href="brms.html#cb62-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
-<span id="cb62-16"><a href="brms.html#cb62-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb62-17"><a href="brms.html#cb62-17"></a></span>
-<span id="cb62-18"><a href="brms.html#cb62-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
-<span id="cb62-19"><a href="brms.html#cb62-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb62-20"><a href="brms.html#cb62-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb62-21"><a href="brms.html#cb62-21"></a></span>
-<span id="cb62-22"><a href="brms.html#cb62-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
-<span id="cb62-23"><a href="brms.html#cb62-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
-<span id="cb62-24"><a href="brms.html#cb62-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="brms.html#cb71-1"></a><span class="kw">library</span>(splines)</span>
+<span id="cb71-2"><a href="brms.html#cb71-2"></a></span>
+<span id="cb71-3"><a href="brms.html#cb71-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
+<span id="cb71-4"><a href="brms.html#cb71-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
+<span id="cb71-5"><a href="brms.html#cb71-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb71-6"><a href="brms.html#cb71-6"></a></span>
+<span id="cb71-7"><a href="brms.html#cb71-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>mtcars<span class="op">$</span>disp, B) <span class="op">%&gt;%</span></span>
+<span id="cb71-8"><a href="brms.html#cb71-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb71-9"><a href="brms.html#cb71-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb71-10"><a href="brms.html#cb71-10"></a></span>
+<span id="cb71-11"><a href="brms.html#cb71-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
+<span id="cb71-12"><a href="brms.html#cb71-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb71-13"><a href="brms.html#cb71-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>disp), <span class="kw">max</span>(mtcars<span class="op">$</span>disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb71-14"><a href="brms.html#cb71-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
+<span id="cb71-15"><a href="brms.html#cb71-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
+<span id="cb71-16"><a href="brms.html#cb71-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb71-17"><a href="brms.html#cb71-17"></a></span>
+<span id="cb71-18"><a href="brms.html#cb71-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
+<span id="cb71-19"><a href="brms.html#cb71-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb71-20"><a href="brms.html#cb71-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb71-21"><a href="brms.html#cb71-21"></a></span>
+<span id="cb71-22"><a href="brms.html#cb71-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
+<span id="cb71-23"><a href="brms.html#cb71-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
+<span id="cb71-24"><a href="brms.html#cb71-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
 <p><img src="04_brms_files/figure-html/splines-1.png" width="672" /></p>
 <p>Note: the dashed lines are the splines and the points are the values of the spline at the specific values of <code>mtcars$disp</code>; the points are inputs into the <code>stan</code> model.</p>
 </div>
 <div id="prior-predictive-distribution-4" class="section level3">
-<h3><span class="header-section-number">5.5.2</span> Prior Predictive Distribution</h3>
+<h3><span class="header-section-number">4.5.2</span> Prior Predictive Distribution</h3>
 </div>
 <div id="diagnostics-5" class="section level3">
-<h3><span class="header-section-number">5.5.3</span> Diagnostics</h3>
+<h3><span class="header-section-number">4.5.3</span> Diagnostics</h3>
 </div>
 <div id="posterior-distribution-5" class="section level3">
-<h3><span class="header-section-number">5.5.4</span> Posterior Distribution</h3>
+<h3><span class="header-section-number">4.5.4</span> Posterior Distribution</h3>
 </div>
 <div id="posterior-predictive-distribution-6" class="section level3">
-<h3><span class="header-section-number">5.5.5</span> Posterior Predictive Distribution</h3>
+<h3><span class="header-section-number">4.5.5</span> Posterior Predictive Distribution</h3>
 </div>
 </div>
 <div id="semi-parametric-model-random-walk-prior" class="section level2">
-<h2><span class="header-section-number">5.6</span> Semi-parametric Model (Random Walk Prior)</h2>
+<h2><span class="header-section-number">4.6</span> Semi-parametric Model (Random Walk Prior)</h2>
 <div id="define-model-7" class="section level3">
-<h3><span class="header-section-number">5.6.1</span> Define Model</h3>
+<h3><span class="header-section-number">4.6.1</span> Define Model</h3>
 </div>
 <div id="prior-predictive-distribution-5" class="section level3">
-<h3><span class="header-section-number">5.6.2</span> Prior Predictive Distribution</h3>
+<h3><span class="header-section-number">4.6.2</span> Prior Predictive Distribution</h3>
 </div>
 <div id="diagnostics-6" class="section level3">
-<h3><span class="header-section-number">5.6.3</span> Diagnostics</h3>
+<h3><span class="header-section-number">4.6.3</span> Diagnostics</h3>
 </div>
 <div id="posterior-distribution-6" class="section level3">
-<h3><span class="header-section-number">5.6.4</span> Posterior Distribution</h3>
+<h3><span class="header-section-number">4.6.4</span> Posterior Distribution</h3>
 </div>
 <div id="posterior-predictive-distribution-7" class="section level3">
-<h3><span class="header-section-number">5.6.5</span> Posterior Predictive Distribution</h3>
+<h3><span class="header-section-number">4.6.5</span> Posterior Predictive Distribution</h3>
 </div>
 </div>
 <div id="session-info-2" class="section level2">
-<h2><span class="header-section-number">5.7</span> Session Info</h2>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="brms.html#cb63-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<h2><span class="header-section-number">4.7</span> Session Info</h2>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="brms.html#cb72-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Big Sur 10.16
@@ -444,6 +558,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [112] stats4_4.0.3         munsell_0.5.0        shinyjs_2.0.0</code></pre>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p><a href="https://mc-stan.org/users/documentation/case-studies/weakly_informative_shapes.html" class="uri">https://mc-stan.org/users/documentation/case-studies/weakly_informative_shapes.html</a><a href="brms.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

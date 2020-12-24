@@ -3,6 +3,6 @@ language:
   ui:
     chapter_name: "Chapter "
 delete_merged_file: true
-rmd_files: ["index.Rmd", "01_intro.Rmd", "02_rstanarm.Rmd", "03_rethinking.Rmd", "05_rstan.Rmd", "06_references.Rmd"]
+rmd_files: ["index.Rmd", "01_intro.Rmd", "02_rstanarm.Rmd", "03_rethinking.Rmd", "04_brms.Rmd", "05_rstan.Rmd", "06_references.Rmd"]
 new_session: yes
 output_dir: docs
