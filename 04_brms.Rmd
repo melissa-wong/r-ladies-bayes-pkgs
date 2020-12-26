@@ -1,8 +1,4 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
+
 # brms {#brms}
 
 ## Resources
@@ -13,6 +9,7 @@ output:
 
 ## Description
 
+For those familiar with the `lme4` package, `brms` is a natural transition because it uses a similar syntax for specifying multi-level models. `brms` capabilities overlap in some areas with both `rstanarm` and `rethinking` while providing expanded features in other areas. For example, `brms` supports default priors (although not the same weakly informative priors as `rstanarm`) while also allowing great flexibility for user-defined priors (like `rethinking`). The `brmsfit` object is compatible with both the `bayesplot` and `shinystan` packages. Like `rethinking`, there is a method for extracting the automatically generated `stan` code. These are just a few of the similarities and differences; the overview document linked above includes a table with a complete comparison of the three packages.
 
 ## Environment Setup
 
@@ -38,7 +35,7 @@ options(mc.cores = parallel::detectCores())
 
 ### Define Model
 
-The `brms` package default priors are improper flat priors over the real line. However, there is a strong case to be made against this type of non-informative prior ^[https://mc-stan.org/users/documentation/case-studies/weakly_informative_shapes.html]. So I'll proceed directly to specifying priors based on the EPA data.
+The `brms` package default priors are improper flat priors over the real line. However, there is a strong case to be made against this type of non-informative prior ^[https://mc-stan.org/users/documentation/case-studies/weakly_informative_shapes.html]. So I'll proceed directly to the priors based on the EPA data.
 
 \begin{align*}
   mpg &\sim Normal(\mu, \sigma^2) \\
@@ -52,9 +49,12 @@ The `brms` package default priors are improper flat priors over the real line. H
 
 mdl1 <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
             prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
-                    set_prior("normal(13.2, 5.3)", class="Intercept")))
+                    set_prior("normal(13.2, 5.3)", class="Intercept"),
+                    set_prior("exponential(1)", class="sigma")))
 
 ```
+
+Like the `rethinking` package, `brms` also implements the `stancode` function.  This `stan` model looks more complicated, but it is functionally equivalent to the `rethinking` model.
 
 ```{r mdl1_stancode}
 stancode(mdl1)
@@ -63,19 +63,27 @@ stancode(mdl1)
 
 ### Prior Predictive Distribution
 
+There are several methods for getting the prior predictive distribution from the `brms` model.
+
+    1. The `prior_summary` function displays model priors. Manually draw samples from those distributions and then construct the prior predictive distribution as I did in \@ref(rethinkingprior). 
+    
+    2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
+    
+    3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
+    
+Method 3 is demonstrated below.
+
 ```{r mdl1_prior, results="hide"}
+
 D <- seq(min(mtcars$disp), max(mtcars$disp))
 
-mdl1_prior <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
-            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
-                    set_prior("normal(13.2, 5.3)", class="Intercept")),
-            sample_prior="only")
+mdl1_prior <- update(mdl1, sample_prior="only")
 
-# Samples from posterior predictive distribution
+# Summarizes samples from posterior predictive distribution
 ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(disp=D)))
 # Samples from expected value of posterior predictive distribution
-eppd <- posterior_epred(mdl1_prior, newdata=data.frame(disp=D), summary=FALSE) %>%
-  head(50) %>%
+eppd <- posterior_epred(mdl1_prior, newdata=data.frame(disp=D), 
+                        summary=FALSE, nsamples=50) %>%
   t() %>%
   as.data.frame() %>%
   mutate(disp=D) %>%
@@ -100,21 +108,36 @@ summary(mdl1)
 
 ### Posterior Distribution
 
+The simple linear model only has population-level (i.e., "fixed") effects, and the `fixef` function extracts a summary of those parameters only.  Note that this is the same information as returned from the `summary` function above.
+
 ```{r mdl1_post}
 fixef(mdl1)
 ```
 
 ### Posterior Predictive Distribution
 
+The `brms` package includes the `pp_check` function which uses `bayesplot` under the hood.
+
+```{r}
+pp_check(mdl1, nsamples = 20)
+```
+
+Or we can use `ppc_dens_overly` directly with the `brmsfit` object as shown below.
+
+```{r}
+ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=20))
+```
+
+
+And below is a plot of the expected value of the posterior predictive distribution overlayed with the observations.
+
 ```{r mdl1_ppd, results="hide"}
 
 D <- seq(min(mtcars$disp), max(mtcars$disp))
 
-# Samples from posterior predictive distribution
-ppd <- as.data.frame(predict(mdl1, newdata=data.frame(disp=D)))
 # Samples from expected value of posterior predictive distribution
-eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), summary=FALSE) %>%
-  head(50) %>%
+eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), 
+                        nsamples=50, summary=FALSE) %>%
   t() %>%
   as.data.frame() %>%
   mutate(disp=D) %>%
@@ -122,7 +145,6 @@ eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), summary=FALSE) %>%
 
 
 ggplot() +
-  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
   geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
   geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
 ```
@@ -131,66 +153,59 @@ ggplot() +
 
 ### Define Model
 
-First, I'll define the splines just as I did with the `rethinking` package.  
+The semi-parametric model is formulated as a mixed-model ^[http://matt-wand.utsacademics.info/publicns/Wand03.pdf] in `brms`.
 
-```{r splines}
-library(splines)
+We can use the `get_prior` function to check what the default priors are for this mixed model.
 
-num_knots <- 4  # number of interior knots
-knot_list <- quantile(mtcars$disp, probs=seq(0,1,length.out = num_knots))
-B <- bs(mtcars$disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
+```{r}
+get_prior(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian())
+```
+I'll replace the improper prior for the smoothing parameter fixed effect  and leave the rest since they are weakly informative priors.  See the `set_prior` help for details on changing the priors for the other parameters.
 
-df1 <- cbind(disp=mtcars$disp, B) %>%
-  as.data.frame() %>%
-  pivot_longer(-disp, names_to="spline", values_to="val")
+```{r mdl2, results="hide"}
 
-# Plot at smaller intervals so curves are smooth
-N<- 50
-D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
-B_plot <- bs(D, 
-             knots=knot_list[-c(1,num_knots)], 
-             intercept=TRUE)
+mdl2 <- brm(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(0,5)", class="b")),
+            control=list(adapt_delta=0.99))
 
-df2 <- cbind(disp=D, B_plot) %>%
-  as.data.frame() %>%
-  pivot_longer(-disp, names_to="spline", values_to="val")
-
-ggplot(mapping=aes(x=disp, y=val, color=spline)) +
-  geom_point(data=df1) +
-  geom_line(data=df2, linetype="dashed")
 ```
 
-Note: the dashed lines are the splines and the points are the values of the spline at the specific values of `mtcars$disp`; the points are inputs into the `stan` model.
-
-
-
 ### Prior Predictive Distribution
 
+```{r mdl2_prior, results="hide"}
 
+mdl2_prior <- update(mdl2, sample_prior="only")
+
+pp_check(mdl2_prior, nsamples = 20)
+```
 
 ### Diagnostics
 
+```{r}
+summary(mdl2)
+```
+
+
+```{r}
+pp_check(mdl2, nsamples=20)
+```
 
 
 ### Posterior Distribution
 
+The summary
+```{r}
+
+```
 
 
 ### Posterior Predictive Distribution
 
+```{r mdl2_ppd, fig.hold=TRUE, out.width="50%"}
+conditional_effects(mdl2, points=TRUE) 
 
-
-## Semi-parametric Model (Random Walk Prior)
-
-### Define Model
-
-### Prior Predictive Distribution
-
-### Diagnostics
-
-### Posterior Distribution
-
-### Posterior Predictive Distribution
+conditional_smooths(mdl2)
+```
 
 
 ## Session Info

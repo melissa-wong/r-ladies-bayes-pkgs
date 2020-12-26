@@ -644,7 +644,7 @@ ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
   labs(title="LOESS")
 ```
 
-<img src="02_rstanarm_files/figure-html/mdl3_ppd, figures-side-1.png" width="50%" /><img src="02_rstanarm_files/figure-html/mdl3_ppd, figures-side-2.png" width="50%" />
+<img src="02_rstanarm_files/figure-html/mdl3_ppd-1.png" width="50%" /><img src="02_rstanarm_files/figure-html/mdl3_ppd-2.png" width="50%" />
 
 ## Session Info
 

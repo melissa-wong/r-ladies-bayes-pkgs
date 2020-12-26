@@ -29,6 +29,11 @@ data(mtcars)
 
 library(rethinking)
 library(bayesplot)
+
+# Saves compiled version of model so it only has to be recompiled if the model is changed
+rstan_options(auto_write = TRUE)
+# Set number of cores
+options(mc.cores = parallel::detectCores())
 ```
 
 ## Linear Model

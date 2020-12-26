@@ -177,7 +177,7 @@ print(mdl1)
 ## sigma   3.21    0.01 0.40   2.56   2.93   3.18   3.45   4.14  1789    1
 ## lp__  -61.51    0.04 1.25 -64.85 -62.06 -61.18 -60.60 -60.11  1190    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Dec 24 17:04:54 2020.
+## Samples were drawn using NUTS(diag_e) at Fri Dec 25 20:25:58 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -499,7 +499,7 @@ print(mdl1_gam, pars=c("a", "sigma", "w"))
 ## w[5]  -2.47    0.08 3.03  -8.47  -4.52 -2.41 -0.46  3.59  1536    1
 ## w[6]  -8.91    0.07 2.53 -13.84 -10.64 -8.88 -7.11 -4.02  1487    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Dec 24 17:06:35 2020.
+## Samples were drawn using NUTS(diag_e) at Fri Dec 25 20:27:59 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -673,7 +673,7 @@ print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
 ## w[21] -19.55    0.05 2.64 -24.68 -21.32 -19.56 -17.77 -14.40  3178    1
 ## w[22] -20.51    0.05 2.75 -25.90 -22.40 -20.52 -18.65 -15.02  3126    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Dec 24 17:07:47 2020.
+## Samples were drawn using NUTS(diag_e) at Fri Dec 25 20:29:12 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).

@@ -378,7 +378,7 @@ ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl3, draws=50))
 
 The expectation over the ppd is plotted below, along with a loess curve for comparison. This model is clearly a better fit to the data than the linear model.
 
-```{r mdl3_ppd, figures-side, fig.show="hold", out.width="50%", message=FALSE}
+```{r mdl3_ppd, fig.show="hold", out.width="50%", message=FALSE}
 
 plot_nonlinear(mdl3, prob=0.95) +
   geom_point(mapping=aes(x=disp, y=mpg-mean(mpg)),
