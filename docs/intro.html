@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-25" />
+<meta name="date" content="2020-12-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -308,7 +308,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="data" class="section level2">
 <h2><span class="header-section-number">1.4</span> Data</h2>
-<p>For all of the examples, I use the mtcars data set and a model with <em>disp</em> as the predictor and <em>mpg</em> as the response. I start with a simple linear regression. However, as you can see from the scatterplot below, the relationship between <em>mpg</em> and <em>disp</em> is not linear, so I also fit a slightly more complex semi-parametric model.</p>
+<p>For all of the examples, I use the mtcars data set and a model with mean centered <em>disp</em> as the predictor and <em>mpg</em> as the response. I start with a simple linear regression. However, as you can see from the scatterplot below, the relationship between <em>mpg</em> and <em>disp</em> is not linear, so I also fit a slightly more complex semi-parametric model.</p>
+<p>There are two reasons why I use mean centered <em>disp</em>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Interpretation of the intercept is the average <em>mpg</em> at the average value of displacement versus average <em>mpg</em> at zero displacement (which has little practical meaning).</p></li>
+<li><p>Several of the packages used in the examples assume priors are for mean-centered predictors for sampling efficiency.</p></li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="intro.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="intro.html#cb1-2"></a><span class="kw">library</span>(datasets)</span>
 <span id="cb1-3"><a href="intro.html#cb1-3"></a><span class="kw">data</span>(mtcars)</span>

@@ -22,6 +22,8 @@ knitr::opts_chunk$set(message=FALSE)
 library(tidyverse)
 library(datasets)
 data(mtcars)
+# mean center disp predictor
+mtcars$c_disp = mtcars$disp - mean(mtcars$disp)
 
 library(brms)
 library(bayesplot)
@@ -38,7 +40,7 @@ The `brms` package default priors are improper flat priors over the real line. H
 
 \begin{align*}
   mpg &\sim Normal(\mu, \sigma^2) \\
-  \mu &= a + b*disp \\
+  \mu &= a + b*c\_disp \\
   a &\sim Normal(13.2, 5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\
   \sigma &\sim Exponential(1)
@@ -46,8 +48,8 @@ The `brms` package default priors are improper flat priors over the real line. H
 
 
 ```r
-mdl1 <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
-            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
+mdl1 <- brm(mpg ~ c_disp, data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "c_disp"),
                     set_prior("normal(13.2, 5.3)", class="Intercept"),
                     set_prior("exponential(1)", class="sigma")))
 ```
@@ -107,34 +109,34 @@ stancode(mdl1)
 
 There are several methods for getting the prior predictive distribution from the `brms` model.
 
-    1. The `prior_summary` function displays model priors. Manually draw samples from those distributions and then construct the prior predictive distribution as I did in \@ref(rethinkingprior). 
+1. The `prior_summary` function displays model priors. Manually draw samples from those distributions and then construct the prior predictive distribution as I did in \@ref(rethinkingprior). 
     
-    2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
+2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
     
-    3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
+3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
     
 Method 3 is demonstrated below.
 
 
 ```r
-D <- seq(min(mtcars$disp), max(mtcars$disp))
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
 
 mdl1_prior <- update(mdl1, sample_prior="only")
 
 # Summarizes samples from posterior predictive distribution
-ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(disp=D)))
+ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(c_disp=D)))
 # Samples from expected value of posterior predictive distribution
-eppd <- posterior_epred(mdl1_prior, newdata=data.frame(disp=D), 
+eppd <- posterior_epred(mdl1_prior, newdata=data.frame(c_disp=D), 
                         summary=FALSE, nsamples=50) %>%
   t() %>%
   as.data.frame() %>%
-  mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="iter", values_to="mpg")
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
 
 ggplot() +
   geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
-  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) 
+  geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) 
 ```
 
 <img src="04_brms_files/figure-html/mdl1_prior-1.png" width="672" />
@@ -144,7 +146,7 @@ ggplot() +
 
 
 ```r
-mcmc_rank_overlay(mdl1, pars=c("b_Intercept", "b_disp", "sigma"))
+mcmc_rank_overlay(mdl1, pars=c("b_Intercept", "b_c_disp", "sigma"))
 ```
 
 <img src="04_brms_files/figure-html/mdl1_trankplot-1.png" width="672" />
@@ -157,19 +159,19 @@ summary(mdl1)
 ```
 ##  Family: gaussian 
 ##   Links: mu = identity; sigma = identity 
-## Formula: mpg ~ disp 
+## Formula: mpg ~ c_disp 
 ##    Data: mtcars (Number of observations: 32) 
 ## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
 ##          total post-warmup samples = 4000
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    29.62      1.21    27.20    32.00 1.00     3382     2874
-## disp         -0.04      0.00    -0.05    -0.03 1.00     3645     2967
+## Intercept    20.02      0.57    18.90    21.16 1.00     2937     2776
+## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4027     2859
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     3.22      0.42     2.52     4.16 1.00     2795     2248
+## sigma     3.23      0.41     2.56     4.15 1.00     2748     2126
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -187,8 +189,8 @@ fixef(mdl1)
 
 ```
 ##           Estimate Est.Error     Q2.5    Q97.5
-## Intercept 29.62222  1.208253 27.20177 32.00096
-## disp      -0.04165  0.004688 -0.05109 -0.03262
+## Intercept  20.0207  0.569593 18.90455 21.15883
+## c_disp     -0.0416  0.004776 -0.05128 -0.03245
 ```
 
 ### Posterior Predictive Distribution
@@ -197,7 +199,7 @@ The `brms` package includes the `pp_check` function which uses `bayesplot` under
 
 
 ```r
-pp_check(mdl1, nsamples = 20)
+pp_check(mdl1, nsamples = 50)
 ```
 
 <img src="04_brms_files/figure-html/unnamed-chunk-1-1.png" width="672" />
@@ -206,7 +208,7 @@ Or we can use `ppc_dens_overly` directly with the `brmsfit` object as shown belo
 
 
 ```r
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=20))
+ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=50))
 ```
 
 <img src="04_brms_files/figure-html/unnamed-chunk-2-1.png" width="672" />
@@ -216,20 +218,20 @@ And below is a plot of the expected value of the posterior predictive distributi
 
 
 ```r
-D <- seq(min(mtcars$disp), max(mtcars$disp))
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
 
 # Samples from expected value of posterior predictive distribution
-eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), 
+eppd <- posterior_epred(mdl1, newdata=data.frame(c_disp=D), 
                         nsamples=50, summary=FALSE) %>%
   t() %>%
   as.data.frame() %>%
-  mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="iter", values_to="mpg")
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
 
 ggplot() +
-  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
-  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
+  geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) +
+  geom_point(data=mtcars, mapping=aes(x=c_disp, y=mpg))
 ```
 
 <img src="04_brms_files/figure-html/mdl1_ppd-1.png" width="672" />
@@ -238,23 +240,23 @@ ggplot() +
 
 ### Define Model
 
-The semi-parametric model is formulated as a mixed-model in `brms`. ^[http://matt-wand.utsacademics.info/publicns/Wand03.pdf]
+The semi-parametric model is formulated as a mixed-model ^[http://matt-wand.utsacademics.info/publicns/Wand03.pdf] in `brms`.
 
 We can use the `get_prior` function to check what the default priors are for this mixed model.
 
 
 ```r
-get_prior(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian())
+get_prior(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian())
 ```
 
 ```
-##                    prior     class                coef group resp dpar nlpar
-##                   (flat)         b                                          
-##                   (flat)         b             sdisp_1                      
-##  student_t(3, 19.2, 5.4) Intercept                                          
-##     student_t(3, 0, 5.4)       sds                                          
-##     student_t(3, 0, 5.4)       sds s(disp,bs="cr",k=7)                      
-##     student_t(3, 0, 5.4)     sigma                                          
+##                    prior     class                  coef group resp dpar nlpar
+##                   (flat)         b                                            
+##                   (flat)         b             sc_disp_1                      
+##  student_t(3, 19.2, 5.4) Intercept                                            
+##     student_t(3, 0, 5.4)       sds                                            
+##     student_t(3, 0, 5.4)       sds s(c_disp,bs="cr",k=7)                      
+##     student_t(3, 0, 5.4)     sigma                                            
 ##  bound       source
 ##             default
 ##        (vectorized)
@@ -267,7 +269,7 @@ I'll replace the improper prior for the smoothing parameter fixed effect  and le
 
 
 ```r
-mdl2 <- brm(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian(), 
+mdl2 <- brm(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian(), 
             prior=c(set_prior("normal(0,5)", class="b")),
             control=list(adapt_delta=0.99))
 ```
@@ -278,7 +280,7 @@ mdl2 <- brm(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian(),
 ```r
 mdl2_prior <- update(mdl2, sample_prior="only")
 
-pp_check(mdl2_prior, nsamples = 20)
+pp_check(mdl2_prior, nsamples = 50)
 ```
 
 <img src="04_brms_files/figure-html/mdl2_prior-1.png" width="672" />
@@ -293,23 +295,23 @@ summary(mdl2)
 ```
 ##  Family: gaussian 
 ##   Links: mu = identity; sigma = identity 
-## Formula: mpg ~ s(disp, bs = "cr", k = 7) 
+## Formula: mpg ~ s(c_disp, bs = "cr", k = 7) 
 ##    Data: mtcars (Number of observations: 32) 
 ## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
 ##          total post-warmup samples = 4000
 ## 
 ## Smooth Terms: 
-##              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sds(sdisp_1)     1.50      0.94     0.44     4.01 1.01      858     1504
+##                Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sds(sc_disp_1)     1.39      0.90     0.36     3.82 1.00      863     1277
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.08      0.44    19.21    20.94 1.00     3371     2727
-## sdisp_1      -3.19      0.28    -3.74    -2.63 1.00     2442     2210
+## Intercept    20.08      0.43    19.23    20.93 1.00     3608     2897
+## sc_disp_1    -3.17      0.28    -3.71    -2.61 1.00     3226     2698
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     2.40      0.35     1.83     3.19 1.00     2434     2702
+## sigma     2.40      0.36     1.83     3.23 1.00     2214     2493
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -319,7 +321,7 @@ summary(mdl2)
 
 
 ```r
-pp_check(mdl2, nsamples=20)
+pp_check(mdl2, nsamples=50)
 ```
 
 <img src="04_brms_files/figure-html/unnamed-chunk-5-1.png" width="672" />
@@ -335,16 +337,10 @@ The summary
 
 
 ```r
-conditional_effects(mdl2, points=TRUE) 
+plot(conditional_effects(mdl2), points=TRUE) 
 ```
 
 <img src="04_brms_files/figure-html/mdl2_ppd-1.png" width="50%" />
-
-```r
-conditional_smooths(mdl2)
-```
-
-<img src="04_brms_files/figure-html/mdl2_ppd-2.png" width="50%" />
 
 
 ## Session Info

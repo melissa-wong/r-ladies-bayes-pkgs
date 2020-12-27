@@ -23,6 +23,8 @@ library(gridExtra)
 library(kableExtra)
 library(datasets)
 data(mtcars)
+# mean center disp predictor
+mtcars$c_disp = mtcars$disp - mean(mtcars$disp)
 
 library(rstanarm)
 library(bayesplot)
@@ -39,14 +41,14 @@ Let's start with the following simple linear model:
 
 \begin{align*}
   mpg &\sim Normal(\mu, \sigma^2) \\
-  \mu &= a + b*disp \\
+  \mu &= a + b*c\_disp \\
 \end{align*}
 
 The `stan_glm` function from the `rstanarm` package fits a Bayesian linear model.  The syntax is very similar to `lm`/`glm`.
 
 
 ```r
-mdl1 <- stan_glm(mpg ~ disp, data = mtcars)
+mdl1 <- stan_glm(mpg ~ c_disp, data = mtcars)
 ```
 ### Prior Predictive Distribution
 
@@ -83,11 +85,6 @@ prior_summary(mdl1)
 
 Overlaying the default prior for the intercept with the EPA data gives a sense of what a weakly informative prior for this data looks like.
 
-
-```
-## here() starts at /Users/melissa/r-ladies-bayes-pkgs
-```
-
 <img src="02_rstanarm_files/figure-html/epa-1.png" width="672" />
 
 
@@ -98,10 +95,10 @@ N <- 100
 prior_samples <- data.frame(a = rnorm(N, 20, 15),
                             b = rnorm(N, 0, 0.12))
 
-D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 
 res <- as.data.frame(apply(prior_samples, 1, 
-                           function(x) x[1] + x[2] * (D-mean(mtcars$disp)))) %>%
+                           function(x) x[1] + x[2] * (D))) %>%
   mutate(disp = D) %>%
   pivot_longer(cols=c(-"disp"), names_to="iter") 
 
@@ -113,7 +110,7 @@ res %>%
 
 <img src="02_rstanarm_files/figure-html/mdl1_prior_plot-1.png" width="672" />
 
-I notice two things in the prior predictive distribution which seem unrealistic given what I know about the real world: 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior which incorporates this external knowledge. But let's proceed with the analysis and see what happens.
+I notice two things in the prior predictive distribution which seem unrealistic given what I know about the real world: plausibility of 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior which incorporates this external knowledge. But let's proceed with the analysis and see what happens.
 
 ### Diagnostics
 
@@ -138,8 +135,6 @@ There are three things I am looking for in the trace plot of each chain:
   
   3. *Convergence* - All of the chains spend most of the time around the same high-probability value.
     
-The trace plots above look good. 
-
 #### Trace Rank Plots
 
 It can sometimes be hard to interpret the trace plots when there are many chains. An alternative is the `mcmc_rank_overlay` function.  This function plots a trace rank plot which is the distribution of the ranked samples; if the four chains have a roughly uniform distribution that indicates good mixing.
@@ -150,6 +145,7 @@ mcmc_rank_overlay(mdl1)
 ```
 
 <img src="02_rstanarm_files/figure-html/mdl1_trank_plot-1.png" width="672" />
+The chains look good based on the plots above.
 
 #### $\widehat{R}$ and Effective Sample Size
 
@@ -169,7 +165,7 @@ summary(mdl1)
 ## Model Info:
 ##  function:     stan_glm
 ##  family:       gaussian [identity]
-##  formula:      mpg ~ disp
+##  formula:      mpg ~ c_disp
 ##  algorithm:    sampling
 ##  sample:       4000 (posterior sample size)
 ##  priors:       see help('prior_summary')
@@ -178,8 +174,8 @@ summary(mdl1)
 ## 
 ## Estimates:
 ##               mean   sd   10%   50%   90%
-## (Intercept) 29.6    1.3 27.9  29.6  31.2 
-## disp         0.0    0.0  0.0   0.0   0.0 
+## (Intercept) 20.1    0.6 19.3  20.1  20.9 
+## c_disp       0.0    0.0  0.0   0.0   0.0 
 ## sigma        3.4    0.5  2.8   3.3   4.0 
 ## 
 ## Fit Diagnostics:
@@ -190,8 +186,8 @@ summary(mdl1)
 ## 
 ## MCMC diagnostics
 ##               mcse Rhat n_eff
-## (Intercept)   0.0  1.0  3501 
-## disp          0.0  1.0  3328 
+## (Intercept)   0.0  1.0  3147 
+## c_disp        0.0  1.0  3328 
 ## sigma         0.0  1.0  3056 
 ## mean_PPD      0.0  1.0  3411 
 ## log-posterior 0.0  1.0  1529 
@@ -210,8 +206,8 @@ coef(mdl1)
 ```
 
 ```
-## (Intercept)        disp 
-##    29.57206    -0.04103
+## (Intercept)      c_disp 
+##    20.11105    -0.04103
 ```
 
 
@@ -231,11 +227,11 @@ knitr::kable(posterior_interval(mdl1, prob=0.95))
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 27.0319 </td>
-   <td style="text-align:right;"> 32.1255 </td>
+   <td style="text-align:right;"> 18.9076 </td>
+   <td style="text-align:right;"> 21.3009 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> disp </td>
+   <td style="text-align:left;"> c_disp </td>
    <td style="text-align:right;"> -0.0509 </td>
    <td style="text-align:right;"> -0.0313 </td>
   </tr>
@@ -263,14 +259,14 @@ Below I also plot the _expected value_ of the posterior predictive distribution 
 
 
 ```r
-newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
+newdata <- data.frame(c_disp=seq(min(mtcars$c_disp), max(mtcars$c_disp)))
 
 y_rep <- as.data.frame(t(posterior_epred(mdl1, newdata=newdata, draws=50))) %>%
   cbind(newdata) %>%
   pivot_longer(cols=starts_with("V"), names_to="grp", values_to="mpg")
 
 y_rep %>%
-  ggplot(aes(x=disp, y=mpg)) +
+  ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=grp), alpha=0.2) +
   geom_point(data = mtcars) 
 ```
@@ -285,7 +281,7 @@ I'll specify priors which incorporate the prior knowledge from the EPA data as w
 
 \begin{align*}
   mpg &\sim Normal(\mu, \sigma^2) \\
-  \mu &= a + b*disp \\
+  \mu &= a + b*c\_disp \\
   a &\sim Normal(13.2,5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\
   \sigma &\sim Exponential(1)
@@ -303,7 +299,7 @@ The differences from the default priors are
 
 
 ```r
-mdl2 <- stan_glm(mpg ~ disp, data = mtcars,
+mdl2 <- stan_glm(mpg ~ c_disp, data = mtcars,
                  prior = normal(-0.1, 0.05), # prior for slope
                  prior_intercept = normal(13.2,5.3), # prior for intercept
                  prior_aux = exponential(1))  # prior for standard deviation
@@ -311,22 +307,23 @@ mdl2 <- stan_glm(mpg ~ disp, data = mtcars,
 
 ### Prior Predictive Distribution
 
-Below is an alternative to manually constructing the prior predictive distribution like I did in the previously.
+Below is an alternative to manually constructing the prior predictive distribution like I did previously. Setting `prior_PD = TRUE` refits the model _without_ conditioning on the data which then gives the prior predictive distribution.
+
 
 ```r
 mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 
-D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 
-draws <- posterior_epred(mdl2_prior, newdata=data.frame(disp=D), draws=50) %>%
+draws <- posterior_epred(mdl2_prior, newdata=data.frame(c_disp=D), draws=50) %>%
   t() %>%
   as.data.frame() %>%
-  mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="draw", values_to="mpg")
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="draw", values_to="mpg")
 
 draws %>%
   ggplot() +
-  geom_line(mapping=aes(x=disp, y=mpg, group=draw), alpha=0.2)
+  geom_line(mapping=aes(x=c_disp, y=mpg, group=draw), alpha=0.2)
 ```
 
 <img src="02_rstanarm_files/figure-html/mdl2_prior-1.png" width="672" />
@@ -352,7 +349,7 @@ summary(mdl2)
 ## Model Info:
 ##  function:     stan_glm
 ##  family:       gaussian [identity]
-##  formula:      mpg ~ disp
+##  formula:      mpg ~ c_disp
 ##  algorithm:    sampling
 ##  sample:       4000 (posterior sample size)
 ##  priors:       see help('prior_summary')
@@ -361,8 +358,8 @@ summary(mdl2)
 ## 
 ## Estimates:
 ##               mean   sd   10%   50%   90%
-## (Intercept) 29.7    1.2 28.1  29.7  31.2 
-## disp         0.0    0.0  0.0   0.0   0.0 
+## (Intercept) 20.0    0.6 19.3  20.0  20.8 
+## c_disp       0.0    0.0  0.0   0.0   0.0 
 ## sigma        3.2    0.4  2.7   3.2   3.8 
 ## 
 ## Fit Diagnostics:
@@ -373,15 +370,15 @@ summary(mdl2)
 ## 
 ## MCMC diagnostics
 ##               mcse Rhat n_eff
-## (Intercept)   0.0  1.0  3848 
-## disp          0.0  1.0  3908 
+## (Intercept)   0.0  1.0  3530 
+## c_disp        0.0  1.0  3908 
 ## sigma         0.0  1.0  3673 
 ## mean_PPD      0.0  1.0  4013 
 ## log-posterior 0.0  1.0  1786 
 ## 
 ## For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
-The trace plots, `n_eff` and $\widehat{R}$ all look good.
+The trace rank plots, `n_eff` and $\widehat{R}$ all look good.
 
 ### Posterior Distribution
 
@@ -404,11 +401,11 @@ knitr::kable(cbind(coef(mdl1), coef(mdl2)), col.names = c("Default", "Informativ
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 29.572 </td>
-   <td style="text-align:right;"> 29.6711 </td>
+   <td style="text-align:right;"> 20.111 </td>
+   <td style="text-align:right;"> 20.0168 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> disp </td>
+   <td style="text-align:left;"> c_disp </td>
    <td style="text-align:right;"> -0.041 </td>
    <td style="text-align:right;"> -0.0417 </td>
   </tr>
@@ -441,13 +438,13 @@ knitr::kable(cbind(posterior_interval(mdl1, prob=0.95),
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 27.0319 </td>
-   <td style="text-align:right;"> 32.1255 </td>
-   <td style="text-align:right;"> 27.3210 </td>
-   <td style="text-align:right;"> 32.0105 </td>
+   <td style="text-align:right;"> 18.9076 </td>
+   <td style="text-align:right;"> 21.3009 </td>
+   <td style="text-align:right;"> 18.9262 </td>
+   <td style="text-align:right;"> 21.1166 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> disp </td>
+   <td style="text-align:left;"> c_disp </td>
    <td style="text-align:right;"> -0.0509 </td>
    <td style="text-align:right;"> -0.0313 </td>
    <td style="text-align:right;"> -0.0509 </td>
@@ -478,14 +475,14 @@ ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl2, draws=50))
 
 ```r
 # Expected value of posterior predictive
-newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
+newdata <- data.frame(c_disp=seq(min(mtcars$c_disp), max(mtcars$c_disp)))
 
 y_rep <- as.data.frame(t(posterior_epred(mdl2, newdata=newdata, draws=50))) %>%
   cbind(newdata) %>%
   pivot_longer(cols=starts_with("V"), names_to="grp", values_to="mpg")
 
 y_rep %>%
-  ggplot(aes(x=disp, y=mpg)) +
+  ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=grp), alpha=0.2) +
   geom_point(data = mtcars) 
 ```
@@ -502,54 +499,34 @@ The linear model is a poor choice for this data, so I'll try a model with spline
 
 
 ```r
-mdl3 <- stan_gamm4(mpg ~ s(disp, bs="cr", k=7), 
+mdl3 <- stan_gamm4(mpg ~ s(c_disp, bs="cr", k=7), 
                    data = mtcars, 
                    adapt_delta = 0.99)
 ```
 
 ### Prior Predictive Distribution
 
-Unlike the linear model, it's not as straightforward to manually construct the prior predictive distribution.  Fortunately, `rstanarm` can automatically generate the prior predictive distribution too--we just refit the model _without_ conditioning on the data by setting `prior_PD = TRUE`.
+Again, I'll use `rstanarm` tonautomatically generate the prior predictive distribution.
 
 
 ```r
 mdl3_prior <- update(mdl3, prior_PD = TRUE, chains=1)
-```
 
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 
-```r
-D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
-
-draws <- posterior_epred(mdl3_prior, newdata=data.frame(disp=D), draws=50) %>%
+draws <- posterior_epred(mdl3_prior, newdata=data.frame(c_disp=D), draws=50) %>%
   t() %>%
-  as.tibble() %>%
-  mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="draw", values_to="mpg")
-```
+  as.data.frame() %>%
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="draw", values_to="mpg")
 
-```
-## Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
-## Please use `as_tibble()` instead.
-## The signature and semantics have changed, see `?as_tibble`.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```
-## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
-## Using compatibility `.name_repair`.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```r
 draws %>%
-  ggplot() +
-  geom_line(mapping=aes(x=disp, y=mpg, group=draw), alpha=0.2) +
-  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg), color="blue")
+  ggplot(mapping=aes(x=c_disp, y=mpg)) +
+  geom_line(mapping=aes(group=draw), alpha=0.2) +
+  geom_point(data=mtcars, color="blue")
 ```
 
-<img src="02_rstanarm_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/mdl3_prior-1.png" width="672" />
 
 This prior predictive distribution gives us some crazy possibilities. However we saw earlier that there is enough data that the model isn't very sensitive to the choice of prior, so let's continue and see what happens.
 
@@ -560,7 +537,7 @@ This prior predictive distribution gives us some crazy possibilities. However we
 mcmc_rank_overlay(mdl3)
 ```
 
-<img src="02_rstanarm_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/mdl3_trankplot-1.png" width="672" />
 
 
 ```r
@@ -572,45 +549,45 @@ summary(mdl3)
 ## Model Info:
 ##  function:     stan_gamm4
 ##  family:       gaussian [identity]
-##  formula:      mpg ~ s(disp, bs = "cr", k = 7)
+##  formula:      mpg ~ s(c_disp, bs = "cr", k = 7)
 ##  algorithm:    sampling
 ##  sample:       4000 (posterior sample size)
 ##  priors:       see help('prior_summary')
 ##  observations: 32
 ## 
 ## Estimates:
-##                       mean   sd   10%   50%   90%
-## (Intercept)         20.1    0.4 19.5  20.1  20.7 
-## s(disp).1            0.2    1.2 -1.1   0.1   1.6 
-## s(disp).2           -0.9    1.1 -2.3  -0.7   0.3 
-## s(disp).3            0.0    0.6 -0.6   0.0   0.7 
-## s(disp).4            1.2    0.4  0.7   1.2   1.6 
-## s(disp).5            0.4    0.1  0.2   0.4   0.6 
-## s(disp).6           -3.1    0.3 -3.5  -3.1  -2.8 
-## sigma                2.4    0.3  2.0   2.4   2.9 
-## smooth_sd[s(disp)1]  1.2    0.7  0.5   1.0   2.0 
-## smooth_sd[s(disp)2]  3.6    2.1  1.7   3.0   6.2 
+##                         mean   sd   10%   50%   90%
+## (Intercept)           20.1    0.4 19.6  20.1  20.6 
+## s(c_disp).1            0.2    1.3 -1.2   0.1   1.6 
+## s(c_disp).2           -0.9    1.1 -2.4  -0.8   0.3 
+## s(c_disp).3            0.0    0.6 -0.7   0.0   0.7 
+## s(c_disp).4            1.2    0.4  0.7   1.2   1.6 
+## s(c_disp).5            0.4    0.1  0.2   0.4   0.6 
+## s(c_disp).6           -3.1    0.3 -3.5  -3.1  -2.8 
+## sigma                  2.4    0.3  2.0   2.4   2.8 
+## smooth_sd[s(c_disp)1]  1.2    0.7  0.6   1.0   2.0 
+## smooth_sd[s(c_disp)2]  3.6    2.0  1.7   3.1   6.2 
 ## 
 ## Fit Diagnostics:
 ##            mean   sd   10%   50%   90%
-## mean_PPD 20.1    0.6 19.3  20.1  20.9 
+## mean_PPD 20.1    0.6 19.3  20.1  20.8 
 ## 
 ## The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
 ## 
 ## MCMC diagnostics
-##                     mcse Rhat n_eff
-## (Intercept)         0.0  1.0  3813 
-## s(disp).1           0.0  1.0  3274 
-## s(disp).2           0.0  1.0  2149 
-## s(disp).3           0.0  1.0  3950 
-## s(disp).4           0.0  1.0  2639 
-## s(disp).5           0.0  1.0  4652 
-## s(disp).6           0.0  1.0  3521 
-## sigma               0.0  1.0  2017 
-## smooth_sd[s(disp)1] 0.0  1.0  1215 
-## smooth_sd[s(disp)2] 0.0  1.0  2055 
-## mean_PPD            0.0  1.0  3909 
-## log-posterior       0.1  1.0   953 
+##                       mcse Rhat n_eff
+## (Intercept)           0.0  1.0  3679 
+## s(c_disp).1           0.0  1.0  3070 
+## s(c_disp).2           0.0  1.0  2407 
+## s(c_disp).3           0.0  1.0  4416 
+## s(c_disp).4           0.0  1.0  3291 
+## s(c_disp).5           0.0  1.0  4717 
+## s(c_disp).6           0.0  1.0  3908 
+## sigma                 0.0  1.0  2538 
+## smooth_sd[s(c_disp)1] 0.0  1.0  1350 
+## smooth_sd[s(c_disp)2] 0.0  1.0  2234 
+## mean_PPD              0.0  1.0  3737 
+## log-posterior         0.1  1.0   933 
 ## 
 ## For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
@@ -624,19 +601,19 @@ The chains, `n_eff` and $\widehat{R}$ look good. In the Estimates section above,
 ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl3, draws=50))
 ```
 
-<img src="02_rstanarm_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/mdl3_dens-1.png" width="672" />
 
 
-The expectation over the ppd is plotted below, along with a loess curve for comparison. This model is clearly a better fit to the data than the linear model.
+The expectation over the ppd is plotted below, along with a loess curve for comparison. This model is a better fit to the data than the linear model but there is still room for improvement. For example, it looks like the number of cylinders (_cyl_) would be a useful predictor to include in the model.
 
 
 ```r
 plot_nonlinear(mdl3, prob=0.95) +
-  geom_point(mapping=aes(x=disp, y=mpg-mean(mpg)),
+  geom_point(mapping=aes(x=c_disp, y=mpg-mean(mpg), color=factor(cyl)),
              data=mtcars) +
-  labs(title="GAM", x="disp", y="mpg-mean(mpg)")
+  labs(title="GAM", x="disp-mean(disp)", y="mpg-mean(mpg)")
 
-ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
+ggplot(mapping=aes(x=c_disp, y=mpg-mean(mpg)),
               data=mtcars) +
   geom_point()+
   stat_smooth(method="loess",

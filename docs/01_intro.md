@@ -53,7 +53,13 @@ In general, this is an iterative process. At each step you may discover somethin
 
 ## Data
 
-For all of the examples, I use the mtcars data set and a model with _disp_ as the predictor and _mpg_ as the response. I start with a simple linear regression. However, as you can see from the scatterplot below, the relationship between _mpg_ and _disp_ is not linear, so I also fit a slightly more complex semi-parametric model. 
+For all of the examples, I use the mtcars data set and a model with mean centered _disp_ as the predictor and _mpg_ as the response. I start with a simple linear regression. However, as you can see from the scatterplot below, the relationship between _mpg_ and _disp_ is not linear, so I also fit a slightly more complex semi-parametric model. 
+
+There are two reasons why I use mean centered _disp_:
+
+1. Interpretation of the intercept is the average _mpg_ at the average value of displacement versus average _mpg_ at zero displacement (which has little practical meaning).
+
+2. Several of the packages used in the examples assume priors are for mean-centered predictors for sampling efficiency.
 
 
 ```r

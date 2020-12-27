@@ -26,6 +26,8 @@ options("scipen" = 1, "digits" = 4)
 library(tidyverse)
 library(datasets)
 data(mtcars)
+# mean center disp predictor
+mtcars$c_disp = mtcars$disp - mean(mtcars$disp)
 
 library(rethinking)
 library(bayesplot)
@@ -44,18 +46,18 @@ The `rethinking` package does not have default priors so I need to explicitly ch
 
 \begin{align*}
   mpg &\sim Normal(\mu, \sigma^2) \\
-  \mu &= a + b*disp \\
+  \mu &= a + b*c\_disp \\
   a &\sim Normal(13.2, 5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\
   \sigma &\sim Exponential(1)
 \end{align*}
 
-```{r mdl1, results="hide"}
+```{r mdl1, results="hide", message=FALSE}
 # Note the sign change for mu and b, this seems to be a quirk
 # of map2stan that it didn't like b ~ dnorm(-0.1, 0.05)
 f <- alist(
   mpg ~ dnorm(mu, sigma),
-  mu <- a - b * disp,
+  mu <- a - b * c_disp,
   a ~ dnorm(13.2, 5.3),
   b ~ dnorm(0.1, 0.05),
   sigma ~ dexp(1)
@@ -67,7 +69,7 @@ mdl1 <- map2stan(f,mtcars, chains=parallel::detectCores())
 
 The automatically generated `stan` code:
 
-```{r}
+```{r mdl1_stancode}
 stancode(mdl1)
 ```
 
@@ -79,15 +81,15 @@ N <- 50
 
 prior_samples <- as.data.frame(extract.prior(mdl1, n=N))
 
-D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 
-res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] - x[2] * (D-mean(mtcars$disp)))) %>%
-  mutate(disp = D) %>%
-  pivot_longer(cols=c(-"disp"), names_to="iter") 
+res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] - x[2] * (D))) %>%
+  mutate(c_disp = D) %>%
+  pivot_longer(cols=c(-"c_disp"), names_to="iter") 
 
 res %>%
   ggplot() +
-  geom_line(aes(x=disp, y=value, group=iter), alpha=0.2) +
+  geom_line(aes(x=c_disp, y=value, group=iter), alpha=0.2) +
   labs(x="disp", y="prior predictive mpg")
 ```
 
@@ -120,17 +122,23 @@ Finally, I'll check the posterior predictive distribution. The `rethinking` pack
 postcheck(mdl1, window=nrow(mtcars))
 ```
 
-Personally, I find the `postcheck` plot hard to use because I can never remember what the different symbols represent.  Instead, I'll plot the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with `rstanarm` . The `sim` function draws samples from the posterior predictive distribution, and the `link` function returns the linear predictor, possibly transformed by the inverse-link function. In this case, the model is a Gaussian likelihood with an identity link function, so the `sim` and `link` functions return identical results.
+Personally, I find the `postcheck` plot hard to use because I can never remember what the different symbols represent.  I prefer the density overlay plot as shown below.
+
+```{r mdl1_dens_overlay, message=FALSE}
+ppc_dens_overlay(mtcars$mpg, sim(mdl1, n=50))
+```
+
+And the expectation of the posterior predictive distribution (i.e., $\mu$) like I did with `rstanarm` can be generated via the `link` function.
 
 ```{r mdl1_eppd, results="hide"}
-newdata <- data.frame(disp=seq(min(mtcars$disp), max(mtcars$disp)))
+newdata <- data.frame(c_disp=seq(min(mtcars$c_disp), max(mtcars$c_disp)))
 
 y_rep <- as.data.frame(t(link(mdl1, data=newdata, n=50))) %>%
   cbind(newdata) %>%
-  pivot_longer(-disp, names_to="draw", values_to="mpg")
+  pivot_longer(-c_disp, names_to="draw", values_to="mpg")
 
 y_rep %>%
-  ggplot(aes(x=disp, y=mpg)) +
+  ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=draw), alpha=0.2) +
   geom_point(data = mtcars) 
 ```
@@ -145,28 +153,31 @@ Setting up the semi-parametric model is a bit more work in the `rethinking` pack
 library(splines)
 
 num_knots <- 4  # number of interior knots
-knot_list <- quantile(mtcars$disp, probs=seq(0,1,length.out = num_knots))
-B <- bs(mtcars$disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
+knot_list <- quantile(mtcars$c_disp, probs=seq(0,1,length.out = num_knots))
+B <- bs(mtcars$c_disp, knots=knot_list[-c(1,num_knots)], intercept=TRUE)
 
-df1 <- cbind(disp=mtcars$disp, B) %>%
+df1 <- cbind(c_disp=mtcars$c_disp, B) %>%
   as.data.frame() %>%
-  pivot_longer(-disp, names_to="spline", values_to="val")
+  pivot_longer(-c_disp, names_to="spline", values_to="val")
 
 # Plot at smaller intervals so curves are smooth
 N<- 50
-D <- seq(min(mtcars$disp), max(mtcars$disp), length.out = N)
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 B_plot <- bs(D, 
              knots=knot_list[-c(1,num_knots)], 
              intercept=TRUE)
 
-df2 <- cbind(disp=D, B_plot) %>%
+df2 <- cbind(c_disp=D, B_plot) %>%
   as.data.frame() %>%
-  pivot_longer(-disp, names_to="spline", values_to="val")
+  pivot_longer(-c_disp, names_to="spline", values_to="val")
 
-ggplot(mapping=aes(x=disp, y=val, color=spline)) +
+ggplot(mapping=aes(x=c_disp, y=val, color=spline)) +
   geom_point(data=df1) +
   geom_line(data=df2, linetype="dashed")
 ```
+
+
+Note: the dashed lines are the splines and the points are the values of the spline at the specific values of `mtcars$c_disp`; the points are inputs into the `rethinking` model.
 
 Then I define the model with the splines.  I wasn't able to get this model to work with either the `map2stan` or `ulam` functions, so I used `quap` instead which fits a quadratic approximation.
 
@@ -200,23 +211,23 @@ precis(mdl2, depth=2)
 
 Finally, the posterior predictive distribution and LOESS for comparison:
 
-```{r mdl2_ppd, figures-side, fig.show="hold", out.width="50%", message=FALSE}
+```{r mdl2_ppd, fig.show="hold", out.width="50%", message=FALSE}
 mu <- link(mdl2)
 mu_mean <- as.data.frame(apply(mu, 2, mean)) %>%
-  mutate(disp=mtcars$disp)
-colnames(mu_mean) <- c("mpg_ppd", "disp")
+  mutate(c_disp=mtcars$c_disp)
+colnames(mu_mean) <- c("mpg_ppd", "c_disp")
 
 mu_PI <- as.data.frame(t(apply(mu,2,PI,0.95))) %>%
-  mutate(disp=mtcars$disp)
-colnames(mu_PI) <- c("lwr", "upr", "disp")
+  mutate(c_disp=mtcars$c_disp)
+colnames(mu_PI) <- c("lwr", "upr", "c_disp")
 
 ggplot() +
-  geom_point(data=mtcars, aes(x=disp, y=mpg)) +
-  geom_line(data=mu_mean, aes(x=disp, y=mpg_ppd), color="blue") +
-  geom_ribbon(data=mu_PI, aes(x=disp, ymin=lwr, ymax=upr), alpha=0.2) +
+  geom_point(data=mtcars, aes(x=c_disp, y=mpg)) +
+  geom_line(data=mu_mean, aes(x=c_disp, y=mpg_ppd), color="blue") +
+  geom_ribbon(data=mu_PI, aes(x=c_disp, ymin=lwr, ymax=upr), alpha=0.2) +
   labs(title="GAM")
 
-ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
+ggplot(mapping=aes(x=c_disp, y=mpg-mean(mpg)),
               data=mtcars) +
   geom_point()+
   stat_smooth(method="loess",
@@ -227,7 +238,7 @@ ggplot(mapping=aes(x=disp, y=mpg-mean(mpg)),
 
 ## Session Info
 
-```{r}
+```{r sessionInfo}
 sessionInfo()
 ```
 

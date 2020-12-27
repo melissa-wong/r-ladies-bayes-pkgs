@@ -22,10 +22,11 @@ knitr::opts_chunk$set(message=FALSE)
 library(tidyverse)
 library(datasets)
 data(mtcars)
+# mean center disp predictor
+mtcars$c_disp = mtcars$disp - mean(mtcars$disp)
 
 library(brms)
 library(bayesplot)
-
 
 # Set number of cores
 options(mc.cores = parallel::detectCores())
@@ -39,7 +40,7 @@ The `brms` package default priors are improper flat priors over the real line. H
 
 \begin{align*}
   mpg &\sim Normal(\mu, \sigma^2) \\
-  \mu &= a + b*disp \\
+  \mu &= a + b*c\_disp \\
   a &\sim Normal(13.2, 5.3^2) \\
   b &\sim Normal(-0.1, 0.05^2) \\
   \sigma &\sim Exponential(1)
@@ -47,8 +48,8 @@ The `brms` package default priors are improper flat priors over the real line. H
 
 ```{r mdl1, results="hide"}
 
-mdl1 <- brm(mpg ~ disp, data=mtcars, family=gaussian(), 
-            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "disp"),
+mdl1 <- brm(mpg ~ c_disp, data=mtcars, family=gaussian(), 
+            prior=c(set_prior("normal(-0.1, 0.05)", class="b", coef = "c_disp"),
                     set_prior("normal(13.2, 5.3)", class="Intercept"),
                     set_prior("exponential(1)", class="sigma")))
 
@@ -65,41 +66,41 @@ stancode(mdl1)
 
 There are several methods for getting the prior predictive distribution from the `brms` model.
 
-    1. The `prior_summary` function displays model priors. Manually draw samples from those distributions and then construct the prior predictive distribution as I did in \@ref(rethinkingprior). 
+1. The `prior_summary` function displays model priors. Manually draw samples from those distributions and then construct the prior predictive distribution as I did in \@ref(rethinkingprior). 
     
-    2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
+2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
     
-    3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
+3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
     
 Method 3 is demonstrated below.
 
 ```{r mdl1_prior, results="hide"}
 
-D <- seq(min(mtcars$disp), max(mtcars$disp))
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
 
 mdl1_prior <- update(mdl1, sample_prior="only")
 
 # Summarizes samples from posterior predictive distribution
-ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(disp=D)))
+ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(c_disp=D)))
 # Samples from expected value of posterior predictive distribution
-eppd <- posterior_epred(mdl1_prior, newdata=data.frame(disp=D), 
+eppd <- posterior_epred(mdl1_prior, newdata=data.frame(c_disp=D), 
                         summary=FALSE, nsamples=50) %>%
   t() %>%
   as.data.frame() %>%
-  mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="iter", values_to="mpg")
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
 
 ggplot() +
   geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
-  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) 
+  geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) 
 ```
 
 
 ### Diagnostics
 
 ```{r mdl1_trankplot}
-mcmc_rank_overlay(mdl1, pars=c("b_Intercept", "b_disp", "sigma"))
+mcmc_rank_overlay(mdl1, pars=c("b_Intercept", "b_c_disp", "sigma"))
 ```
 
 ```{r mdl1_summary}
@@ -119,13 +120,13 @@ fixef(mdl1)
 The `brms` package includes the `pp_check` function which uses `bayesplot` under the hood.
 
 ```{r}
-pp_check(mdl1, nsamples = 20)
+pp_check(mdl1, nsamples = 50)
 ```
 
 Or we can use `ppc_dens_overly` directly with the `brmsfit` object as shown below.
 
 ```{r}
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=20))
+ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=50))
 ```
 
 
@@ -133,20 +134,20 @@ And below is a plot of the expected value of the posterior predictive distributi
 
 ```{r mdl1_ppd, results="hide"}
 
-D <- seq(min(mtcars$disp), max(mtcars$disp))
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
 
 # Samples from expected value of posterior predictive distribution
-eppd <- posterior_epred(mdl1, newdata=data.frame(disp=D), 
+eppd <- posterior_epred(mdl1, newdata=data.frame(c_disp=D), 
                         nsamples=50, summary=FALSE) %>%
   t() %>%
   as.data.frame() %>%
-  mutate(disp=D) %>%
-  pivot_longer(-disp, names_to="iter", values_to="mpg")
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
 
 ggplot() +
-  geom_line(data=eppd, mapping=aes(x=disp, y=mpg, group=iter), alpha=0.2) +
-  geom_point(data=mtcars, mapping=aes(x=disp, y=mpg))
+  geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) +
+  geom_point(data=mtcars, mapping=aes(x=c_disp, y=mpg))
 ```
 
 ## Semi-parametric Model
@@ -158,13 +159,13 @@ The semi-parametric model is formulated as a mixed-model ^[http://matt-wand.utsa
 We can use the `get_prior` function to check what the default priors are for this mixed model.
 
 ```{r}
-get_prior(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian())
+get_prior(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian())
 ```
 I'll replace the improper prior for the smoothing parameter fixed effect  and leave the rest since they are weakly informative priors.  See the `set_prior` help for details on changing the priors for the other parameters.
 
 ```{r mdl2, results="hide"}
 
-mdl2 <- brm(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian(), 
+mdl2 <- brm(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian(), 
             prior=c(set_prior("normal(0,5)", class="b")),
             control=list(adapt_delta=0.99))
 
@@ -176,7 +177,7 @@ mdl2 <- brm(mpg ~ s(disp, bs="cr", k=7), data=mtcars, family=gaussian(),
 
 mdl2_prior <- update(mdl2, sample_prior="only")
 
-pp_check(mdl2_prior, nsamples = 20)
+pp_check(mdl2_prior, nsamples = 50)
 ```
 
 ### Diagnostics
@@ -187,7 +188,7 @@ summary(mdl2)
 
 
 ```{r}
-pp_check(mdl2, nsamples=20)
+pp_check(mdl2, nsamples=50)
 ```
 
 
@@ -202,15 +203,13 @@ The summary
 ### Posterior Predictive Distribution
 
 ```{r mdl2_ppd, fig.hold=TRUE, out.width="50%"}
-conditional_effects(mdl2, points=TRUE) 
-
-conditional_smooths(mdl2)
+plot(conditional_effects(mdl2), points=TRUE) 
 ```
 
 
 ## Session Info
 
-```{r}
+```{r sessionInfo}
 sessionInfo()
 ```
 
