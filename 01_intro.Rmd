@@ -61,6 +61,8 @@ There are two reasons why I use mean centered _disp_:
 
 2. Several of the packages used in the examples assume priors are for mean-centered predictors for sampling efficiency.
 
+I use the `bayesplot` package to demonstrate the steps for creating some of the most common diagnostic plots. I found this helpful as I was learning how to use each package. The `tidybayes` package is another good option for visualization of Bayesian models. However, I highly recommend the `shinystan` package; it will automatically create all of these diagnostic plots (and more) with an nice interactive web interface.
+
 ```{r mtcars, message=FALSE}
 library(tidyverse)
 library(datasets)

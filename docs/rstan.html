@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-27" />
+<meta name="date" content="2020-12-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -341,61 +341,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>And this is the call to fit the model.</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="rstan.html#cb81-1"></a><span class="co"># Fit model</span></span>
 <span id="cb81-2"><a href="rstan.html#cb81-2"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_code, <span class="dt">data=</span>mdl_data, <span class="dt">model_name=</span><span class="st">&quot;mdl1&quot;</span>)</span></code></pre></div>
-<pre><code>## Trying to compile a simple C file</code></pre>
 </div>
 <div id="prior-predictive-distribution-5" class="section level3">
 <h3><span class="header-section-number">5.4.2</span> Prior Predictive Distribution</h3>
 <p>I could manually construct the prior predictive distribution like I did in <a href="rethinking.html#rethinkingprior">3.4.2</a>. Instead I’ll have <code>stan</code> generate the prior predictive distribution which will be useful for more complex models. First, create another model with just the <code>data</code> and <code>generated quantities</code> section. The <code>generated quantities</code> section mirrors the <code>model</code> section except it is now drawing samples from the priors without conditioning on the observed data. Also, in the <code>stan</code> call set the sampling algorithm for fixed parameters.</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="rstan.html#cb83-1"></a><span class="co"># Plot prior predictive distribution</span></span>
-<span id="cb83-2"><a href="rstan.html#cb83-2"></a>mdl_prior &lt;-<span class="st"> &#39;</span></span>
-<span id="cb83-3"><a href="rstan.html#cb83-3"></a><span class="st">  data{</span></span>
-<span id="cb83-4"><a href="rstan.html#cb83-4"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
-<span id="cb83-5"><a href="rstan.html#cb83-5"></a><span class="st">    vector[N] c_disp;</span></span>
-<span id="cb83-6"><a href="rstan.html#cb83-6"></a><span class="st">  }</span></span>
-<span id="cb83-7"><a href="rstan.html#cb83-7"></a><span class="st">generated quantities{</span></span>
-<span id="cb83-8"><a href="rstan.html#cb83-8"></a><span class="st">  real a_sim = normal_rng(13.2, 5.3);</span></span>
-<span id="cb83-9"><a href="rstan.html#cb83-9"></a><span class="st">  real b_sim = normal_rng(-0.1, 0.05);</span></span>
-<span id="cb83-10"><a href="rstan.html#cb83-10"></a><span class="st">  real sigma_sim = exponential_rng(1);</span></span>
-<span id="cb83-11"><a href="rstan.html#cb83-11"></a><span class="st">  real mpg_sim[N] = normal_rng(a_sim + b_sim * c_disp, sigma_sim);</span></span>
-<span id="cb83-12"><a href="rstan.html#cb83-12"></a><span class="st">}</span></span>
-<span id="cb83-13"><a href="rstan.html#cb83-13"></a><span class="st">&#39;</span></span>
-<span id="cb83-14"><a href="rstan.html#cb83-14"></a></span>
-<span id="cb83-15"><a href="rstan.html#cb83-15"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb83-16"><a href="rstan.html#cb83-16"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb83-17"><a href="rstan.html#cb83-17"></a>mdl_data_prior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">N =</span> N, <span class="dt">c_disp=</span>D)</span>
-<span id="cb83-18"><a href="rstan.html#cb83-18"></a></span>
-<span id="cb83-19"><a href="rstan.html#cb83-19"></a>mdl_prior &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_prior, <span class="dt">data=</span>mdl_data_prior, <span class="dt">model_name=</span><span class="st">&quot;mdl_prior&quot;</span>,</span>
-<span id="cb83-20"><a href="rstan.html#cb83-20"></a>             <span class="dt">chains=</span><span class="dv">1</span>, <span class="dt">algorithm=</span><span class="st">&quot;Fixed_param&quot;</span>)</span></code></pre></div>
-<pre><code>## Trying to compile a simple C file</code></pre>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="rstan.html#cb85-1"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl_prior) <span class="op">%&gt;%</span></span>
-<span id="cb85-2"><a href="rstan.html#cb85-2"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>)</span>
-<span id="cb85-3"><a href="rstan.html#cb85-3"></a></span>
-<span id="cb85-4"><a href="rstan.html#cb85-4"></a><span class="co"># Expected value prior predictive distribution</span></span>
-<span id="cb85-5"><a href="rstan.html#cb85-5"></a>exp_mpg_sim &lt;-<span class="st"> </span><span class="kw">apply</span>(draws, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="st">&quot;a_sim&quot;</span>] <span class="op">+</span><span class="st"> </span>x[<span class="st">&quot;b_sim&quot;</span>] <span class="op">*</span><span class="st"> </span>(D)) <span class="op">%&gt;%</span></span>
-<span id="cb85-6"><a href="rstan.html#cb85-6"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb85-7"><a href="rstan.html#cb85-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
-<span id="cb85-8"><a href="rstan.html#cb85-8"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
-<span id="cb85-9"><a href="rstan.html#cb85-9"></a></span>
-<span id="cb85-10"><a href="rstan.html#cb85-10"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb85-11"><a href="rstan.html#cb85-11"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>exp_mpg_sim, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="rstan.html#cb82-1"></a><span class="co"># Plot prior predictive distribution</span></span>
+<span id="cb82-2"><a href="rstan.html#cb82-2"></a>mdl_prior &lt;-<span class="st"> &#39;</span></span>
+<span id="cb82-3"><a href="rstan.html#cb82-3"></a><span class="st">  data{</span></span>
+<span id="cb82-4"><a href="rstan.html#cb82-4"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
+<span id="cb82-5"><a href="rstan.html#cb82-5"></a><span class="st">    vector[N] c_disp;</span></span>
+<span id="cb82-6"><a href="rstan.html#cb82-6"></a><span class="st">  }</span></span>
+<span id="cb82-7"><a href="rstan.html#cb82-7"></a><span class="st">generated quantities{</span></span>
+<span id="cb82-8"><a href="rstan.html#cb82-8"></a><span class="st">  real a_sim = normal_rng(13.2, 5.3);</span></span>
+<span id="cb82-9"><a href="rstan.html#cb82-9"></a><span class="st">  real b_sim = normal_rng(-0.1, 0.05);</span></span>
+<span id="cb82-10"><a href="rstan.html#cb82-10"></a><span class="st">  real sigma_sim = exponential_rng(1);</span></span>
+<span id="cb82-11"><a href="rstan.html#cb82-11"></a><span class="st">  real mpg_sim[N] = normal_rng(a_sim + b_sim * c_disp, sigma_sim);</span></span>
+<span id="cb82-12"><a href="rstan.html#cb82-12"></a><span class="st">}</span></span>
+<span id="cb82-13"><a href="rstan.html#cb82-13"></a><span class="st">&#39;</span></span>
+<span id="cb82-14"><a href="rstan.html#cb82-14"></a></span>
+<span id="cb82-15"><a href="rstan.html#cb82-15"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb82-16"><a href="rstan.html#cb82-16"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb82-17"><a href="rstan.html#cb82-17"></a>mdl_data_prior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">N =</span> N, <span class="dt">c_disp=</span>D)</span>
+<span id="cb82-18"><a href="rstan.html#cb82-18"></a></span>
+<span id="cb82-19"><a href="rstan.html#cb82-19"></a>mdl_prior &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_prior, <span class="dt">data=</span>mdl_data_prior, <span class="dt">model_name=</span><span class="st">&quot;mdl_prior&quot;</span>,</span>
+<span id="cb82-20"><a href="rstan.html#cb82-20"></a>             <span class="dt">chains=</span><span class="dv">1</span>, <span class="dt">algorithm=</span><span class="st">&quot;Fixed_param&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="rstan.html#cb83-1"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl_prior) <span class="op">%&gt;%</span></span>
+<span id="cb83-2"><a href="rstan.html#cb83-2"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>)</span>
+<span id="cb83-3"><a href="rstan.html#cb83-3"></a></span>
+<span id="cb83-4"><a href="rstan.html#cb83-4"></a><span class="co"># Expected value prior predictive distribution</span></span>
+<span id="cb83-5"><a href="rstan.html#cb83-5"></a>exp_mpg_sim &lt;-<span class="st"> </span><span class="kw">apply</span>(draws, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="st">&quot;a_sim&quot;</span>] <span class="op">+</span><span class="st"> </span>x[<span class="st">&quot;b_sim&quot;</span>] <span class="op">*</span><span class="st"> </span>(D)) <span class="op">%&gt;%</span></span>
+<span id="cb83-6"><a href="rstan.html#cb83-6"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb83-7"><a href="rstan.html#cb83-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb83-8"><a href="rstan.html#cb83-8"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
+<span id="cb83-9"><a href="rstan.html#cb83-9"></a></span>
+<span id="cb83-10"><a href="rstan.html#cb83-10"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb83-11"><a href="rstan.html#cb83-11"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>exp_mpg_sim, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) </span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_prior_plot-1.png" width="672" /></p>
 </div>
 <div id="diagnostics-6" class="section level3">
 <h3><span class="header-section-number">5.4.3</span> Diagnostics</h3>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="rstan.html#cb86-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="rstan.html#cb84-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_trankplot-1.png" width="672" /></p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="rstan.html#cb87-1"></a><span class="kw">print</span>(mdl1)</span></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="rstan.html#cb85-1"></a><span class="kw">print</span>(mdl1)</span></code></pre></div>
 <pre><code>## Inference for Stan model: mdl1.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## a      20.01    0.01 0.57  18.88  19.64  20.02  20.40  21.12  2986    1
-## b      -0.04    0.00 0.00  -0.05  -0.04  -0.04  -0.04  -0.03  3697    1
-## sigma   3.21    0.01 0.39   2.55   2.93   3.18   3.45   4.07  3023    1
-## lp__  -57.72    0.03 1.25 -61.03 -58.30 -57.39 -56.81 -56.30  1672    1
+## a      20.01    0.01 0.57  18.88  19.66  20.01  20.39  21.14  2367    1
+## b      -0.04    0.00 0.00  -0.05  -0.04  -0.04  -0.04  -0.03  3641    1
+## sigma   3.22    0.01 0.41   2.53   2.92   3.18   3.48   4.13  2906    1
+## lp__  -57.77    0.03 1.29 -61.11 -58.37 -57.42 -56.81 -56.29  1775    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Dec 27 16:37:16 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec 29 20:22:25 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -403,7 +401,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="posterior-distribution-6" class="section level3">
 <h3><span class="header-section-number">5.4.4</span> Posterior Distribution</h3>
 <p>The <code>print</code> function above displays information about the posterior distributions in addition to <code>n_eff</code>. Alternatively, the <code>plot</code> function provides a graphical display of the posterior distributions.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="rstan.html#cb89-1"></a><span class="kw">plot</span>(mdl1)</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="rstan.html#cb87-1"></a><span class="kw">plot</span>(mdl1)</span></code></pre></div>
 <pre><code>## ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>## outer_level: 0.95 (95% intervals)</code></pre>
 <p><img src="05_rstan_files/figure-html/mdl1_post_plot-1.png" width="672" /></p>
@@ -411,91 +409,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="posterior-predictive-distribution-7" class="section level3">
 <h3><span class="header-section-number">5.4.5</span> Posterior Predictive Distribution</h3>
 <p>Using the posterior samples, I can plot the expected value of the posterior predictive distribution.</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="rstan.html#cb92-1"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb92-2"><a href="rstan.html#cb92-2"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb92-3"><a href="rstan.html#cb92-3"></a></span>
-<span id="cb92-4"><a href="rstan.html#cb92-4"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1) <span class="op">%&gt;%</span></span>
-<span id="cb92-5"><a href="rstan.html#cb92-5"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>)</span>
-<span id="cb92-6"><a href="rstan.html#cb92-6"></a></span>
-<span id="cb92-7"><a href="rstan.html#cb92-7"></a><span class="co"># Expected value posterior predictive distribution</span></span>
-<span id="cb92-8"><a href="rstan.html#cb92-8"></a>post_pred &lt;-<span class="st"> </span><span class="kw">apply</span>(draws, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="st">&quot;a&quot;</span>] <span class="op">+</span><span class="st"> </span>x[<span class="st">&quot;b&quot;</span>]<span class="op">*</span>(D)) <span class="op">%&gt;%</span></span>
-<span id="cb92-9"><a href="rstan.html#cb92-9"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb92-10"><a href="rstan.html#cb92-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
-<span id="cb92-11"><a href="rstan.html#cb92-11"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
-<span id="cb92-12"><a href="rstan.html#cb92-12"></a></span>
-<span id="cb92-13"><a href="rstan.html#cb92-13"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb92-14"><a href="rstan.html#cb92-14"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>post_pred, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb92-15"><a href="rstan.html#cb92-15"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars)</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="rstan.html#cb90-1"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb90-2"><a href="rstan.html#cb90-2"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb90-3"><a href="rstan.html#cb90-3"></a></span>
+<span id="cb90-4"><a href="rstan.html#cb90-4"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1) <span class="op">%&gt;%</span></span>
+<span id="cb90-5"><a href="rstan.html#cb90-5"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>)</span>
+<span id="cb90-6"><a href="rstan.html#cb90-6"></a></span>
+<span id="cb90-7"><a href="rstan.html#cb90-7"></a><span class="co"># Expected value posterior predictive distribution</span></span>
+<span id="cb90-8"><a href="rstan.html#cb90-8"></a>post_pred &lt;-<span class="st"> </span><span class="kw">apply</span>(draws, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="st">&quot;a&quot;</span>] <span class="op">+</span><span class="st"> </span>x[<span class="st">&quot;b&quot;</span>]<span class="op">*</span>(D)) <span class="op">%&gt;%</span></span>
+<span id="cb90-9"><a href="rstan.html#cb90-9"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb90-10"><a href="rstan.html#cb90-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb90-11"><a href="rstan.html#cb90-11"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
+<span id="cb90-12"><a href="rstan.html#cb90-12"></a></span>
+<span id="cb90-13"><a href="rstan.html#cb90-13"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb90-14"><a href="rstan.html#cb90-14"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>post_pred, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb90-15"><a href="rstan.html#cb90-15"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_ppd-1.png" width="672" /></p>
 <p>Note that the expected value of the ppd doesn’t include <span class="math inline">\(\sigma\)</span>.</p>
 <p>An alternative is to have <code>stan</code> automatically generate samples from the posterior predictive distribution by adding a <code>generated quantities</code> section to the model (similar to what I did for the prior predictive distribution).</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="rstan.html#cb93-1"></a><span class="co"># Define model</span></span>
-<span id="cb93-2"><a href="rstan.html#cb93-2"></a></span>
-<span id="cb93-3"><a href="rstan.html#cb93-3"></a>mdl_code_ppd &lt;-<span class="st"> &#39;</span></span>
-<span id="cb93-4"><a href="rstan.html#cb93-4"></a><span class="st">  data{</span></span>
-<span id="cb93-5"><a href="rstan.html#cb93-5"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
-<span id="cb93-6"><a href="rstan.html#cb93-6"></a><span class="st">    vector[N] mpg;</span></span>
-<span id="cb93-7"><a href="rstan.html#cb93-7"></a><span class="st">    vector[N] c_disp;</span></span>
-<span id="cb93-8"><a href="rstan.html#cb93-8"></a><span class="st">  }</span></span>
-<span id="cb93-9"><a href="rstan.html#cb93-9"></a><span class="st">  parameters{</span></span>
-<span id="cb93-10"><a href="rstan.html#cb93-10"></a><span class="st">    real a;</span></span>
-<span id="cb93-11"><a href="rstan.html#cb93-11"></a><span class="st">    real b;</span></span>
-<span id="cb93-12"><a href="rstan.html#cb93-12"></a><span class="st">    real&lt;lower=0.0&gt; sigma;</span></span>
-<span id="cb93-13"><a href="rstan.html#cb93-13"></a><span class="st">  }</span></span>
-<span id="cb93-14"><a href="rstan.html#cb93-14"></a><span class="st">  transformed parameters{</span></span>
-<span id="cb93-15"><a href="rstan.html#cb93-15"></a><span class="st">    // Expected value of posterior predictive</span></span>
-<span id="cb93-16"><a href="rstan.html#cb93-16"></a><span class="st">    vector[N] Y_hat = a + b * c_disp;</span></span>
-<span id="cb93-17"><a href="rstan.html#cb93-17"></a><span class="st">  }</span></span>
-<span id="cb93-18"><a href="rstan.html#cb93-18"></a><span class="st">  model{</span></span>
-<span id="cb93-19"><a href="rstan.html#cb93-19"></a><span class="st">    // Likelihood</span></span>
-<span id="cb93-20"><a href="rstan.html#cb93-20"></a><span class="st">    mpg ~ normal(Y_hat, sigma);</span></span>
-<span id="cb93-21"><a href="rstan.html#cb93-21"></a><span class="st">    // Priors</span></span>
-<span id="cb93-22"><a href="rstan.html#cb93-22"></a><span class="st">    a ~ normal(13.2, 5.3);</span></span>
-<span id="cb93-23"><a href="rstan.html#cb93-23"></a><span class="st">    b ~ normal(-0.1, 0.05);</span></span>
-<span id="cb93-24"><a href="rstan.html#cb93-24"></a><span class="st">    sigma ~ exponential(1);</span></span>
-<span id="cb93-25"><a href="rstan.html#cb93-25"></a><span class="st">  }</span></span>
-<span id="cb93-26"><a href="rstan.html#cb93-26"></a><span class="st">  generated quantities{</span></span>
-<span id="cb93-27"><a href="rstan.html#cb93-27"></a><span class="st">    // Posterior Predictive</span></span>
-<span id="cb93-28"><a href="rstan.html#cb93-28"></a><span class="st">    real mpg_ppd[N] = normal_rng(Y_hat, sigma);</span></span>
-<span id="cb93-29"><a href="rstan.html#cb93-29"></a><span class="st">  }</span></span>
-<span id="cb93-30"><a href="rstan.html#cb93-30"></a><span class="st">&#39;</span></span>
-<span id="cb93-31"><a href="rstan.html#cb93-31"></a></span>
-<span id="cb93-32"><a href="rstan.html#cb93-32"></a><span class="co"># Fit model</span></span>
-<span id="cb93-33"><a href="rstan.html#cb93-33"></a>mdl1_ppd &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_code_ppd, <span class="dt">data=</span>mdl_data)</span></code></pre></div>
-<pre><code>## Trying to compile a simple C file</code></pre>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="rstan.html#cb95-1"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1_ppd)</span>
-<span id="cb95-2"><a href="rstan.html#cb95-2"></a></span>
-<span id="cb95-3"><a href="rstan.html#cb95-3"></a><span class="co"># 95% credible interval for expected value of ppd</span></span>
-<span id="cb95-4"><a href="rstan.html#cb95-4"></a>Eppd &lt;-<span class="st"> </span>draws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb95-5"><a href="rstan.html#cb95-5"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb95-6"><a href="rstan.html#cb95-6"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb95-7"><a href="rstan.html#cb95-7"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb95-8"><a href="rstan.html#cb95-8"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb95-9"><a href="rstan.html#cb95-9"></a></span>
-<span id="cb95-10"><a href="rstan.html#cb95-10"></a><span class="co"># 95 credible interval for ppd</span></span>
-<span id="cb95-11"><a href="rstan.html#cb95-11"></a>ppd &lt;-<span class="st"> </span>draws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg_ppd&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb95-12"><a href="rstan.html#cb95-12"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb95-13"><a href="rstan.html#cb95-13"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb95-14"><a href="rstan.html#cb95-14"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb95-15"><a href="rstan.html#cb95-15"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp=</span>mdl_data<span class="op">$</span>c_disp)</span>
-<span id="cb95-16"><a href="rstan.html#cb95-16"></a>  </span>
-<span id="cb95-17"><a href="rstan.html#cb95-17"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb95-18"><a href="rstan.html#cb95-18"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span><span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">+</span></span>
-<span id="cb95-19"><a href="rstan.html#cb95-19"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>ppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
-<span id="cb95-20"><a href="rstan.html#cb95-20"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span></span>
-<span id="cb95-21"><a href="rstan.html#cb95-21"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
-<span id="cb95-22"><a href="rstan.html#cb95-22"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>) <span class="op">+</span></span>
-<span id="cb95-23"><a href="rstan.html#cb95-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb95-24"><a href="rstan.html#cb95-24"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;c_disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="rstan.html#cb91-1"></a><span class="co"># Define model</span></span>
+<span id="cb91-2"><a href="rstan.html#cb91-2"></a></span>
+<span id="cb91-3"><a href="rstan.html#cb91-3"></a>mdl_code_ppd &lt;-<span class="st"> &#39;</span></span>
+<span id="cb91-4"><a href="rstan.html#cb91-4"></a><span class="st">  data{</span></span>
+<span id="cb91-5"><a href="rstan.html#cb91-5"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
+<span id="cb91-6"><a href="rstan.html#cb91-6"></a><span class="st">    vector[N] mpg;</span></span>
+<span id="cb91-7"><a href="rstan.html#cb91-7"></a><span class="st">    vector[N] c_disp;</span></span>
+<span id="cb91-8"><a href="rstan.html#cb91-8"></a><span class="st">  }</span></span>
+<span id="cb91-9"><a href="rstan.html#cb91-9"></a><span class="st">  parameters{</span></span>
+<span id="cb91-10"><a href="rstan.html#cb91-10"></a><span class="st">    real a;</span></span>
+<span id="cb91-11"><a href="rstan.html#cb91-11"></a><span class="st">    real b;</span></span>
+<span id="cb91-12"><a href="rstan.html#cb91-12"></a><span class="st">    real&lt;lower=0.0&gt; sigma;</span></span>
+<span id="cb91-13"><a href="rstan.html#cb91-13"></a><span class="st">  }</span></span>
+<span id="cb91-14"><a href="rstan.html#cb91-14"></a><span class="st">  transformed parameters{</span></span>
+<span id="cb91-15"><a href="rstan.html#cb91-15"></a><span class="st">    // Expected value of posterior predictive</span></span>
+<span id="cb91-16"><a href="rstan.html#cb91-16"></a><span class="st">    vector[N] Y_hat = a + b * c_disp;</span></span>
+<span id="cb91-17"><a href="rstan.html#cb91-17"></a><span class="st">  }</span></span>
+<span id="cb91-18"><a href="rstan.html#cb91-18"></a><span class="st">  model{</span></span>
+<span id="cb91-19"><a href="rstan.html#cb91-19"></a><span class="st">    // Likelihood</span></span>
+<span id="cb91-20"><a href="rstan.html#cb91-20"></a><span class="st">    mpg ~ normal(Y_hat, sigma);</span></span>
+<span id="cb91-21"><a href="rstan.html#cb91-21"></a><span class="st">    // Priors</span></span>
+<span id="cb91-22"><a href="rstan.html#cb91-22"></a><span class="st">    a ~ normal(13.2, 5.3);</span></span>
+<span id="cb91-23"><a href="rstan.html#cb91-23"></a><span class="st">    b ~ normal(-0.1, 0.05);</span></span>
+<span id="cb91-24"><a href="rstan.html#cb91-24"></a><span class="st">    sigma ~ exponential(1);</span></span>
+<span id="cb91-25"><a href="rstan.html#cb91-25"></a><span class="st">  }</span></span>
+<span id="cb91-26"><a href="rstan.html#cb91-26"></a><span class="st">  generated quantities{</span></span>
+<span id="cb91-27"><a href="rstan.html#cb91-27"></a><span class="st">    // Posterior Predictive</span></span>
+<span id="cb91-28"><a href="rstan.html#cb91-28"></a><span class="st">    real mpg_ppd[N] = normal_rng(Y_hat, sigma);</span></span>
+<span id="cb91-29"><a href="rstan.html#cb91-29"></a><span class="st">  }</span></span>
+<span id="cb91-30"><a href="rstan.html#cb91-30"></a><span class="st">&#39;</span></span>
+<span id="cb91-31"><a href="rstan.html#cb91-31"></a></span>
+<span id="cb91-32"><a href="rstan.html#cb91-32"></a><span class="co"># Fit model</span></span>
+<span id="cb91-33"><a href="rstan.html#cb91-33"></a>mdl1_ppd &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_code_ppd, <span class="dt">data=</span>mdl_data)</span>
+<span id="cb91-34"><a href="rstan.html#cb91-34"></a></span>
+<span id="cb91-35"><a href="rstan.html#cb91-35"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1_ppd)</span>
+<span id="cb91-36"><a href="rstan.html#cb91-36"></a></span>
+<span id="cb91-37"><a href="rstan.html#cb91-37"></a><span class="co"># 95% credible interval for expected value of ppd</span></span>
+<span id="cb91-38"><a href="rstan.html#cb91-38"></a>Eppd &lt;-<span class="st"> </span>draws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb91-39"><a href="rstan.html#cb91-39"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb91-40"><a href="rstan.html#cb91-40"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb91-41"><a href="rstan.html#cb91-41"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb91-42"><a href="rstan.html#cb91-42"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb91-43"><a href="rstan.html#cb91-43"></a></span>
+<span id="cb91-44"><a href="rstan.html#cb91-44"></a><span class="co"># 95 credible interval for ppd</span></span>
+<span id="cb91-45"><a href="rstan.html#cb91-45"></a>ppd &lt;-<span class="st"> </span>draws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg_ppd&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb91-46"><a href="rstan.html#cb91-46"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb91-47"><a href="rstan.html#cb91-47"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb91-48"><a href="rstan.html#cb91-48"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb91-49"><a href="rstan.html#cb91-49"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp=</span>mdl_data<span class="op">$</span>c_disp)</span>
+<span id="cb91-50"><a href="rstan.html#cb91-50"></a>  </span>
+<span id="cb91-51"><a href="rstan.html#cb91-51"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb91-52"><a href="rstan.html#cb91-52"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span><span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">+</span></span>
+<span id="cb91-53"><a href="rstan.html#cb91-53"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>ppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
+<span id="cb91-54"><a href="rstan.html#cb91-54"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span></span>
+<span id="cb91-55"><a href="rstan.html#cb91-55"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
+<span id="cb91-56"><a href="rstan.html#cb91-56"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>) <span class="op">+</span></span>
+<span id="cb91-57"><a href="rstan.html#cb91-57"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb91-58"><a href="rstan.html#cb91-58"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;c_disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_ppd_alternate-1.png" width="672" /></p>
 <p>The darker blue area is a 95% credible interval for the expected value of the posterior predictive distribution and the lighter blue area is the 95% credible interval for the posterior predictive distribution.</p>
 <p>And we can also plot the density overlay using the posterior predictive draws.</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="rstan.html#cb96-1"></a>yrep &lt;-<span class="st"> </span>draws <span class="op">%&gt;%</span></span>
-<span id="cb96-2"><a href="rstan.html#cb96-2"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>) <span class="op">%&gt;%</span></span>
-<span id="cb96-3"><a href="rstan.html#cb96-3"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg_ppd&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb96-4"><a href="rstan.html#cb96-4"></a><span class="st">  </span><span class="kw">as.matrix</span>()</span>
-<span id="cb96-5"><a href="rstan.html#cb96-5"></a></span>
-<span id="cb96-6"><a href="rstan.html#cb96-6"></a><span class="kw">ppc_dens_overlay</span>(mtcars<span class="op">$</span>mpg, yrep)</span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="rstan.html#cb92-1"></a>yrep &lt;-<span class="st"> </span>draws <span class="op">%&gt;%</span></span>
+<span id="cb92-2"><a href="rstan.html#cb92-2"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>) <span class="op">%&gt;%</span></span>
+<span id="cb92-3"><a href="rstan.html#cb92-3"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg_ppd&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb92-4"><a href="rstan.html#cb92-4"></a><span class="st">  </span><span class="kw">as.matrix</span>()</span>
+<span id="cb92-5"><a href="rstan.html#cb92-5"></a></span>
+<span id="cb92-6"><a href="rstan.html#cb92-6"></a><span class="kw">ppc_dens_overlay</span>(mtcars<span class="op">$</span>mpg, yrep)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 </div>
 </div>
@@ -504,184 +502,183 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="define-model-8" class="section level3">
 <h3><span class="header-section-number">5.5.1</span> Define Model</h3>
 <p>First, I’ll define the splines just as I did with the <code>rethinking</code> package.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="rstan.html#cb97-1"></a><span class="kw">library</span>(splines)</span>
-<span id="cb97-2"><a href="rstan.html#cb97-2"></a></span>
-<span id="cb97-3"><a href="rstan.html#cb97-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
-<span id="cb97-4"><a href="rstan.html#cb97-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
-<span id="cb97-5"><a href="rstan.html#cb97-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb97-6"><a href="rstan.html#cb97-6"></a></span>
-<span id="cb97-7"><a href="rstan.html#cb97-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp, B) <span class="op">%&gt;%</span></span>
-<span id="cb97-8"><a href="rstan.html#cb97-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb97-9"><a href="rstan.html#cb97-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb97-10"><a href="rstan.html#cb97-10"></a></span>
-<span id="cb97-11"><a href="rstan.html#cb97-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
-<span id="cb97-12"><a href="rstan.html#cb97-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb97-13"><a href="rstan.html#cb97-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb97-14"><a href="rstan.html#cb97-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
-<span id="cb97-15"><a href="rstan.html#cb97-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
-<span id="cb97-16"><a href="rstan.html#cb97-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb97-17"><a href="rstan.html#cb97-17"></a></span>
-<span id="cb97-18"><a href="rstan.html#cb97-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
-<span id="cb97-19"><a href="rstan.html#cb97-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb97-20"><a href="rstan.html#cb97-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb97-21"><a href="rstan.html#cb97-21"></a></span>
-<span id="cb97-22"><a href="rstan.html#cb97-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
-<span id="cb97-23"><a href="rstan.html#cb97-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
-<span id="cb97-24"><a href="rstan.html#cb97-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="rstan.html#cb93-1"></a><span class="kw">library</span>(splines)</span>
+<span id="cb93-2"><a href="rstan.html#cb93-2"></a></span>
+<span id="cb93-3"><a href="rstan.html#cb93-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
+<span id="cb93-4"><a href="rstan.html#cb93-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
+<span id="cb93-5"><a href="rstan.html#cb93-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb93-6"><a href="rstan.html#cb93-6"></a></span>
+<span id="cb93-7"><a href="rstan.html#cb93-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp, B) <span class="op">%&gt;%</span></span>
+<span id="cb93-8"><a href="rstan.html#cb93-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb93-9"><a href="rstan.html#cb93-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb93-10"><a href="rstan.html#cb93-10"></a></span>
+<span id="cb93-11"><a href="rstan.html#cb93-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
+<span id="cb93-12"><a href="rstan.html#cb93-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb93-13"><a href="rstan.html#cb93-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb93-14"><a href="rstan.html#cb93-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
+<span id="cb93-15"><a href="rstan.html#cb93-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
+<span id="cb93-16"><a href="rstan.html#cb93-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb93-17"><a href="rstan.html#cb93-17"></a></span>
+<span id="cb93-18"><a href="rstan.html#cb93-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
+<span id="cb93-19"><a href="rstan.html#cb93-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb93-20"><a href="rstan.html#cb93-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb93-21"><a href="rstan.html#cb93-21"></a></span>
+<span id="cb93-22"><a href="rstan.html#cb93-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
+<span id="cb93-23"><a href="rstan.html#cb93-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
+<span id="cb93-24"><a href="rstan.html#cb93-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/splines-1.png" width="672" /></p>
 <p>Note: the dashed lines are the splines and the points are the values of the spline at the specific values of <code>mtcars$c_disp</code>; the points are inputs into the <code>stan</code> model.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="rstan.html#cb98-1"></a><span class="co"># Define model</span></span>
-<span id="cb98-2"><a href="rstan.html#cb98-2"></a></span>
-<span id="cb98-3"><a href="rstan.html#cb98-3"></a>mdl_code &lt;-<span class="st"> &#39;</span></span>
-<span id="cb98-4"><a href="rstan.html#cb98-4"></a><span class="st">  data{</span></span>
-<span id="cb98-5"><a href="rstan.html#cb98-5"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
-<span id="cb98-6"><a href="rstan.html#cb98-6"></a><span class="st">    int&lt;lower=1&gt; num_basis;</span></span>
-<span id="cb98-7"><a href="rstan.html#cb98-7"></a><span class="st">    vector[N] mpg;</span></span>
-<span id="cb98-8"><a href="rstan.html#cb98-8"></a><span class="st">    matrix[N, num_basis] B;</span></span>
-<span id="cb98-9"><a href="rstan.html#cb98-9"></a><span class="st">  }</span></span>
-<span id="cb98-10"><a href="rstan.html#cb98-10"></a><span class="st">  parameters{</span></span>
-<span id="cb98-11"><a href="rstan.html#cb98-11"></a><span class="st">    real a;</span></span>
-<span id="cb98-12"><a href="rstan.html#cb98-12"></a><span class="st">    real&lt;lower=0.0&gt; sigma;</span></span>
-<span id="cb98-13"><a href="rstan.html#cb98-13"></a><span class="st">    vector[num_basis] w;</span></span>
-<span id="cb98-14"><a href="rstan.html#cb98-14"></a><span class="st">  }</span></span>
-<span id="cb98-15"><a href="rstan.html#cb98-15"></a><span class="st">  transformed parameters{</span></span>
-<span id="cb98-16"><a href="rstan.html#cb98-16"></a><span class="st">    vector[N] Y_hat = a + B*w;</span></span>
-<span id="cb98-17"><a href="rstan.html#cb98-17"></a><span class="st">  }</span></span>
-<span id="cb98-18"><a href="rstan.html#cb98-18"></a><span class="st">  model{</span></span>
-<span id="cb98-19"><a href="rstan.html#cb98-19"></a><span class="st">    // Likelihood</span></span>
-<span id="cb98-20"><a href="rstan.html#cb98-20"></a><span class="st">    mpg ~ normal(Y_hat, sigma);</span></span>
-<span id="cb98-21"><a href="rstan.html#cb98-21"></a><span class="st">    // Priors</span></span>
-<span id="cb98-22"><a href="rstan.html#cb98-22"></a><span class="st">    a ~ normal(25, 10);</span></span>
-<span id="cb98-23"><a href="rstan.html#cb98-23"></a><span class="st">    sigma ~ exponential(1);</span></span>
-<span id="cb98-24"><a href="rstan.html#cb98-24"></a><span class="st">    w ~ normal(0, 5);</span></span>
-<span id="cb98-25"><a href="rstan.html#cb98-25"></a><span class="st">  }</span></span>
-<span id="cb98-26"><a href="rstan.html#cb98-26"></a><span class="st">  generated quantities{</span></span>
-<span id="cb98-27"><a href="rstan.html#cb98-27"></a><span class="st">    // Posterior Predictive</span></span>
-<span id="cb98-28"><a href="rstan.html#cb98-28"></a><span class="st">    real mpg_ppd[N] = normal_rng(Y_hat, sigma);</span></span>
-<span id="cb98-29"><a href="rstan.html#cb98-29"></a><span class="st">  }</span></span>
-<span id="cb98-30"><a href="rstan.html#cb98-30"></a><span class="st">&#39;</span></span>
-<span id="cb98-31"><a href="rstan.html#cb98-31"></a></span>
-<span id="cb98-32"><a href="rstan.html#cb98-32"></a>mdl_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">N=</span><span class="kw">nrow</span>(mtcars),</span>
-<span id="cb98-33"><a href="rstan.html#cb98-33"></a>                 <span class="dt">num_basis=</span><span class="kw">ncol</span>(B),</span>
-<span id="cb98-34"><a href="rstan.html#cb98-34"></a>                 <span class="dt">B=</span>B,</span>
-<span id="cb98-35"><a href="rstan.html#cb98-35"></a>                 <span class="dt">mpg =</span> mtcars<span class="op">$</span>mpg)</span>
-<span id="cb98-36"><a href="rstan.html#cb98-36"></a></span>
-<span id="cb98-37"><a href="rstan.html#cb98-37"></a><span class="co"># Fit model</span></span>
-<span id="cb98-38"><a href="rstan.html#cb98-38"></a>mdl1_gam &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_code, <span class="dt">data=</span>mdl_data)</span></code></pre></div>
-<pre><code>## Trying to compile a simple C file</code></pre>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="rstan.html#cb94-1"></a><span class="co"># Define model</span></span>
+<span id="cb94-2"><a href="rstan.html#cb94-2"></a></span>
+<span id="cb94-3"><a href="rstan.html#cb94-3"></a>mdl_code &lt;-<span class="st"> &#39;</span></span>
+<span id="cb94-4"><a href="rstan.html#cb94-4"></a><span class="st">  data{</span></span>
+<span id="cb94-5"><a href="rstan.html#cb94-5"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
+<span id="cb94-6"><a href="rstan.html#cb94-6"></a><span class="st">    int&lt;lower=1&gt; num_basis;</span></span>
+<span id="cb94-7"><a href="rstan.html#cb94-7"></a><span class="st">    vector[N] mpg;</span></span>
+<span id="cb94-8"><a href="rstan.html#cb94-8"></a><span class="st">    matrix[N, num_basis] B;</span></span>
+<span id="cb94-9"><a href="rstan.html#cb94-9"></a><span class="st">  }</span></span>
+<span id="cb94-10"><a href="rstan.html#cb94-10"></a><span class="st">  parameters{</span></span>
+<span id="cb94-11"><a href="rstan.html#cb94-11"></a><span class="st">    real a;</span></span>
+<span id="cb94-12"><a href="rstan.html#cb94-12"></a><span class="st">    real&lt;lower=0.0&gt; sigma;</span></span>
+<span id="cb94-13"><a href="rstan.html#cb94-13"></a><span class="st">    vector[num_basis] w;</span></span>
+<span id="cb94-14"><a href="rstan.html#cb94-14"></a><span class="st">  }</span></span>
+<span id="cb94-15"><a href="rstan.html#cb94-15"></a><span class="st">  transformed parameters{</span></span>
+<span id="cb94-16"><a href="rstan.html#cb94-16"></a><span class="st">    vector[N] Y_hat = a + B*w;</span></span>
+<span id="cb94-17"><a href="rstan.html#cb94-17"></a><span class="st">  }</span></span>
+<span id="cb94-18"><a href="rstan.html#cb94-18"></a><span class="st">  model{</span></span>
+<span id="cb94-19"><a href="rstan.html#cb94-19"></a><span class="st">    // Likelihood</span></span>
+<span id="cb94-20"><a href="rstan.html#cb94-20"></a><span class="st">    mpg ~ normal(Y_hat, sigma);</span></span>
+<span id="cb94-21"><a href="rstan.html#cb94-21"></a><span class="st">    // Priors</span></span>
+<span id="cb94-22"><a href="rstan.html#cb94-22"></a><span class="st">    a ~ normal(25, 10);</span></span>
+<span id="cb94-23"><a href="rstan.html#cb94-23"></a><span class="st">    sigma ~ exponential(1);</span></span>
+<span id="cb94-24"><a href="rstan.html#cb94-24"></a><span class="st">    w ~ normal(0, 5);</span></span>
+<span id="cb94-25"><a href="rstan.html#cb94-25"></a><span class="st">  }</span></span>
+<span id="cb94-26"><a href="rstan.html#cb94-26"></a><span class="st">  generated quantities{</span></span>
+<span id="cb94-27"><a href="rstan.html#cb94-27"></a><span class="st">    // Posterior Predictive</span></span>
+<span id="cb94-28"><a href="rstan.html#cb94-28"></a><span class="st">    real mpg_ppd[N] = normal_rng(Y_hat, sigma);</span></span>
+<span id="cb94-29"><a href="rstan.html#cb94-29"></a><span class="st">  }</span></span>
+<span id="cb94-30"><a href="rstan.html#cb94-30"></a><span class="st">&#39;</span></span>
+<span id="cb94-31"><a href="rstan.html#cb94-31"></a></span>
+<span id="cb94-32"><a href="rstan.html#cb94-32"></a>mdl_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">N=</span><span class="kw">nrow</span>(mtcars),</span>
+<span id="cb94-33"><a href="rstan.html#cb94-33"></a>                 <span class="dt">num_basis=</span><span class="kw">ncol</span>(B),</span>
+<span id="cb94-34"><a href="rstan.html#cb94-34"></a>                 <span class="dt">B=</span>B,</span>
+<span id="cb94-35"><a href="rstan.html#cb94-35"></a>                 <span class="dt">mpg =</span> mtcars<span class="op">$</span>mpg)</span>
+<span id="cb94-36"><a href="rstan.html#cb94-36"></a></span>
+<span id="cb94-37"><a href="rstan.html#cb94-37"></a><span class="co"># Fit model</span></span>
+<span id="cb94-38"><a href="rstan.html#cb94-38"></a>mdl1_gam &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_code, <span class="dt">data=</span>mdl_data)</span></code></pre></div>
 </div>
 <div id="prior-predictive-distribution-6" class="section level3">
 <h3><span class="header-section-number">5.5.2</span> Prior Predictive Distribution</h3>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="rstan.html#cb100-1"></a><span class="co"># Define model</span></span>
-<span id="cb100-2"><a href="rstan.html#cb100-2"></a></span>
-<span id="cb100-3"><a href="rstan.html#cb100-3"></a>mdl2 &lt;-<span class="st"> &#39;</span></span>
-<span id="cb100-4"><a href="rstan.html#cb100-4"></a><span class="st">  data{</span></span>
-<span id="cb100-5"><a href="rstan.html#cb100-5"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
-<span id="cb100-6"><a href="rstan.html#cb100-6"></a><span class="st">    int&lt;lower=1&gt; num_basis;</span></span>
-<span id="cb100-7"><a href="rstan.html#cb100-7"></a><span class="st">    //vector[N] mpg;</span></span>
-<span id="cb100-8"><a href="rstan.html#cb100-8"></a><span class="st">    matrix[N, num_basis] B;</span></span>
-<span id="cb100-9"><a href="rstan.html#cb100-9"></a><span class="st">  }</span></span>
-<span id="cb100-10"><a href="rstan.html#cb100-10"></a><span class="st">  generated quantities{</span></span>
-<span id="cb100-11"><a href="rstan.html#cb100-11"></a><span class="st">    real a_sim = normal_rng(25, 10);</span></span>
-<span id="cb100-12"><a href="rstan.html#cb100-12"></a><span class="st">    real sigma_sim = exponential_rng(1);</span></span>
-<span id="cb100-13"><a href="rstan.html#cb100-13"></a><span class="st">    real mpg_sim[N];</span></span>
-<span id="cb100-14"><a href="rstan.html#cb100-14"></a><span class="st">    vector[N] Y_hat;</span></span>
-<span id="cb100-15"><a href="rstan.html#cb100-15"></a><span class="st">    vector[num_basis] w_sim;</span></span>
-<span id="cb100-16"><a href="rstan.html#cb100-16"></a><span class="st">    for (i in 1:num_basis)</span></span>
-<span id="cb100-17"><a href="rstan.html#cb100-17"></a><span class="st">      w_sim[i] = normal_rng(0,5);</span></span>
-<span id="cb100-18"><a href="rstan.html#cb100-18"></a><span class="st">    Y_hat = a_sim + B * w_sim;</span></span>
-<span id="cb100-19"><a href="rstan.html#cb100-19"></a><span class="st">    mpg_sim = normal_rng(Y_hat, sigma_sim);</span></span>
-<span id="cb100-20"><a href="rstan.html#cb100-20"></a><span class="st">}</span></span>
-<span id="cb100-21"><a href="rstan.html#cb100-21"></a><span class="st">&#39;</span></span>
-<span id="cb100-22"><a href="rstan.html#cb100-22"></a></span>
-<span id="cb100-23"><a href="rstan.html#cb100-23"></a>mdl_gam_prior &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl2, </span>
-<span id="cb100-24"><a href="rstan.html#cb100-24"></a>                      <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">N=</span>N, </span>
-<span id="cb100-25"><a href="rstan.html#cb100-25"></a>                                <span class="dt">num_basis=</span><span class="kw">ncol</span>(B_plot),</span>
-<span id="cb100-26"><a href="rstan.html#cb100-26"></a>                                <span class="dt">B=</span>B_plot),</span>
-<span id="cb100-27"><a href="rstan.html#cb100-27"></a>                      <span class="dt">chains=</span><span class="dv">1</span>, <span class="dt">algorithm=</span><span class="st">&quot;Fixed_param&quot;</span>)</span></code></pre></div>
-<pre><code>## Trying to compile a simple C file</code></pre>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="rstan.html#cb102-1"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl_gam_prior) <span class="op">%&gt;%</span></span>
-<span id="cb102-2"><a href="rstan.html#cb102-2"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>)</span>
-<span id="cb102-3"><a href="rstan.html#cb102-3"></a></span>
-<span id="cb102-4"><a href="rstan.html#cb102-4"></a><span class="co"># Expected value prior predictive distribution</span></span>
-<span id="cb102-5"><a href="rstan.html#cb102-5"></a>exp_mpg_sim &lt;-<span class="st"> </span><span class="kw">apply</span>(draws, <span class="dv">1</span>, <span class="cf">function</span>(x) {</span>
-<span id="cb102-6"><a href="rstan.html#cb102-6"></a>  x[<span class="st">&quot;a_sim&quot;</span>] <span class="op">+</span><span class="st"> </span>B_plot <span class="op">%*%</span><span class="st"> </span>x[<span class="kw">grepl</span>(<span class="st">&quot;w&quot;</span>, <span class="kw">names</span>(x))]</span>
-<span id="cb102-7"><a href="rstan.html#cb102-7"></a>}) <span class="op">%&gt;%</span></span>
-<span id="cb102-8"><a href="rstan.html#cb102-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb102-9"><a href="rstan.html#cb102-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
-<span id="cb102-10"><a href="rstan.html#cb102-10"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
-<span id="cb102-11"><a href="rstan.html#cb102-11"></a></span>
-<span id="cb102-12"><a href="rstan.html#cb102-12"></a><span class="co"># 95% interval prior predictive distribution</span></span>
-<span id="cb102-13"><a href="rstan.html#cb102-13"></a>mpg_sim &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl_gam_prior) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb102-14"><a href="rstan.html#cb102-14"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb102-15"><a href="rstan.html#cb102-15"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb102-16"><a href="rstan.html#cb102-16"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb102-17"><a href="rstan.html#cb102-17"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D)</span>
-<span id="cb102-18"><a href="rstan.html#cb102-18"></a></span>
-<span id="cb102-19"><a href="rstan.html#cb102-19"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb102-20"><a href="rstan.html#cb102-20"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>exp_mpg_sim, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb102-21"><a href="rstan.html#cb102-21"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>mpg_sim, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
-<span id="cb102-22"><a href="rstan.html#cb102-22"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="rstan.html#cb95-1"></a><span class="co"># Define model</span></span>
+<span id="cb95-2"><a href="rstan.html#cb95-2"></a></span>
+<span id="cb95-3"><a href="rstan.html#cb95-3"></a>mdl2 &lt;-<span class="st"> &#39;</span></span>
+<span id="cb95-4"><a href="rstan.html#cb95-4"></a><span class="st">  data{</span></span>
+<span id="cb95-5"><a href="rstan.html#cb95-5"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
+<span id="cb95-6"><a href="rstan.html#cb95-6"></a><span class="st">    int&lt;lower=1&gt; num_basis;</span></span>
+<span id="cb95-7"><a href="rstan.html#cb95-7"></a><span class="st">    //vector[N] mpg;</span></span>
+<span id="cb95-8"><a href="rstan.html#cb95-8"></a><span class="st">    matrix[N, num_basis] B;</span></span>
+<span id="cb95-9"><a href="rstan.html#cb95-9"></a><span class="st">  }</span></span>
+<span id="cb95-10"><a href="rstan.html#cb95-10"></a><span class="st">  generated quantities{</span></span>
+<span id="cb95-11"><a href="rstan.html#cb95-11"></a><span class="st">    real a_sim = normal_rng(25, 10);</span></span>
+<span id="cb95-12"><a href="rstan.html#cb95-12"></a><span class="st">    real sigma_sim = exponential_rng(1);</span></span>
+<span id="cb95-13"><a href="rstan.html#cb95-13"></a><span class="st">    real mpg_sim[N];</span></span>
+<span id="cb95-14"><a href="rstan.html#cb95-14"></a><span class="st">    vector[N] Y_hat;</span></span>
+<span id="cb95-15"><a href="rstan.html#cb95-15"></a><span class="st">    vector[num_basis] w_sim;</span></span>
+<span id="cb95-16"><a href="rstan.html#cb95-16"></a><span class="st">    for (i in 1:num_basis)</span></span>
+<span id="cb95-17"><a href="rstan.html#cb95-17"></a><span class="st">      w_sim[i] = normal_rng(0,5);</span></span>
+<span id="cb95-18"><a href="rstan.html#cb95-18"></a><span class="st">    Y_hat = a_sim + B * w_sim;</span></span>
+<span id="cb95-19"><a href="rstan.html#cb95-19"></a><span class="st">    mpg_sim = normal_rng(Y_hat, sigma_sim);</span></span>
+<span id="cb95-20"><a href="rstan.html#cb95-20"></a><span class="st">}</span></span>
+<span id="cb95-21"><a href="rstan.html#cb95-21"></a><span class="st">&#39;</span></span>
+<span id="cb95-22"><a href="rstan.html#cb95-22"></a></span>
+<span id="cb95-23"><a href="rstan.html#cb95-23"></a>mdl_gam_prior &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl2, </span>
+<span id="cb95-24"><a href="rstan.html#cb95-24"></a>                      <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">N=</span>N, </span>
+<span id="cb95-25"><a href="rstan.html#cb95-25"></a>                                <span class="dt">num_basis=</span><span class="kw">ncol</span>(B_plot),</span>
+<span id="cb95-26"><a href="rstan.html#cb95-26"></a>                                <span class="dt">B=</span>B_plot),</span>
+<span id="cb95-27"><a href="rstan.html#cb95-27"></a>                      <span class="dt">chains=</span><span class="dv">1</span>, <span class="dt">algorithm=</span><span class="st">&quot;Fixed_param&quot;</span>)</span>
+<span id="cb95-28"><a href="rstan.html#cb95-28"></a></span>
+<span id="cb95-29"><a href="rstan.html#cb95-29"></a>draws &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl_gam_prior) <span class="op">%&gt;%</span></span>
+<span id="cb95-30"><a href="rstan.html#cb95-30"></a><span class="st">  </span><span class="kw">head</span>(<span class="dv">50</span>)</span>
+<span id="cb95-31"><a href="rstan.html#cb95-31"></a></span>
+<span id="cb95-32"><a href="rstan.html#cb95-32"></a><span class="co"># Expected value prior predictive distribution</span></span>
+<span id="cb95-33"><a href="rstan.html#cb95-33"></a>exp_mpg_sim &lt;-<span class="st"> </span><span class="kw">apply</span>(draws, <span class="dv">1</span>, <span class="cf">function</span>(x) {</span>
+<span id="cb95-34"><a href="rstan.html#cb95-34"></a>  x[<span class="st">&quot;a_sim&quot;</span>] <span class="op">+</span><span class="st"> </span>B_plot <span class="op">%*%</span><span class="st"> </span>x[<span class="kw">grepl</span>(<span class="st">&quot;w&quot;</span>, <span class="kw">names</span>(x))]</span>
+<span id="cb95-35"><a href="rstan.html#cb95-35"></a>}) <span class="op">%&gt;%</span></span>
+<span id="cb95-36"><a href="rstan.html#cb95-36"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb95-37"><a href="rstan.html#cb95-37"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb95-38"><a href="rstan.html#cb95-38"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>) </span>
+<span id="cb95-39"><a href="rstan.html#cb95-39"></a></span>
+<span id="cb95-40"><a href="rstan.html#cb95-40"></a><span class="co"># 95% interval prior predictive distribution</span></span>
+<span id="cb95-41"><a href="rstan.html#cb95-41"></a>mpg_sim &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl_gam_prior) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb95-42"><a href="rstan.html#cb95-42"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb95-43"><a href="rstan.html#cb95-43"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb95-44"><a href="rstan.html#cb95-44"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb95-45"><a href="rstan.html#cb95-45"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D)</span>
+<span id="cb95-46"><a href="rstan.html#cb95-46"></a></span>
+<span id="cb95-47"><a href="rstan.html#cb95-47"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb95-48"><a href="rstan.html#cb95-48"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>exp_mpg_sim, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb95-49"><a href="rstan.html#cb95-49"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>mpg_sim, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
+<span id="cb95-50"><a href="rstan.html#cb95-50"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_gam_prior-1.png" width="672" /></p>
 </div>
 <div id="diagnostics-7" class="section level3">
 <h3><span class="header-section-number">5.5.3</span> Diagnostics</h3>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="rstan.html#cb103-1"></a><span class="co"># Note that bayesplot methods support tidy selection of parameters</span></span>
-<span id="cb103-2"><a href="rstan.html#cb103-2"></a><span class="kw">mcmc_rank_overlay</span>(mdl1_gam, <span class="dt">pars=</span><span class="kw">vars</span>(a, sigma, <span class="kw">starts_with</span>(<span class="st">&quot;w[&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="rstan.html#cb96-1"></a><span class="co"># Note that bayesplot methods support tidy selection of parameters</span></span>
+<span id="cb96-2"><a href="rstan.html#cb96-2"></a><span class="kw">mcmc_rank_overlay</span>(mdl1_gam, <span class="dt">pars=</span><span class="kw">vars</span>(a, sigma, <span class="kw">starts_with</span>(<span class="st">&quot;w[&quot;</span>)))</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_gam_trankplot-1.png" width="672" /></p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="rstan.html#cb104-1"></a><span class="co"># This is the print.stanfit method and pars must be a character vector</span></span>
-<span id="cb104-2"><a href="rstan.html#cb104-2"></a><span class="kw">print</span>(mdl1_gam, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="rstan.html#cb97-1"></a><span class="co"># This is the print.stanfit method and pars must be a character vector</span></span>
+<span id="cb97-2"><a href="rstan.html#cb97-2"></a><span class="kw">print</span>(mdl1_gam, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
 <pre><code>## Inference for Stan model: 95f5b790b7449ad462398a31917fea97.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##        mean se_mean   sd   2.5%    25%   50%   75% 97.5% n_eff Rhat
-## a     20.18    0.06 1.97  16.27  18.87 20.17 21.54 23.93  1252    1
-## sigma  2.23    0.01 0.30   1.71   2.02  2.20  2.41  2.92  2490    1
-## w[1]  11.94    0.06 2.34   7.32  10.36 11.91 13.52 16.52  1358    1
-## w[2]   4.36    0.06 2.57  -0.56   2.63  4.30  6.07  9.53  1956    1
-## w[3]  -0.54    0.07 2.86  -6.13  -2.52 -0.49  1.40  5.04  1578    1
-## w[4]  -5.69    0.07 2.91 -11.24  -7.63 -5.74 -3.73  0.08  1957    1
-## w[5]  -2.30    0.07 2.92  -7.98  -4.28 -2.36 -0.41  3.55  1740    1
-## w[6]  -8.82    0.06 2.42 -13.47 -10.48 -8.84 -7.19 -3.91  1639    1
+## a     20.13    0.06 2.04  16.03  18.80 20.13 21.53 24.14  1111    1
+## sigma  2.23    0.01 0.31   1.74   2.01  2.20  2.42  2.92  2387    1
+## w[1]  11.97    0.06 2.38   7.28  10.39 12.03 13.50 16.66  1357    1
+## w[2]   4.45    0.07 2.61  -0.58   2.65  4.47  6.21  9.59  1522    1
+## w[3]  -0.55    0.08 2.88  -6.22  -2.45 -0.56  1.43  4.98  1322    1
+## w[4]  -5.58    0.07 3.02 -11.32  -7.62 -5.69 -3.54  0.46  1656    1
+## w[5]  -2.33    0.08 3.01  -8.25  -4.36 -2.37 -0.32  3.44  1506    1
+## w[6]  -8.76    0.06 2.50 -13.61 -10.46 -8.79 -7.10 -3.75  1555    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Dec 27 16:39:03 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec 29 20:23:52 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 </div>
 <div id="posterior-distribution-7" class="section level3">
 <h3><span class="header-section-number">5.5.4</span> Posterior Distribution</h3>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="rstan.html#cb106-1"></a><span class="kw">plot</span>(mdl1_gam, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="rstan.html#cb99-1"></a><span class="kw">plot</span>(mdl1_gam, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
 <pre><code>## ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>## outer_level: 0.95 (95% intervals)</code></pre>
 <p><img src="05_rstan_files/figure-html/mdl1_gam_post-1.png" width="672" /></p>
 </div>
 <div id="posterior-predictive-distribution-8" class="section level3">
 <h3><span class="header-section-number">5.5.5</span> Posterior Predictive Distribution</h3>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="rstan.html#cb109-1"></a><span class="co"># 95% credible interval expected value of posterior predictive</span></span>
-<span id="cb109-2"><a href="rstan.html#cb109-2"></a>Eppd &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1_gam) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb109-3"><a href="rstan.html#cb109-3"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb109-4"><a href="rstan.html#cb109-4"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb109-5"><a href="rstan.html#cb109-5"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb109-6"><a href="rstan.html#cb109-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb109-7"><a href="rstan.html#cb109-7"></a></span>
-<span id="cb109-8"><a href="rstan.html#cb109-8"></a><span class="co"># 95% credible interval posterior predictive</span></span>
-<span id="cb109-9"><a href="rstan.html#cb109-9"></a>ppd &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1_gam) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb109-10"><a href="rstan.html#cb109-10"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb109-11"><a href="rstan.html#cb109-11"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb109-12"><a href="rstan.html#cb109-12"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb109-13"><a href="rstan.html#cb109-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb109-14"><a href="rstan.html#cb109-14"></a></span>
-<span id="cb109-15"><a href="rstan.html#cb109-15"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb109-16"><a href="rstan.html#cb109-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span><span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">+</span></span>
-<span id="cb109-17"><a href="rstan.html#cb109-17"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>ppd,</span>
-<span id="cb109-18"><a href="rstan.html#cb109-18"></a>              <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
-<span id="cb109-19"><a href="rstan.html#cb109-19"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span></span>
-<span id="cb109-20"><a href="rstan.html#cb109-20"></a><span class="st">    </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
-<span id="cb109-21"><a href="rstan.html#cb109-21"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>) <span class="op">+</span></span>
-<span id="cb109-22"><a href="rstan.html#cb109-22"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb109-23"><a href="rstan.html#cb109-23"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;c_disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="rstan.html#cb102-1"></a><span class="co"># 95% credible interval expected value of posterior predictive</span></span>
+<span id="cb102-2"><a href="rstan.html#cb102-2"></a>Eppd &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1_gam) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb102-3"><a href="rstan.html#cb102-3"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb102-4"><a href="rstan.html#cb102-4"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb102-5"><a href="rstan.html#cb102-5"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb102-6"><a href="rstan.html#cb102-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb102-7"><a href="rstan.html#cb102-7"></a></span>
+<span id="cb102-8"><a href="rstan.html#cb102-8"></a><span class="co"># 95% credible interval posterior predictive</span></span>
+<span id="cb102-9"><a href="rstan.html#cb102-9"></a>ppd &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl1_gam) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;mpg&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb102-10"><a href="rstan.html#cb102-10"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb102-11"><a href="rstan.html#cb102-11"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb102-12"><a href="rstan.html#cb102-12"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb102-13"><a href="rstan.html#cb102-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb102-14"><a href="rstan.html#cb102-14"></a></span>
+<span id="cb102-15"><a href="rstan.html#cb102-15"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb102-16"><a href="rstan.html#cb102-16"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span><span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">+</span></span>
+<span id="cb102-17"><a href="rstan.html#cb102-17"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>ppd,</span>
+<span id="cb102-18"><a href="rstan.html#cb102-18"></a>              <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
+<span id="cb102-19"><a href="rstan.html#cb102-19"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span></span>
+<span id="cb102-20"><a href="rstan.html#cb102-20"></a><span class="st">    </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>Eppd, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>), </span>
+<span id="cb102-21"><a href="rstan.html#cb102-21"></a>              <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>) <span class="op">+</span></span>
+<span id="cb102-22"><a href="rstan.html#cb102-22"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb102-23"><a href="rstan.html#cb102-23"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;c_disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/mdl1_gam_ppd-1.png" width="672" /></p>
 </div>
 </div>
@@ -691,138 +688,138 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">5.6.1</span> Define Model</h3>
 <p>One challenge with splines is choosing the number of knots. For the previous model, I tried several values for <code>num_knots</code> until settling on 4. However, there is a <code>stan</code> case study for splines that uses a novel prior which addresses this issue. The details are <a href="https://mc-stan.org/users/documentation/case-studies/splines_in_stan.html">here</a>.</p>
 <p>For this example, I will set <code>num_knots=20</code> and then fit models with and without the random walk prior. This is an example where the <code>rstan</code>’s flexibility is an advantage because it would be difficult or impossible to specify the random walk prior in the other packages.</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="rstan.html#cb110-1"></a><span class="kw">library</span>(splines)</span>
-<span id="cb110-2"><a href="rstan.html#cb110-2"></a></span>
-<span id="cb110-3"><a href="rstan.html#cb110-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">20</span>  <span class="co"># number of interior knots</span></span>
-<span id="cb110-4"><a href="rstan.html#cb110-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
-<span id="cb110-5"><a href="rstan.html#cb110-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb110-6"><a href="rstan.html#cb110-6"></a></span>
-<span id="cb110-7"><a href="rstan.html#cb110-7"></a><span class="co"># Define model with smoothing prior</span></span>
-<span id="cb110-8"><a href="rstan.html#cb110-8"></a>mdl_smooth_code &lt;-<span class="st"> &#39;</span></span>
-<span id="cb110-9"><a href="rstan.html#cb110-9"></a><span class="st">  data{</span></span>
-<span id="cb110-10"><a href="rstan.html#cb110-10"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
-<span id="cb110-11"><a href="rstan.html#cb110-11"></a><span class="st">    int&lt;lower=1&gt; num_basis;</span></span>
-<span id="cb110-12"><a href="rstan.html#cb110-12"></a><span class="st">    vector[N] mpg;</span></span>
-<span id="cb110-13"><a href="rstan.html#cb110-13"></a><span class="st">    matrix[N, num_basis] B;</span></span>
-<span id="cb110-14"><a href="rstan.html#cb110-14"></a><span class="st">  }</span></span>
-<span id="cb110-15"><a href="rstan.html#cb110-15"></a><span class="st">  parameters{</span></span>
-<span id="cb110-16"><a href="rstan.html#cb110-16"></a><span class="st">    real a;</span></span>
-<span id="cb110-17"><a href="rstan.html#cb110-17"></a><span class="st">    real&lt;lower=0.0&gt; sigma;</span></span>
-<span id="cb110-18"><a href="rstan.html#cb110-18"></a><span class="st">    vector[num_basis] w_raw;</span></span>
-<span id="cb110-19"><a href="rstan.html#cb110-19"></a><span class="st">    real&lt;lower=0.0&gt; tau;</span></span>
-<span id="cb110-20"><a href="rstan.html#cb110-20"></a><span class="st">  }</span></span>
-<span id="cb110-21"><a href="rstan.html#cb110-21"></a><span class="st">  transformed parameters{</span></span>
-<span id="cb110-22"><a href="rstan.html#cb110-22"></a><span class="st">    vector[num_basis] w;</span></span>
-<span id="cb110-23"><a href="rstan.html#cb110-23"></a><span class="st">    vector[N] Y_hat;</span></span>
-<span id="cb110-24"><a href="rstan.html#cb110-24"></a><span class="st">    w[1] = w_raw[1];</span></span>
-<span id="cb110-25"><a href="rstan.html#cb110-25"></a><span class="st">    for (i in 2:num_basis)</span></span>
-<span id="cb110-26"><a href="rstan.html#cb110-26"></a><span class="st">      w[i] = w[i-1] + w_raw[i]*tau;</span></span>
-<span id="cb110-27"><a href="rstan.html#cb110-27"></a><span class="st">    Y_hat = a + B*w;</span></span>
-<span id="cb110-28"><a href="rstan.html#cb110-28"></a><span class="st">  }</span></span>
-<span id="cb110-29"><a href="rstan.html#cb110-29"></a><span class="st">  model{</span></span>
-<span id="cb110-30"><a href="rstan.html#cb110-30"></a><span class="st">    // Likelihood</span></span>
-<span id="cb110-31"><a href="rstan.html#cb110-31"></a><span class="st">    mpg ~ normal(Y_hat, sigma);</span></span>
-<span id="cb110-32"><a href="rstan.html#cb110-32"></a><span class="st">    // Priors</span></span>
-<span id="cb110-33"><a href="rstan.html#cb110-33"></a><span class="st">    a ~ normal(25, 10);</span></span>
-<span id="cb110-34"><a href="rstan.html#cb110-34"></a><span class="st">    sigma ~ exponential(1);</span></span>
-<span id="cb110-35"><a href="rstan.html#cb110-35"></a><span class="st">    w_raw ~ normal(0, 1);</span></span>
-<span id="cb110-36"><a href="rstan.html#cb110-36"></a><span class="st">    tau ~ normal(0,1);</span></span>
-<span id="cb110-37"><a href="rstan.html#cb110-37"></a><span class="st">  }</span></span>
-<span id="cb110-38"><a href="rstan.html#cb110-38"></a><span class="st">  generated quantities{</span></span>
-<span id="cb110-39"><a href="rstan.html#cb110-39"></a><span class="st">    real mpg_ppd[N] = normal_rng(a + B*w, sigma);</span></span>
-<span id="cb110-40"><a href="rstan.html#cb110-40"></a><span class="st">  }</span></span>
-<span id="cb110-41"><a href="rstan.html#cb110-41"></a><span class="st">&#39;</span></span>
-<span id="cb110-42"><a href="rstan.html#cb110-42"></a></span>
-<span id="cb110-43"><a href="rstan.html#cb110-43"></a>mdl_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">N=</span><span class="kw">nrow</span>(mtcars), </span>
-<span id="cb110-44"><a href="rstan.html#cb110-44"></a>                 <span class="dt">num_basis=</span><span class="kw">ncol</span>(B),</span>
-<span id="cb110-45"><a href="rstan.html#cb110-45"></a>                 <span class="dt">B=</span>B,</span>
-<span id="cb110-46"><a href="rstan.html#cb110-46"></a>                 <span class="dt">mpg =</span> mtcars<span class="op">$</span>mpg)</span>
-<span id="cb110-47"><a href="rstan.html#cb110-47"></a></span>
-<span id="cb110-48"><a href="rstan.html#cb110-48"></a><span class="co"># Fit model with smoothing prior</span></span>
-<span id="cb110-49"><a href="rstan.html#cb110-49"></a>mdl2_gam_smooth &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_smooth_code, <span class="dt">data=</span>mdl_data,</span>
-<span id="cb110-50"><a href="rstan.html#cb110-50"></a>                 <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">adapt_delta=</span><span class="fl">0.99</span>))</span></code></pre></div>
-<pre><code>## Trying to compile a simple C file</code></pre>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="rstan.html#cb112-1"></a><span class="co"># Fit model without smoothing prior</span></span>
-<span id="cb112-2"><a href="rstan.html#cb112-2"></a>mdl2_gam &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code =</span> mdl_code, <span class="dt">data=</span>mdl_data,</span>
-<span id="cb112-3"><a href="rstan.html#cb112-3"></a>                 <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">adapt_delta=</span><span class="fl">0.99</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="rstan.html#cb103-1"></a><span class="kw">library</span>(splines)</span>
+<span id="cb103-2"><a href="rstan.html#cb103-2"></a></span>
+<span id="cb103-3"><a href="rstan.html#cb103-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">20</span>  <span class="co"># number of interior knots</span></span>
+<span id="cb103-4"><a href="rstan.html#cb103-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
+<span id="cb103-5"><a href="rstan.html#cb103-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb103-6"><a href="rstan.html#cb103-6"></a></span>
+<span id="cb103-7"><a href="rstan.html#cb103-7"></a><span class="co"># Define model with smoothing prior</span></span>
+<span id="cb103-8"><a href="rstan.html#cb103-8"></a>mdl_smooth_code &lt;-<span class="st"> &#39;</span></span>
+<span id="cb103-9"><a href="rstan.html#cb103-9"></a><span class="st">  data{</span></span>
+<span id="cb103-10"><a href="rstan.html#cb103-10"></a><span class="st">    int&lt;lower=1&gt; N;</span></span>
+<span id="cb103-11"><a href="rstan.html#cb103-11"></a><span class="st">    int&lt;lower=1&gt; num_basis;</span></span>
+<span id="cb103-12"><a href="rstan.html#cb103-12"></a><span class="st">    vector[N] mpg;</span></span>
+<span id="cb103-13"><a href="rstan.html#cb103-13"></a><span class="st">    matrix[N, num_basis] B;</span></span>
+<span id="cb103-14"><a href="rstan.html#cb103-14"></a><span class="st">  }</span></span>
+<span id="cb103-15"><a href="rstan.html#cb103-15"></a><span class="st">  parameters{</span></span>
+<span id="cb103-16"><a href="rstan.html#cb103-16"></a><span class="st">    real a;</span></span>
+<span id="cb103-17"><a href="rstan.html#cb103-17"></a><span class="st">    real&lt;lower=0.0&gt; sigma;</span></span>
+<span id="cb103-18"><a href="rstan.html#cb103-18"></a><span class="st">    vector[num_basis] w_raw;</span></span>
+<span id="cb103-19"><a href="rstan.html#cb103-19"></a><span class="st">    real&lt;lower=0.0&gt; tau;</span></span>
+<span id="cb103-20"><a href="rstan.html#cb103-20"></a><span class="st">  }</span></span>
+<span id="cb103-21"><a href="rstan.html#cb103-21"></a><span class="st">  transformed parameters{</span></span>
+<span id="cb103-22"><a href="rstan.html#cb103-22"></a><span class="st">    vector[num_basis] w;</span></span>
+<span id="cb103-23"><a href="rstan.html#cb103-23"></a><span class="st">    vector[N] Y_hat;</span></span>
+<span id="cb103-24"><a href="rstan.html#cb103-24"></a><span class="st">    w[1] = w_raw[1];</span></span>
+<span id="cb103-25"><a href="rstan.html#cb103-25"></a><span class="st">    for (i in 2:num_basis)</span></span>
+<span id="cb103-26"><a href="rstan.html#cb103-26"></a><span class="st">      w[i] = w[i-1] + w_raw[i]*tau;</span></span>
+<span id="cb103-27"><a href="rstan.html#cb103-27"></a><span class="st">    Y_hat = a + B*w;</span></span>
+<span id="cb103-28"><a href="rstan.html#cb103-28"></a><span class="st">  }</span></span>
+<span id="cb103-29"><a href="rstan.html#cb103-29"></a><span class="st">  model{</span></span>
+<span id="cb103-30"><a href="rstan.html#cb103-30"></a><span class="st">    // Likelihood</span></span>
+<span id="cb103-31"><a href="rstan.html#cb103-31"></a><span class="st">    mpg ~ normal(Y_hat, sigma);</span></span>
+<span id="cb103-32"><a href="rstan.html#cb103-32"></a><span class="st">    // Priors</span></span>
+<span id="cb103-33"><a href="rstan.html#cb103-33"></a><span class="st">    a ~ normal(25, 10);</span></span>
+<span id="cb103-34"><a href="rstan.html#cb103-34"></a><span class="st">    sigma ~ exponential(1);</span></span>
+<span id="cb103-35"><a href="rstan.html#cb103-35"></a><span class="st">    w_raw ~ normal(0, 1);</span></span>
+<span id="cb103-36"><a href="rstan.html#cb103-36"></a><span class="st">    tau ~ normal(0,1);</span></span>
+<span id="cb103-37"><a href="rstan.html#cb103-37"></a><span class="st">  }</span></span>
+<span id="cb103-38"><a href="rstan.html#cb103-38"></a><span class="st">  generated quantities{</span></span>
+<span id="cb103-39"><a href="rstan.html#cb103-39"></a><span class="st">    real mpg_ppd[N] = normal_rng(a + B*w, sigma);</span></span>
+<span id="cb103-40"><a href="rstan.html#cb103-40"></a><span class="st">  }</span></span>
+<span id="cb103-41"><a href="rstan.html#cb103-41"></a><span class="st">&#39;</span></span>
+<span id="cb103-42"><a href="rstan.html#cb103-42"></a></span>
+<span id="cb103-43"><a href="rstan.html#cb103-43"></a>mdl_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">N=</span><span class="kw">nrow</span>(mtcars), </span>
+<span id="cb103-44"><a href="rstan.html#cb103-44"></a>                 <span class="dt">num_basis=</span><span class="kw">ncol</span>(B),</span>
+<span id="cb103-45"><a href="rstan.html#cb103-45"></a>                 <span class="dt">B=</span>B,</span>
+<span id="cb103-46"><a href="rstan.html#cb103-46"></a>                 <span class="dt">mpg =</span> mtcars<span class="op">$</span>mpg)</span>
+<span id="cb103-47"><a href="rstan.html#cb103-47"></a></span>
+<span id="cb103-48"><a href="rstan.html#cb103-48"></a><span class="co"># Fit model with smoothing prior</span></span>
+<span id="cb103-49"><a href="rstan.html#cb103-49"></a>mdl2_gam_smooth &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code=</span>mdl_smooth_code, <span class="dt">data=</span>mdl_data,</span>
+<span id="cb103-50"><a href="rstan.html#cb103-50"></a>                 <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">adapt_delta=</span><span class="fl">0.99</span>))</span>
+<span id="cb103-51"><a href="rstan.html#cb103-51"></a></span>
+<span id="cb103-52"><a href="rstan.html#cb103-52"></a><span class="co"># Fit model without smoothing prior</span></span>
+<span id="cb103-53"><a href="rstan.html#cb103-53"></a>mdl2_gam &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">model_code =</span> mdl_code, <span class="dt">data=</span>mdl_data,</span>
+<span id="cb103-54"><a href="rstan.html#cb103-54"></a>                 <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">adapt_delta=</span><span class="fl">0.99</span>))</span></code></pre></div>
 </div>
 <div id="diagnostics-8" class="section level3">
 <h3><span class="header-section-number">5.6.2</span> Diagnostics</h3>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="rstan.html#cb113-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl2_gam_smooth, <span class="dt">pars=</span><span class="kw">vars</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="kw">starts_with</span>(<span class="st">&quot;w[&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="rstan.html#cb104-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl2_gam_smooth, <span class="dt">pars=</span><span class="kw">vars</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="kw">starts_with</span>(<span class="st">&quot;w[&quot;</span>)))</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/gam_rw_trankplot-1.png" width="672" /></p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="rstan.html#cb114-1"></a><span class="kw">print</span>(mdl2_gam_smooth, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="rstan.html#cb105-1"></a><span class="kw">print</span>(mdl2_gam_smooth, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
 <pre><code>## Inference for Stan model: 2e3abf0ef6bf631fb50d560f27cb244a.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-## a      32.03    0.03 1.95  28.10  30.75  32.01  33.36  35.78  3632    1
-## sigma   2.18    0.01 0.32   1.63   1.95   2.14   2.37   2.92  3204    1
-## w[1]    0.05    0.01 1.01  -2.02  -0.63   0.04   0.72   2.04  4812    1
-## w[2]   -1.11    0.03 1.90  -4.91  -2.36  -1.09   0.10   2.68  4398    1
-## w[3]   -2.26    0.03 2.13  -6.39  -3.66  -2.28  -0.89   1.94  4223    1
-## w[4]   -3.57    0.04 2.33  -8.18  -5.15  -3.50  -2.00   0.87  4251    1
-## w[5]   -6.01    0.04 2.37 -10.82  -7.61  -5.97  -4.37  -1.51  4281    1
-## w[6]   -8.34    0.04 2.31 -12.82  -9.95  -8.36  -6.75  -3.85  3762    1
-## w[7]   -9.18    0.04 2.46 -14.12 -10.82  -9.21  -7.54  -4.36  4127    1
-## w[8]   -9.76    0.04 2.32 -14.24 -11.33  -9.75  -8.16  -5.19  4245    1
-## w[9]  -10.52    0.04 2.31 -15.04 -12.05 -10.50  -8.99  -6.09  4096    1
-## w[10] -11.98    0.04 2.24 -16.33 -13.53 -12.00 -10.40  -7.62  3735    1
-## w[11] -12.93    0.04 2.50 -17.77 -14.58 -12.94 -11.24  -8.09  4162    1
-## w[12] -13.34    0.04 2.45 -18.21 -14.99 -13.35 -11.72  -8.50  4281    1
-## w[13] -13.85    0.03 2.30 -18.33 -15.44 -13.85 -12.33  -9.27  4361    1
-## w[14] -15.63    0.04 2.37 -20.20 -17.22 -15.66 -14.12 -10.94  3722    1
-## w[15] -16.39    0.04 2.40 -21.09 -18.01 -16.42 -14.74 -11.75  3900    1
-## w[16] -16.66    0.04 2.41 -21.42 -18.22 -16.69 -15.02 -11.97  3940    1
-## w[17] -16.72    0.04 2.35 -21.35 -18.26 -16.72 -15.16 -12.03  3813    1
-## w[18] -16.00    0.04 2.30 -20.53 -17.56 -15.94 -14.51 -11.49  4181    1
-## w[19] -15.87    0.04 2.46 -20.54 -17.54 -15.89 -14.22 -11.08  4303    1
-## w[20] -17.45    0.04 2.45 -22.35 -19.13 -17.45 -15.75 -12.67  4148    1
-## w[21] -19.58    0.04 2.55 -24.50 -21.26 -19.59 -17.89 -14.52  3525    1
-## w[22] -20.55    0.04 2.67 -25.78 -22.35 -20.60 -18.77 -15.21  3964    1
+## a      31.99    0.04 2.01  28.06  30.67  31.99  33.34  36.06  2969    1
+## sigma   2.17    0.01 0.34   1.62   1.94   2.14   2.37   2.93  2768    1
+## w[1]    0.07    0.02 1.01  -1.89  -0.62   0.06   0.74   2.07  4492    1
+## w[2]   -1.03    0.03 1.86  -4.72  -2.26  -1.03   0.20   2.63  3840    1
+## w[3]   -2.21    0.04 2.15  -6.43  -3.64  -2.20  -0.85   2.08  3605    1
+## w[4]   -3.55    0.04 2.33  -8.21  -5.04  -3.57  -2.02   1.06  4091    1
+## w[5]   -5.98    0.04 2.43 -10.70  -7.56  -5.96  -4.42  -1.13  3657    1
+## w[6]   -8.31    0.04 2.40 -13.05  -9.91  -8.31  -6.75  -3.48  3051    1
+## w[7]   -9.18    0.05 2.52 -14.13 -10.80  -9.18  -7.48  -4.40  3121    1
+## w[8]   -9.73    0.04 2.39 -14.45 -11.29  -9.71  -8.18  -5.03  3616    1
+## w[9]  -10.50    0.04 2.35 -15.17 -12.04 -10.53  -8.94  -5.88  3692    1
+## w[10] -11.98    0.04 2.29 -16.44 -13.50 -12.00 -10.49  -7.40  3315    1
+## w[11] -12.98    0.04 2.54 -18.10 -14.64 -13.02 -11.33  -8.05  3220    1
+## w[12] -13.29    0.04 2.50 -18.21 -14.97 -13.33 -11.62  -8.30  3468    1
+## w[13] -13.82    0.04 2.36 -18.44 -15.37 -13.83 -12.26  -9.27  3582    1
+## w[14] -15.57    0.04 2.42 -20.31 -17.16 -15.61 -14.00 -10.64  3033    1
+## w[15] -16.31    0.04 2.42 -21.04 -17.94 -16.27 -14.72 -11.54  3157    1
+## w[16] -16.59    0.04 2.54 -21.71 -18.30 -16.63 -14.80 -11.67  3436    1
+## w[17] -16.64    0.04 2.46 -21.52 -18.24 -16.62 -15.00 -11.88  3308    1
+## w[18] -15.92    0.04 2.30 -20.46 -17.47 -15.91 -14.40 -11.39  3939    1
+## w[19] -15.81    0.04 2.45 -20.65 -17.41 -15.80 -14.24 -10.92  4103    1
+## w[20] -17.39    0.04 2.50 -22.28 -19.04 -17.41 -15.74 -12.33  4038    1
+## w[21] -19.53    0.05 2.60 -24.61 -21.27 -19.58 -17.81 -14.32  2924    1
+## w[22] -20.52    0.05 2.75 -25.86 -22.35 -20.56 -18.70 -14.91  3069    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Dec 27 16:40:22 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Dec 29 20:25:00 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
 </div>
 <div id="posterior-distribution-8" class="section level3">
 <h3><span class="header-section-number">5.6.3</span> Posterior Distribution</h3>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="rstan.html#cb116-1"></a><span class="kw">plot</span>(mdl2_gam_smooth, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span>
-<span id="cb116-2"><a href="rstan.html#cb116-2"></a><span class="kw">plot</span>(mdl2_gam, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="rstan.html#cb107-1"></a><span class="kw">plot</span>(mdl2_gam_smooth, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span>
+<span id="cb107-2"><a href="rstan.html#cb107-2"></a><span class="kw">plot</span>(mdl2_gam, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;w&quot;</span>))</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/gam_ppd_compare_coefs-1.png" width="50%" /><img src="05_rstan_files/figure-html/gam_ppd_compare_coefs-2.png" width="50%" /></p>
 </div>
 <div id="posterior-predictive-distribution-9" class="section level3">
 <h3><span class="header-section-number">5.6.4</span> Posterior Predictive Distribution</h3>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="rstan.html#cb117-1"></a><span class="co"># Draws from regular gam</span></span>
-<span id="cb117-2"><a href="rstan.html#cb117-2"></a>Epost_pred &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl2_gam) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-3"><a href="rstan.html#cb117-3"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb117-4"><a href="rstan.html#cb117-4"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.055</span>, <span class="fl">0.5</span>, <span class="fl">0.945</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb117-5"><a href="rstan.html#cb117-5"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb117-6"><a href="rstan.html#cb117-6"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb117-7"><a href="rstan.html#cb117-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb117-8"><a href="rstan.html#cb117-8"></a></span>
-<span id="cb117-9"><a href="rstan.html#cb117-9"></a><span class="co"># Draws from random walk model</span></span>
-<span id="cb117-10"><a href="rstan.html#cb117-10"></a>Epost_pred_smooth &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl2_gam_smooth) <span class="op">%&gt;%</span></span>
-<span id="cb117-11"><a href="rstan.html#cb117-11"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb117-12"><a href="rstan.html#cb117-12"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.055</span>, <span class="fl">0.5</span>, <span class="fl">0.945</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb117-13"><a href="rstan.html#cb117-13"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb117-14"><a href="rstan.html#cb117-14"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb117-15"><a href="rstan.html#cb117-15"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb117-16"><a href="rstan.html#cb117-16"></a></span>
-<span id="cb117-17"><a href="rstan.html#cb117-17"></a><span class="kw">rbind</span>(Epost_pred <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;c_disp&quot;</span>, <span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">type=</span><span class="st">&quot;without smoothing prior&quot;</span>),</span>
-<span id="cb117-18"><a href="rstan.html#cb117-18"></a>      Epost_pred_smooth <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;c_disp&quot;</span>, <span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">type=</span><span class="st">&quot;with smoothing prior&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb117-19"><a href="rstan.html#cb117-19"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb117-20"><a href="rstan.html#cb117-20"></a><span class="st">  </span><span class="kw">geom_line</span>( <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span><span class="st">`</span><span class="dt">50%</span><span class="st">`</span>, <span class="dt">linetype=</span>type), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span> ) <span class="op">+</span></span>
-<span id="cb117-21"><a href="rstan.html#cb117-21"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb117-22"><a href="rstan.html#cb117-22"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="rstan.html#cb108-1"></a><span class="co"># Draws from regular gam</span></span>
+<span id="cb108-2"><a href="rstan.html#cb108-2"></a>Epost_pred &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl2_gam) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb108-3"><a href="rstan.html#cb108-3"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb108-4"><a href="rstan.html#cb108-4"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.055</span>, <span class="fl">0.5</span>, <span class="fl">0.945</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb108-5"><a href="rstan.html#cb108-5"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb108-6"><a href="rstan.html#cb108-6"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb108-7"><a href="rstan.html#cb108-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb108-8"><a href="rstan.html#cb108-8"></a></span>
+<span id="cb108-9"><a href="rstan.html#cb108-9"></a><span class="co"># Draws from random walk model</span></span>
+<span id="cb108-10"><a href="rstan.html#cb108-10"></a>Epost_pred_smooth &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mdl2_gam_smooth) <span class="op">%&gt;%</span></span>
+<span id="cb108-11"><a href="rstan.html#cb108-11"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Y_hat&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb108-12"><a href="rstan.html#cb108-12"></a><span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.055</span>, <span class="fl">0.5</span>, <span class="fl">0.945</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb108-13"><a href="rstan.html#cb108-13"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb108-14"><a href="rstan.html#cb108-14"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb108-15"><a href="rstan.html#cb108-15"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb108-16"><a href="rstan.html#cb108-16"></a></span>
+<span id="cb108-17"><a href="rstan.html#cb108-17"></a><span class="kw">rbind</span>(Epost_pred <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;c_disp&quot;</span>, <span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">type=</span><span class="st">&quot;without smoothing prior&quot;</span>),</span>
+<span id="cb108-18"><a href="rstan.html#cb108-18"></a>      Epost_pred_smooth <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;c_disp&quot;</span>, <span class="st">`</span><span class="dt">50%</span><span class="st">`</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">type=</span><span class="st">&quot;with smoothing prior&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb108-19"><a href="rstan.html#cb108-19"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb108-20"><a href="rstan.html#cb108-20"></a><span class="st">  </span><span class="kw">geom_line</span>( <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span><span class="st">`</span><span class="dt">50%</span><span class="st">`</span>, <span class="dt">linetype=</span>type), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span> ) <span class="op">+</span></span>
+<span id="cb108-21"><a href="rstan.html#cb108-21"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb108-22"><a href="rstan.html#cb108-22"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
 <p><img src="05_rstan_files/figure-html/gam_ppd_compare_plot-1.png" width="672" /></p>
 <p>The plot above shows that even with a large number of knots (in this case 20), the model with the smoothing prior significantly reduces over-fitting when compared to the model without the smoothing prior.</p>
 </div>
 </div>
 <div id="session-info-3" class="section level2">
 <h2><span class="header-section-number">5.7</span> Session Info</h2>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="rstan.html#cb118-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="rstan.html#cb109-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Big Sur 10.16

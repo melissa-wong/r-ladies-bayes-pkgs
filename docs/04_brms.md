@@ -166,12 +166,12 @@ summary(mdl1)
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.02      0.57    18.90    21.16 1.00     2937     2776
-## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4027     2859
+## Intercept    19.99      0.56    18.91    21.08 1.00     3307     2869
+## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4633     3056
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     3.23      0.41     2.56     4.15 1.00     2748     2126
+## sigma     3.20      0.40     2.53     4.09 1.00     2746     2602
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -188,9 +188,9 @@ fixef(mdl1)
 ```
 
 ```
-##           Estimate Est.Error     Q2.5    Q97.5
-## Intercept  20.0207  0.569593 18.90455 21.15883
-## c_disp     -0.0416  0.004776 -0.05128 -0.03245
+##           Estimate Est.Error    Q2.5    Q97.5
+## Intercept 19.99038  0.557763 18.9132 21.08207
+## c_disp    -0.04191  0.004729 -0.0512 -0.03245
 ```
 
 ### Posterior Predictive Distribution
@@ -302,16 +302,16 @@ summary(mdl2)
 ## 
 ## Smooth Terms: 
 ##                Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sds(sc_disp_1)     1.39      0.90     0.36     3.82 1.00      863     1277
+## sds(sc_disp_1)     1.38      0.86     0.39     3.71 1.00      778     1369
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.08      0.43    19.23    20.93 1.00     3608     2897
-## sc_disp_1    -3.17      0.28    -3.71    -2.61 1.00     3226     2698
+## Intercept    20.08      0.43    19.19    20.93 1.00     3567     2408
+## sc_disp_1    -3.18      0.28    -3.72    -2.63 1.00     3009     2652
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     2.40      0.36     1.83     3.23 1.00     2214     2493
+## sigma     2.40      0.35     1.83     3.19 1.00     2433     2652
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential

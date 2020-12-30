@@ -98,8 +98,6 @@ I notice two things in the prior predictive distribution which seem unrealistic 
 
 ### Diagnostics
 
-I'll walk through the steps for manually extracting the key diagnostic information from the `mdl1` object since I think that can be helpful to understand exactly what's going on.  However, once you have a handle on these steps I highly recommend the `shinystan` package; it will automatically create all of these diagnostic plots (and more) with an nice interactive web interface.
-
 #### Trace Plots
 
 The `bayesplot` package provides the function `mcmc_trace` which plots the Markov Chain Monte Carlo (MCMC) draws.
