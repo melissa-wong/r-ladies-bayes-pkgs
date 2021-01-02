@@ -90,7 +90,7 @@ res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] - x[2] * (D))) %>%
 res %>%
   ggplot() +
   geom_line(aes(x=c_disp, y=value, group=iter), alpha=0.2) +
-  labs(x="disp", y="prior predictive mpg")
+  labs(x="c_disp", y="mpg")
 ```
 
 ### Diagnostics

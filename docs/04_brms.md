@@ -113,7 +113,7 @@ There are several methods for getting the prior predictive distribution from the
     
 2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
     
-3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
+3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and/or `posterior_epred` functions to draw samples from the prior only model.
     
 Method 3 is demonstrated below.
 
@@ -123,8 +123,6 @@ D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
 
 mdl1_prior <- update(mdl1, sample_prior="only")
 
-# Summarizes samples from posterior predictive distribution
-ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(c_disp=D)))
 # Samples from expected value of posterior predictive distribution
 eppd <- posterior_epred(mdl1_prior, newdata=data.frame(c_disp=D), 
                         summary=FALSE, nsamples=50) %>%
@@ -133,9 +131,7 @@ eppd <- posterior_epred(mdl1_prior, newdata=data.frame(c_disp=D),
   mutate(c_disp=D) %>%
   pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
-
 ggplot() +
-  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
   geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) 
 ```
 
@@ -166,12 +162,12 @@ summary(mdl1)
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    19.99      0.56    18.91    21.08 1.00     3307     2869
-## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4633     3056
+## Intercept    20.01      0.56    18.90    21.13 1.00     3358     2509
+## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4113     2720
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     3.20      0.40     2.53     4.09 1.00     2746     2602
+## sigma     3.21      0.40     2.56     4.14 1.00     3030     2442
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -180,7 +176,7 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-The simple linear model only has population-level (i.e., "fixed") effects, and the `fixef` function extracts a summary of those parameters only.  Note that this is the same information as returned from the `summary` function above.
+The `fixef` function extracts a summary of those population-level (i.e. fixed effect) parameters only, whereas the `posterior_summary` function summarizes the posterior draws for all model parameters.
 
 
 ```r
@@ -188,9 +184,21 @@ fixef(mdl1)
 ```
 
 ```
-##           Estimate Est.Error    Q2.5    Q97.5
-## Intercept 19.99038  0.557763 18.9132 21.08207
-## c_disp    -0.04191  0.004729 -0.0512 -0.03245
+##           Estimate Est.Error     Q2.5    Q97.5
+## Intercept 20.01137  0.561868 18.90493 21.12712
+## c_disp    -0.04156  0.004668 -0.05102 -0.03211
+```
+
+```r
+posterior_summary(mdl1)
+```
+
+```
+##              Estimate Est.Error      Q2.5     Q97.5
+## b_Intercept  20.01137  0.561868  18.90493  21.12712
+## b_c_disp     -0.04156  0.004668  -0.05102  -0.03211
+## sigma         3.21264  0.404501   2.55725   4.14268
+## lp__        -87.64601  1.291216 -90.98746 -86.22136
 ```
 
 ### Posterior Predictive Distribution
@@ -199,16 +207,8 @@ The `brms` package includes the `pp_check` function which uses `bayesplot` under
 
 
 ```r
+# Equivalent to ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=50))
 pp_check(mdl1, nsamples = 50)
-```
-
-<img src="04_brms_files/figure-html/unnamed-chunk-1-1.png" width="672" />
-
-Or we can use `ppc_dens_overly` directly with the `brmsfit` object as shown below.
-
-
-```r
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=50))
 ```
 
 <img src="04_brms_files/figure-html/unnamed-chunk-2-1.png" width="672" />
@@ -274,13 +274,35 @@ mdl2 <- brm(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian(),
             control=list(adapt_delta=0.99))
 ```
 
+```
+## Warning: There were 2 divergent transitions after warmup. See
+## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+## to find out why this is a problem and how to eliminate them.
+```
+
+```
+## Warning: Examine the pairs() plot to diagnose sampling problems
+```
+
 ### Prior Predictive Distribution
 
 
 ```r
 mdl2_prior <- update(mdl2, sample_prior="only")
 
-pp_check(mdl2_prior, nsamples = 50)
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
+
+# Samples from expected value of posterior predictive distribution
+eppd <- posterior_epred(mdl2_prior, newdata=data.frame(c_disp=D), 
+                        summary=FALSE, nsamples=50) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
+
+ggplot() +
+  geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) +
+  geom_point(data=mtcars, mapping=aes(x=c_disp, y=mpg), color="blue")
 ```
 
 <img src="04_brms_files/figure-html/mdl2_prior-1.png" width="672" />
@@ -293,6 +315,12 @@ summary(mdl2)
 ```
 
 ```
+## Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta
+## above 0.99 may help. See http://mc-stan.org/misc/warnings.html#divergent-
+## transitions-after-warmup
+```
+
+```
 ##  Family: gaussian 
 ##   Links: mu = identity; sigma = identity 
 ## Formula: mpg ~ s(c_disp, bs = "cr", k = 7) 
@@ -302,16 +330,16 @@ summary(mdl2)
 ## 
 ## Smooth Terms: 
 ##                Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sds(sc_disp_1)     1.38      0.86     0.39     3.71 1.00      778     1369
+## sds(sc_disp_1)     1.42      0.88     0.42     3.66 1.00      881     1841
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.08      0.43    19.19    20.93 1.00     3567     2408
-## sc_disp_1    -3.18      0.28    -3.72    -2.63 1.00     3009     2652
+## Intercept    20.09      0.42    19.25    20.91 1.00     3566     2513
+## sc_disp_1    -3.18      0.27    -3.71    -2.65 1.00     2980     2679
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     2.40      0.35     1.83     3.19 1.00     2433     2652
+## sigma     2.41      0.35     1.83     3.22 1.00     2531     2312
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -329,8 +357,26 @@ pp_check(mdl2, nsamples=50)
 
 ### Posterior Distribution
 
-The summary
+The `posterior_summary` function summarizes the posterior samples for all of the model parameters.
 
+
+```r
+posterior_summary(mdl2)
+```
+
+```
+##                 Estimate Est.Error     Q2.5    Q97.5
+## b_Intercept     20.08637    0.4234  19.2513  20.9086
+## bs_sc_disp_1    -3.17969    0.2728  -3.7052  -2.6496
+## sds_sc_disp_1    1.41671    0.8788   0.4225   3.6582
+## sigma            2.40620    0.3547   1.8261   3.2163
+## s_sc_disp_1[1]   0.21932    1.4015  -2.6522   3.3024
+## s_sc_disp_1[2]   0.40156    0.1369   0.1261   0.6694
+## s_sc_disp_1[3]   1.21622    0.3535   0.5096   1.8888
+## s_sc_disp_1[4]   0.02512    0.5783  -1.1131   1.1811
+## s_sc_disp_1[5]  -1.06316    1.1489  -3.5961   0.8077
+## lp__           -87.14421    2.7291 -93.3661 -82.6821
+```
 
 
 ### Posterior Predictive Distribution

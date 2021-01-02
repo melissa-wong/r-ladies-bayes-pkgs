@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2020-12-29" />
+<meta name="date" content="2021-01-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -276,22 +276,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="environment-setup-1" class="section level2">
 <h2><span class="header-section-number">3.3</span> Environment Setup</h2>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="rethinking.html#cb35-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb35-2"><a href="rethinking.html#cb35-2"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
-<span id="cb35-3"><a href="rethinking.html#cb35-3"></a></span>
-<span id="cb35-4"><a href="rethinking.html#cb35-4"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb35-5"><a href="rethinking.html#cb35-5"></a><span class="kw">library</span>(datasets)</span>
-<span id="cb35-6"><a href="rethinking.html#cb35-6"></a><span class="kw">data</span>(mtcars)</span>
-<span id="cb35-7"><a href="rethinking.html#cb35-7"></a><span class="co"># mean center disp predictor</span></span>
-<span id="cb35-8"><a href="rethinking.html#cb35-8"></a>mtcars<span class="op">$</span>c_disp =<span class="st"> </span>mtcars<span class="op">$</span>disp <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)</span>
-<span id="cb35-9"><a href="rethinking.html#cb35-9"></a></span>
-<span id="cb35-10"><a href="rethinking.html#cb35-10"></a><span class="kw">library</span>(rethinking)</span>
-<span id="cb35-11"><a href="rethinking.html#cb35-11"></a><span class="kw">library</span>(bayesplot)</span>
-<span id="cb35-12"><a href="rethinking.html#cb35-12"></a></span>
-<span id="cb35-13"><a href="rethinking.html#cb35-13"></a><span class="co"># Saves compiled version of model so it only has to be recompiled if the model is changed</span></span>
-<span id="cb35-14"><a href="rethinking.html#cb35-14"></a><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb35-15"><a href="rethinking.html#cb35-15"></a><span class="co"># Set number of cores</span></span>
-<span id="cb35-16"><a href="rethinking.html#cb35-16"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="rethinking.html#cb33-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb33-2"><a href="rethinking.html#cb33-2"></a><span class="kw">options</span>(<span class="st">&quot;scipen&quot;</span> =<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;digits&quot;</span> =<span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb33-3"><a href="rethinking.html#cb33-3"></a></span>
+<span id="cb33-4"><a href="rethinking.html#cb33-4"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb33-5"><a href="rethinking.html#cb33-5"></a><span class="kw">library</span>(datasets)</span>
+<span id="cb33-6"><a href="rethinking.html#cb33-6"></a><span class="kw">data</span>(mtcars)</span>
+<span id="cb33-7"><a href="rethinking.html#cb33-7"></a><span class="co"># mean center disp predictor</span></span>
+<span id="cb33-8"><a href="rethinking.html#cb33-8"></a>mtcars<span class="op">$</span>c_disp =<span class="st"> </span>mtcars<span class="op">$</span>disp <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mtcars<span class="op">$</span>disp)</span>
+<span id="cb33-9"><a href="rethinking.html#cb33-9"></a></span>
+<span id="cb33-10"><a href="rethinking.html#cb33-10"></a><span class="kw">library</span>(rethinking)</span>
+<span id="cb33-11"><a href="rethinking.html#cb33-11"></a><span class="kw">library</span>(bayesplot)</span>
+<span id="cb33-12"><a href="rethinking.html#cb33-12"></a></span>
+<span id="cb33-13"><a href="rethinking.html#cb33-13"></a><span class="co"># Saves compiled version of model so it only has to be recompiled if the model is changed</span></span>
+<span id="cb33-14"><a href="rethinking.html#cb33-14"></a><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb33-15"><a href="rethinking.html#cb33-15"></a><span class="co"># Set number of cores</span></span>
+<span id="cb33-16"><a href="rethinking.html#cb33-16"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
 </div>
 <div id="linear-model" class="section level2">
 <h2><span class="header-section-number">3.4</span> Linear Model</h2>
@@ -305,21 +305,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   b &amp;\sim Normal(-0.1, 0.05^2) \\
   \sigma &amp;\sim Exponential(1)
 \end{align*}\]</span></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="rethinking.html#cb36-1"></a><span class="co"># Note the sign change for mu and b, this seems to be a quirk</span></span>
-<span id="cb36-2"><a href="rethinking.html#cb36-2"></a><span class="co"># of map2stan that it didn&#39;t like b ~ dnorm(-0.1, 0.05)</span></span>
-<span id="cb36-3"><a href="rethinking.html#cb36-3"></a>f &lt;-<span class="st"> </span><span class="kw">alist</span>(</span>
-<span id="cb36-4"><a href="rethinking.html#cb36-4"></a>  mpg <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu, sigma),</span>
-<span id="cb36-5"><a href="rethinking.html#cb36-5"></a>  mu &lt;-<span class="st"> </span>a <span class="op">-</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span>c_disp,</span>
-<span id="cb36-6"><a href="rethinking.html#cb36-6"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">13.2</span>, <span class="fl">5.3</span>),</span>
-<span id="cb36-7"><a href="rethinking.html#cb36-7"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">0.1</span>, <span class="fl">0.05</span>),</span>
-<span id="cb36-8"><a href="rethinking.html#cb36-8"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
-<span id="cb36-9"><a href="rethinking.html#cb36-9"></a>)</span>
-<span id="cb36-10"><a href="rethinking.html#cb36-10"></a></span>
-<span id="cb36-11"><a href="rethinking.html#cb36-11"></a><span class="co"># Note the default number of chains = 1, so I&#39;m explicitly setting to available cores</span></span>
-<span id="cb36-12"><a href="rethinking.html#cb36-12"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">map2stan</span>(f,mtcars, <span class="dt">chains=</span>parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="rethinking.html#cb34-1"></a><span class="co"># Note the sign change for mu and b, this seems to be a quirk</span></span>
+<span id="cb34-2"><a href="rethinking.html#cb34-2"></a><span class="co"># of map2stan that it didn&#39;t like b ~ dnorm(-0.1, 0.05)</span></span>
+<span id="cb34-3"><a href="rethinking.html#cb34-3"></a>f &lt;-<span class="st"> </span><span class="kw">alist</span>(</span>
+<span id="cb34-4"><a href="rethinking.html#cb34-4"></a>  mpg <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu, sigma),</span>
+<span id="cb34-5"><a href="rethinking.html#cb34-5"></a>  mu &lt;-<span class="st"> </span>a <span class="op">-</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span>c_disp,</span>
+<span id="cb34-6"><a href="rethinking.html#cb34-6"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">13.2</span>, <span class="fl">5.3</span>),</span>
+<span id="cb34-7"><a href="rethinking.html#cb34-7"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">0.1</span>, <span class="fl">0.05</span>),</span>
+<span id="cb34-8"><a href="rethinking.html#cb34-8"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
+<span id="cb34-9"><a href="rethinking.html#cb34-9"></a>)</span>
+<span id="cb34-10"><a href="rethinking.html#cb34-10"></a></span>
+<span id="cb34-11"><a href="rethinking.html#cb34-11"></a><span class="co"># Note the default number of chains = 1, so I&#39;m explicitly setting to available cores</span></span>
+<span id="cb34-12"><a href="rethinking.html#cb34-12"></a>mdl1 &lt;-<span class="st"> </span><span class="kw">map2stan</span>(f,mtcars, <span class="dt">chains=</span>parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
 <p>The automatically generated <code>stan</code> code:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="rethinking.html#cb37-1"></a><span class="kw">stancode</span>(mdl1)</span></code></pre></div>
-<pre><code>## //2020-12-29 20:19:49
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="rethinking.html#cb35-1"></a><span class="kw">stancode</span>(mdl1)</span></code></pre></div>
+<pre><code>## //2021-01-02 17:34:08
 ## data{
 ##     int&lt;lower=1&gt; N;
 ##     real mpg[N];
@@ -349,31 +349,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="rethinkingprior" class="section level3">
 <h3><span class="header-section-number">3.4.2</span> Prior Predictive Distribution</h3>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="rethinking.html#cb39-1"></a><span class="co"># Plot prior predictive distribution</span></span>
-<span id="cb39-2"><a href="rethinking.html#cb39-2"></a>N &lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb39-3"><a href="rethinking.html#cb39-3"></a></span>
-<span id="cb39-4"><a href="rethinking.html#cb39-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">extract.prior</span>(mdl1, <span class="dt">n=</span>N))</span>
-<span id="cb39-5"><a href="rethinking.html#cb39-5"></a></span>
-<span id="cb39-6"><a href="rethinking.html#cb39-6"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb39-7"><a href="rethinking.html#cb39-7"></a></span>
-<span id="cb39-8"><a href="rethinking.html#cb39-8"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D))) <span class="op">%&gt;%</span></span>
-<span id="cb39-9"><a href="rethinking.html#cb39-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
-<span id="cb39-10"><a href="rethinking.html#cb39-10"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;c_disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
-<span id="cb39-11"><a href="rethinking.html#cb39-11"></a></span>
-<span id="cb39-12"><a href="rethinking.html#cb39-12"></a>res <span class="op">%&gt;%</span></span>
-<span id="cb39-13"><a href="rethinking.html#cb39-13"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb39-14"><a href="rethinking.html#cb39-14"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb39-15"><a href="rethinking.html#cb39-15"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;prior predictive mpg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="rethinking.html#cb37-1"></a><span class="co"># Plot prior predictive distribution</span></span>
+<span id="cb37-2"><a href="rethinking.html#cb37-2"></a>N &lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb37-3"><a href="rethinking.html#cb37-3"></a></span>
+<span id="cb37-4"><a href="rethinking.html#cb37-4"></a>prior_samples &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">extract.prior</span>(mdl1, <span class="dt">n=</span>N))</span>
+<span id="cb37-5"><a href="rethinking.html#cb37-5"></a></span>
+<span id="cb37-6"><a href="rethinking.html#cb37-6"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb37-7"><a href="rethinking.html#cb37-7"></a></span>
+<span id="cb37-8"><a href="rethinking.html#cb37-8"></a>res &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(prior_samples, <span class="dv">1</span>, <span class="cf">function</span>(x) x[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>x[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(D))) <span class="op">%&gt;%</span></span>
+<span id="cb37-9"><a href="rethinking.html#cb37-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp =</span> D) <span class="op">%&gt;%</span></span>
+<span id="cb37-10"><a href="rethinking.html#cb37-10"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span><span class="kw">c</span>(<span class="op">-</span><span class="st">&quot;c_disp&quot;</span>), <span class="dt">names_to=</span><span class="st">&quot;iter&quot;</span>) </span>
+<span id="cb37-11"><a href="rethinking.html#cb37-11"></a></span>
+<span id="cb37-12"><a href="rethinking.html#cb37-12"></a>res <span class="op">%&gt;%</span></span>
+<span id="cb37-13"><a href="rethinking.html#cb37-13"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb37-14"><a href="rethinking.html#cb37-14"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>value, <span class="dt">group=</span>iter), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb37-15"><a href="rethinking.html#cb37-15"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;c_disp&quot;</span>, <span class="dt">y=</span><span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_prior-1.png" width="672" /></p>
 </div>
 <div id="diagnostics-2" class="section level3">
 <h3><span class="header-section-number">3.4.3</span> Diagnostics</h3>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rethinking.html#cb40-1"></a><span class="kw">mcmc_trace</span>(mdl1<span class="op">@</span>stanfit, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="rethinking.html#cb38-1"></a><span class="kw">mcmc_trace</span>(mdl1<span class="op">@</span>stanfit, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_trace-1.png" width="672" /></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="rethinking.html#cb41-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1<span class="op">@</span>stanfit, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="rethinking.html#cb39-1"></a><span class="kw">mcmc_rank_overlay</span>(mdl1<span class="op">@</span>stanfit, <span class="dt">pars=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_trank-1.png" width="672" /></p>
 <p>The <code>precis</code> function displays <code>n_eff</code> and <span class="math inline">\(\widehat{R}\)</span>.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="rethinking.html#cb42-1"></a><span class="kw">precis</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rethinking.html#cb40-1"></a><span class="kw">precis</span>(mdl1, <span class="dt">prob=</span><span class="fl">0.95</span>)</span></code></pre></div>
 <pre><code>##           mean       sd     2.5%    97.5% n_eff  Rhat4
 ## a     20.01656 0.560896 18.90335 21.12146  3632 0.9997
 ## b      0.04187 0.004546  0.03313  0.05089  4100 1.0005
@@ -386,10 +386,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="posterior-predictive-distribution-3" class="section level3">
 <h3><span class="header-section-number">3.4.5</span> Posterior Predictive Distribution</h3>
 <p>Finally, I’ll check the posterior predictive distribution. The <code>rethinking</code> package includes the <code>postcheck</code> function which displays a plot for posterior predictive checking.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="rethinking.html#cb44-1"></a><span class="kw">postcheck</span>(mdl1, <span class="dt">window=</span><span class="kw">nrow</span>(mtcars))</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="rethinking.html#cb42-1"></a><span class="kw">postcheck</span>(mdl1, <span class="dt">window=</span><span class="kw">nrow</span>(mtcars))</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_ppd-1.png" width="672" /></p>
 <p>Personally, I find the <code>postcheck</code> plot hard to use because I can never remember what the different symbols represent. I prefer the density overlay plot as shown below.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rethinking.html#cb45-1"></a><span class="kw">ppc_dens_overlay</span>(mtcars<span class="op">$</span>mpg, <span class="kw">sim</span>(mdl1, <span class="dt">n=</span><span class="dv">50</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="rethinking.html#cb43-1"></a><span class="kw">ppc_dens_overlay</span>(mtcars<span class="op">$</span>mpg, <span class="kw">sim</span>(mdl1, <span class="dt">n=</span><span class="dv">50</span>))</span></code></pre></div>
 <pre><code>## [ 5 / 50 ]
 [ 10 / 50 ]
 [ 15 / 50 ]
@@ -402,16 +402,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 [ 50 / 50 ]</code></pre>
 <p><img src="03_rethinking_files/figure-html/mdl1_dens_overlay-1.png" width="672" /></p>
 <p>And the expectation of the posterior predictive distribution (i.e., <span class="math inline">\(\mu\)</span>) like I did with <code>rstanarm</code> can be generated via the <code>link</code> function.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rethinking.html#cb47-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">c_disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp)))</span>
-<span id="cb47-2"><a href="rethinking.html#cb47-2"></a></span>
-<span id="cb47-3"><a href="rethinking.html#cb47-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">link</span>(mdl1, <span class="dt">data=</span>newdata, <span class="dt">n=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb47-4"><a href="rethinking.html#cb47-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
-<span id="cb47-5"><a href="rethinking.html#cb47-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;draw&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
-<span id="cb47-6"><a href="rethinking.html#cb47-6"></a></span>
-<span id="cb47-7"><a href="rethinking.html#cb47-7"></a>y_rep <span class="op">%&gt;%</span></span>
-<span id="cb47-8"><a href="rethinking.html#cb47-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb47-9"><a href="rethinking.html#cb47-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>draw), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb47-10"><a href="rethinking.html#cb47-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rethinking.html#cb45-1"></a>newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">c_disp=</span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp)))</span>
+<span id="cb45-2"><a href="rethinking.html#cb45-2"></a></span>
+<span id="cb45-3"><a href="rethinking.html#cb45-3"></a>y_rep &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">link</span>(mdl1, <span class="dt">data=</span>newdata, <span class="dt">n=</span><span class="dv">50</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb45-4"><a href="rethinking.html#cb45-4"></a><span class="st">  </span><span class="kw">cbind</span>(newdata) <span class="op">%&gt;%</span></span>
+<span id="cb45-5"><a href="rethinking.html#cb45-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;draw&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;mpg&quot;</span>)</span>
+<span id="cb45-6"><a href="rethinking.html#cb45-6"></a></span>
+<span id="cb45-7"><a href="rethinking.html#cb45-7"></a>y_rep <span class="op">%&gt;%</span></span>
+<span id="cb45-8"><a href="rethinking.html#cb45-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb45-9"><a href="rethinking.html#cb45-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>draw), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb45-10"><a href="rethinking.html#cb45-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> mtcars) </span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl1_eppd-1.png" width="672" /></p>
 </div>
 </div>
@@ -420,44 +420,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="define-model-4" class="section level3">
 <h3><span class="header-section-number">3.5.1</span> Define Model</h3>
 <p>Setting up the semi-parametric model is a bit more work in the <code>rethinking</code> package. First, I explicitly create the splines. The component splines are plotted below.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="rethinking.html#cb48-1"></a><span class="kw">library</span>(splines)</span>
-<span id="cb48-2"><a href="rethinking.html#cb48-2"></a></span>
-<span id="cb48-3"><a href="rethinking.html#cb48-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
-<span id="cb48-4"><a href="rethinking.html#cb48-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
-<span id="cb48-5"><a href="rethinking.html#cb48-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb48-6"><a href="rethinking.html#cb48-6"></a></span>
-<span id="cb48-7"><a href="rethinking.html#cb48-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp, B) <span class="op">%&gt;%</span></span>
-<span id="cb48-8"><a href="rethinking.html#cb48-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb48-9"><a href="rethinking.html#cb48-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb48-10"><a href="rethinking.html#cb48-10"></a></span>
-<span id="cb48-11"><a href="rethinking.html#cb48-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
-<span id="cb48-12"><a href="rethinking.html#cb48-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
-<span id="cb48-13"><a href="rethinking.html#cb48-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
-<span id="cb48-14"><a href="rethinking.html#cb48-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
-<span id="cb48-15"><a href="rethinking.html#cb48-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
-<span id="cb48-16"><a href="rethinking.html#cb48-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
-<span id="cb48-17"><a href="rethinking.html#cb48-17"></a></span>
-<span id="cb48-18"><a href="rethinking.html#cb48-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
-<span id="cb48-19"><a href="rethinking.html#cb48-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb48-20"><a href="rethinking.html#cb48-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
-<span id="cb48-21"><a href="rethinking.html#cb48-21"></a></span>
-<span id="cb48-22"><a href="rethinking.html#cb48-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
-<span id="cb48-23"><a href="rethinking.html#cb48-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
-<span id="cb48-24"><a href="rethinking.html#cb48-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="rethinking.html#cb46-1"></a><span class="kw">library</span>(splines)</span>
+<span id="cb46-2"><a href="rethinking.html#cb46-2"></a></span>
+<span id="cb46-3"><a href="rethinking.html#cb46-3"></a>num_knots &lt;-<span class="st"> </span><span class="dv">4</span>  <span class="co"># number of interior knots</span></span>
+<span id="cb46-4"><a href="rethinking.html#cb46-4"></a>knot_list &lt;-<span class="st"> </span><span class="kw">quantile</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> num_knots))</span>
+<span id="cb46-5"><a href="rethinking.html#cb46-5"></a>B &lt;-<span class="st"> </span><span class="kw">bs</span>(mtcars<span class="op">$</span>c_disp, <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb46-6"><a href="rethinking.html#cb46-6"></a></span>
+<span id="cb46-7"><a href="rethinking.html#cb46-7"></a>df1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp, B) <span class="op">%&gt;%</span></span>
+<span id="cb46-8"><a href="rethinking.html#cb46-8"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb46-9"><a href="rethinking.html#cb46-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb46-10"><a href="rethinking.html#cb46-10"></a></span>
+<span id="cb46-11"><a href="rethinking.html#cb46-11"></a><span class="co"># Plot at smaller intervals so curves are smooth</span></span>
+<span id="cb46-12"><a href="rethinking.html#cb46-12"></a>N&lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb46-13"><a href="rethinking.html#cb46-13"></a>D &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(mtcars<span class="op">$</span>c_disp), <span class="kw">max</span>(mtcars<span class="op">$</span>c_disp), <span class="dt">length.out =</span> N)</span>
+<span id="cb46-14"><a href="rethinking.html#cb46-14"></a>B_plot &lt;-<span class="st"> </span><span class="kw">bs</span>(D, </span>
+<span id="cb46-15"><a href="rethinking.html#cb46-15"></a>             <span class="dt">knots=</span>knot_list[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,num_knots)], </span>
+<span id="cb46-16"><a href="rethinking.html#cb46-16"></a>             <span class="dt">intercept=</span><span class="ot">TRUE</span>)</span>
+<span id="cb46-17"><a href="rethinking.html#cb46-17"></a></span>
+<span id="cb46-18"><a href="rethinking.html#cb46-18"></a>df2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">c_disp=</span>D, B_plot) <span class="op">%&gt;%</span></span>
+<span id="cb46-19"><a href="rethinking.html#cb46-19"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
+<span id="cb46-20"><a href="rethinking.html#cb46-20"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>c_disp, <span class="dt">names_to=</span><span class="st">&quot;spline&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;val&quot;</span>)</span>
+<span id="cb46-21"><a href="rethinking.html#cb46-21"></a></span>
+<span id="cb46-22"><a href="rethinking.html#cb46-22"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>val, <span class="dt">color=</span>spline)) <span class="op">+</span></span>
+<span id="cb46-23"><a href="rethinking.html#cb46-23"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df1) <span class="op">+</span></span>
+<span id="cb46-24"><a href="rethinking.html#cb46-24"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>df2, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/spline-1.png" width="672" /></p>
 <p>Note: the dashed lines are the splines and the points are the values of the spline at the specific values of <code>mtcars$c_disp</code>; the points are inputs into the <code>rethinking</code> model.</p>
 <p>Then I define the model with the splines. I wasn’t able to get this model to work with either the <code>map2stan</code> or <code>ulam</code> functions, so I used <code>quap</code> instead which fits a quadratic approximation.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="rethinking.html#cb49-1"></a>f &lt;-<span class="st"> </span><span class="kw">alist</span>(</span>
-<span id="cb49-2"><a href="rethinking.html#cb49-2"></a>  mpg <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu, sigma),</span>
-<span id="cb49-3"><a href="rethinking.html#cb49-3"></a>  mu &lt;-<span class="st"> </span>a <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span>w,</span>
-<span id="cb49-4"><a href="rethinking.html#cb49-4"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">25</span>, <span class="dv">10</span>),</span>
-<span id="cb49-5"><a href="rethinking.html#cb49-5"></a>  w <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>,<span class="dv">5</span>),</span>
-<span id="cb49-6"><a href="rethinking.html#cb49-6"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
-<span id="cb49-7"><a href="rethinking.html#cb49-7"></a>)</span>
-<span id="cb49-8"><a href="rethinking.html#cb49-8"></a></span>
-<span id="cb49-9"><a href="rethinking.html#cb49-9"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">quap</span>(f, <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">mpg=</span>mtcars<span class="op">$</span>mpg, <span class="dt">B=</span>B),</span>
-<span id="cb49-10"><a href="rethinking.html#cb49-10"></a>             <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">w=</span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">ncol</span>(B)))</span>
-<span id="cb49-11"><a href="rethinking.html#cb49-11"></a>            )</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rethinking.html#cb47-1"></a>f &lt;-<span class="st"> </span><span class="kw">alist</span>(</span>
+<span id="cb47-2"><a href="rethinking.html#cb47-2"></a>  mpg <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(mu, sigma),</span>
+<span id="cb47-3"><a href="rethinking.html#cb47-3"></a>  mu &lt;-<span class="st"> </span>a <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span>w,</span>
+<span id="cb47-4"><a href="rethinking.html#cb47-4"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">25</span>, <span class="dv">10</span>),</span>
+<span id="cb47-5"><a href="rethinking.html#cb47-5"></a>  w <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>,<span class="dv">5</span>),</span>
+<span id="cb47-6"><a href="rethinking.html#cb47-6"></a>  sigma <span class="op">~</span><span class="st"> </span><span class="kw">dexp</span>(<span class="dv">1</span>)</span>
+<span id="cb47-7"><a href="rethinking.html#cb47-7"></a>)</span>
+<span id="cb47-8"><a href="rethinking.html#cb47-8"></a></span>
+<span id="cb47-9"><a href="rethinking.html#cb47-9"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">quap</span>(f, <span class="dt">data=</span><span class="kw">list</span>(<span class="dt">mpg=</span>mtcars<span class="op">$</span>mpg, <span class="dt">B=</span>B),</span>
+<span id="cb47-10"><a href="rethinking.html#cb47-10"></a>             <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">w=</span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">ncol</span>(B)))</span>
+<span id="cb47-11"><a href="rethinking.html#cb47-11"></a>            )</span></code></pre></div>
 </div>
 <div id="diagnostics-3" class="section level3">
 <h3><span class="header-section-number">3.5.2</span> Diagnostics</h3>
@@ -466,7 +466,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="posterior-distribution-3" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Posterior Distribution</h3>
 <p>I can still use the <code>precis</code> function to look at the posterior distribution, although there’s really no intuitive interpretation for the spline weights.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="rethinking.html#cb50-1"></a><span class="kw">precis</span>(mdl2, <span class="dt">depth=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="rethinking.html#cb48-1"></a><span class="kw">precis</span>(mdl2, <span class="dt">depth=</span><span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##           mean     sd    5.5%   94.5%
 ## w[1]  -12.0857 2.2957 -15.755 -8.4166
 ## w[2]   -4.3134 2.5531  -8.394 -0.2331
@@ -480,33 +480,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="posterior-predictive-distribution-4" class="section level3">
 <h3><span class="header-section-number">3.5.4</span> Posterior Predictive Distribution</h3>
 <p>Finally, the posterior predictive distribution and LOESS for comparison:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="rethinking.html#cb52-1"></a>mu &lt;-<span class="st"> </span><span class="kw">link</span>(mdl2)</span>
-<span id="cb52-2"><a href="rethinking.html#cb52-2"></a>mu_mean &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(mu, <span class="dv">2</span>, mean)) <span class="op">%&gt;%</span></span>
-<span id="cb52-3"><a href="rethinking.html#cb52-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb52-4"><a href="rethinking.html#cb52-4"></a><span class="kw">colnames</span>(mu_mean) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mpg_ppd&quot;</span>, <span class="st">&quot;c_disp&quot;</span>)</span>
-<span id="cb52-5"><a href="rethinking.html#cb52-5"></a></span>
-<span id="cb52-6"><a href="rethinking.html#cb52-6"></a>mu_PI &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">apply</span>(mu,<span class="dv">2</span>,PI,<span class="fl">0.95</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb52-7"><a href="rethinking.html#cb52-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp)</span>
-<span id="cb52-8"><a href="rethinking.html#cb52-8"></a><span class="kw">colnames</span>(mu_PI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lwr&quot;</span>, <span class="st">&quot;upr&quot;</span>, <span class="st">&quot;c_disp&quot;</span>)</span>
-<span id="cb52-9"><a href="rethinking.html#cb52-9"></a></span>
-<span id="cb52-10"><a href="rethinking.html#cb52-10"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb52-11"><a href="rethinking.html#cb52-11"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
-<span id="cb52-12"><a href="rethinking.html#cb52-12"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>mu_mean, <span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg_ppd), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
-<span id="cb52-13"><a href="rethinking.html#cb52-13"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>mu_PI, <span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb52-14"><a href="rethinking.html#cb52-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;GAM&quot;</span>)</span>
-<span id="cb52-15"><a href="rethinking.html#cb52-15"></a></span>
-<span id="cb52-16"><a href="rethinking.html#cb52-16"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
-<span id="cb52-17"><a href="rethinking.html#cb52-17"></a>              <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
-<span id="cb52-18"><a href="rethinking.html#cb52-18"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb52-19"><a href="rethinking.html#cb52-19"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>,</span>
-<span id="cb52-20"><a href="rethinking.html#cb52-20"></a>              <span class="dt">level=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
-<span id="cb52-21"><a href="rethinking.html#cb52-21"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;LOESS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="rethinking.html#cb50-1"></a>mu &lt;-<span class="st"> </span><span class="kw">link</span>(mdl2)</span>
+<span id="cb50-2"><a href="rethinking.html#cb50-2"></a>mu_mean &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">apply</span>(mu, <span class="dv">2</span>, mean)) <span class="op">%&gt;%</span></span>
+<span id="cb50-3"><a href="rethinking.html#cb50-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb50-4"><a href="rethinking.html#cb50-4"></a><span class="kw">colnames</span>(mu_mean) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mpg_ppd&quot;</span>, <span class="st">&quot;c_disp&quot;</span>)</span>
+<span id="cb50-5"><a href="rethinking.html#cb50-5"></a></span>
+<span id="cb50-6"><a href="rethinking.html#cb50-6"></a>mu_PI &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">apply</span>(mu,<span class="dv">2</span>,PI,<span class="fl">0.95</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb50-7"><a href="rethinking.html#cb50-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">c_disp=</span>mtcars<span class="op">$</span>c_disp)</span>
+<span id="cb50-8"><a href="rethinking.html#cb50-8"></a><span class="kw">colnames</span>(mu_PI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lwr&quot;</span>, <span class="st">&quot;upr&quot;</span>, <span class="st">&quot;c_disp&quot;</span>)</span>
+<span id="cb50-9"><a href="rethinking.html#cb50-9"></a></span>
+<span id="cb50-10"><a href="rethinking.html#cb50-10"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb50-11"><a href="rethinking.html#cb50-11"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg)) <span class="op">+</span></span>
+<span id="cb50-12"><a href="rethinking.html#cb50-12"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>mu_mean, <span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg_ppd), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb50-13"><a href="rethinking.html#cb50-13"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>mu_PI, <span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">alpha=</span><span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb50-14"><a href="rethinking.html#cb50-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;GAM&quot;</span>)</span>
+<span id="cb50-15"><a href="rethinking.html#cb50-15"></a></span>
+<span id="cb50-16"><a href="rethinking.html#cb50-16"></a><span class="kw">ggplot</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">x=</span>c_disp, <span class="dt">y=</span>mpg<span class="op">-</span><span class="kw">mean</span>(mpg)),</span>
+<span id="cb50-17"><a href="rethinking.html#cb50-17"></a>              <span class="dt">data=</span>mtcars) <span class="op">+</span></span>
+<span id="cb50-18"><a href="rethinking.html#cb50-18"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb50-19"><a href="rethinking.html#cb50-19"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>,</span>
+<span id="cb50-20"><a href="rethinking.html#cb50-20"></a>              <span class="dt">level=</span><span class="fl">0.95</span>) <span class="op">+</span></span>
+<span id="cb50-21"><a href="rethinking.html#cb50-21"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;LOESS&quot;</span>)</span></code></pre></div>
 <p><img src="03_rethinking_files/figure-html/mdl2_ppd-1.png" width="50%" /><img src="03_rethinking_files/figure-html/mdl2_ppd-2.png" width="50%" /></p>
 </div>
 </div>
 <div id="session-info-1" class="section level2">
 <h2><span class="header-section-number">3.6</span> Session Info</h2>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="rethinking.html#cb53-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="rethinking.html#cb51-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Big Sur 10.16

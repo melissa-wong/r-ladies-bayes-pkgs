@@ -70,7 +70,7 @@ There are several methods for getting the prior predictive distribution from the
     
 2. In the `brm` function, set the parameter `sample_prior="yes"`.  Then use the function 'prior_samples` to get samples from the prior distributions and construct the prior predictive distribution.
     
-3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and `posterior_epred` functions to draw samples from the prior only model.
+3. Sample from the model _without_ conditioning on the data.  We do that by setting the parameter `sample_prior = "only"` and then using the `predict` and/or `posterior_epred` functions to draw samples from the prior only model.
     
 Method 3 is demonstrated below.
 
@@ -80,8 +80,6 @@ D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
 
 mdl1_prior <- update(mdl1, sample_prior="only")
 
-# Summarizes samples from posterior predictive distribution
-ppd <- as.data.frame(predict(mdl1_prior, newdata=data.frame(c_disp=D)))
 # Samples from expected value of posterior predictive distribution
 eppd <- posterior_epred(mdl1_prior, newdata=data.frame(c_disp=D), 
                         summary=FALSE, nsamples=50) %>%
@@ -90,9 +88,7 @@ eppd <- posterior_epred(mdl1_prior, newdata=data.frame(c_disp=D),
   mutate(c_disp=D) %>%
   pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
-
 ggplot() +
-  geom_ribbon(data=ppd, mapping=aes(x=D, ymin=Q2.5, ymax=Q97.5), alpha=0.5, fill="lightblue") +
   geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) 
 ```
 
@@ -109,10 +105,13 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-The simple linear model only has population-level (i.e., "fixed") effects, and the `fixef` function extracts a summary of those parameters only.  Note that this is the same information as returned from the `summary` function above.
+The `fixef` function extracts a summary of those population-level (i.e. fixed effect) parameters only, whereas the `posterior_summary` function summarizes the posterior draws for all model parameters.
 
 ```{r mdl1_post}
 fixef(mdl1)
+```
+```{r}
+posterior_summary(mdl1)
 ```
 
 ### Posterior Predictive Distribution
@@ -120,13 +119,8 @@ fixef(mdl1)
 The `brms` package includes the `pp_check` function which uses `bayesplot` under the hood.
 
 ```{r}
+# Equivalent to ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=50))
 pp_check(mdl1, nsamples = 50)
-```
-
-Or we can use `ppc_dens_overly` directly with the `brmsfit` object as shown below.
-
-```{r}
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, nsamples=50))
 ```
 
 
@@ -177,7 +171,19 @@ mdl2 <- brm(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian(),
 
 mdl2_prior <- update(mdl2, sample_prior="only")
 
-pp_check(mdl2_prior, nsamples = 50)
+D <- seq(min(mtcars$c_disp), max(mtcars$c_disp))
+
+# Samples from expected value of posterior predictive distribution
+eppd <- posterior_epred(mdl2_prior, newdata=data.frame(c_disp=D), 
+                        summary=FALSE, nsamples=50) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(c_disp=D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
+
+ggplot() +
+  geom_line(data=eppd, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) +
+  geom_point(data=mtcars, mapping=aes(x=c_disp, y=mpg), color="blue")
 ```
 
 ### Diagnostics
@@ -194,9 +200,10 @@ pp_check(mdl2, nsamples=50)
 
 ### Posterior Distribution
 
-The summary
-```{r}
+The `posterior_summary` function summarizes the posterior samples for all of the model parameters.
 
+```{r}
+posterior_summary(mdl2)
 ```
 
 

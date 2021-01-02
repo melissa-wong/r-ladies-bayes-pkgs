@@ -76,7 +76,7 @@ stancode(mdl1)
 ```
 
 ```
-## //2020-12-29 20:26:23
+## //2021-01-02 17:34:08
 ## data{
 ##     int<lower=1> N;
 ##     real mpg[N];
@@ -123,7 +123,7 @@ res <- as.data.frame(apply(prior_samples, 1, function(x) x[1] - x[2] * (D))) %>%
 res %>%
   ggplot() +
   geom_line(aes(x=c_disp, y=value, group=iter), alpha=0.2) +
-  labs(x="disp", y="prior predictive mpg")
+  labs(x="c_disp", y="mpg")
 ```
 
 <img src="03_rethinking_files/figure-html/mdl1_prior-1.png" width="672" />

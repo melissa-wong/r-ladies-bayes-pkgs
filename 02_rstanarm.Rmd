@@ -66,12 +66,12 @@ epa <- read.csv(here("data", "EPA_1974.csv"), header=TRUE)
 ggplot() +
   geom_histogram(data=epa, mapping=aes(x=mpg, y=..density..), binwidth = 1) +
   stat_function(data=data.frame(x=c(0, 35)),
-                mapping=aes(x=x),
+                mapping=aes(x=x, colour="Default"),
                 fun=dnorm, n=101, 
                 args=list(mean=20, 
                           sd=15),
-                linetype="dashed",
-                color="blue")
+                linetype="dashed") +
+  scale_colour_manual("Prior", values="blue")
 ```
 
 ```{r mdl1_prior_plot}
@@ -85,13 +85,14 @@ D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 
 res <- as.data.frame(apply(prior_samples, 1, 
                            function(x) x[1] + x[2] * (D))) %>%
-  mutate(disp = D) %>%
-  pivot_longer(cols=c(-"disp"), names_to="iter") 
+  mutate(c_disp = D) %>%
+  pivot_longer(cols=-c_disp, names_to="iter") 
 
-res %>%
+(default_prior_plot <- res %>%
   ggplot() +
-  geom_line(aes(x=disp, y=value, group=iter), alpha=0.2) +
-  labs(x="disp", y="prior predictive mpg")
+  geom_line(aes(x=c_disp, y=value, group=iter), alpha=0.2) +
+  labs(x="c_disp", y="mpg", 
+       title = "Prior Predictive Distribution - Default Priors"))
 ```
 
 I notice two things in the prior predictive distribution which seem unrealistic given what I know about the real world: plausibility of 1) negative mpg and 2) increasing mpg as displacement increases. Later on I'll choose a more informative prior which incorporates this external knowledge. But let's proceed with the analysis and see what happens.
@@ -137,17 +138,13 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-Since the chains, `n_eff` and $\widehat{R}$ look good, let's examine the posterior distributions next.
+Since the chains, `n_eff` and $\widehat{R}$ look good, let's examine the posterior distributions next.  The `Estimates` section of the `summary` output above displays the posterior point estimates, standard deviation and 10%, 50% and 90% quantiles.  Alternatively, we can plot the posterior distributions:
 
 ```{r mdl1_post}
 # Posterior point estimates (medians are used for point estimates)
-coef(mdl1)
+plot(mdl1)
 ```
 
-```{r mdl1_post_int}
-# 95% credible intervals
-knitr::kable(posterior_interval(mdl1, prob=0.95))
-```
 
 
 ### Posterior Predictive Distribution
@@ -155,7 +152,8 @@ knitr::kable(posterior_interval(mdl1, prob=0.95))
 The `posterior_predict` function draws samples from the posterior predictive distribution, and then the `ppc_dens_overlay` function plots the distribution of each draw overlaid with the observed distribution.
 
 ```{r}
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, draws=50))
+(mdl1_ppd_plot <- ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, draws=50)) +
+   labs(title="Posterior Predictive Distribution - Default Priors"))
 ```
 
 Below I also plot the _expected value_ of the posterior predictive distribution and overlay the observations as an alternative way to visualize the result. The `posterior_linpred` function returns the linear predictor, possibly transformed by the inverse-link function.  The `posterior_epred` function returns the expectation over the posterior predictive distribution. In this example, the model is a Gaussian likelihood with an identity link function, so the two functions return identical results.
@@ -167,10 +165,11 @@ y_rep <- as.data.frame(t(posterior_epred(mdl1, newdata=newdata, draws=50))) %>%
   cbind(newdata) %>%
   pivot_longer(cols=starts_with("V"), names_to="grp", values_to="mpg")
 
-y_rep %>%
+(mdl1_eppd_plot <- y_rep %>%
   ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=grp), alpha=0.2) +
-  geom_point(data = mtcars) 
+  geom_point(data = mtcars) +
+  labs(title="Expected Value ppd - Default Priors"))
 ```
 
 As expected, the linear model is not a good fit to the data.
@@ -199,19 +198,18 @@ epa <- read.csv("./data/EPA_1974.csv", header=TRUE)
 ggplot() +
   geom_histogram(data=epa, mapping=aes(x=mpg, y=..density..), binwidth = 1) +
   stat_function(data=data.frame(x=c(0, 35)),
-                mapping=aes(x=x),
+                mapping=aes(x=x, colour="Default"),
                 fun=dnorm, n=101, 
                 args=list(mean=20, 
                           sd=15),
-                linetype="dashed",
-                color="blue") +
+                linetype="dashed") +
   stat_function(data=data.frame(x=c(0, 35)),
-                mapping=aes(x=x),
+                mapping=aes(x=x, colour="Informative"),
                 fun=dnorm, n=101, 
                 args=list(mean=13.2, 
                           sd=5.3),
-                linetype="dashed",
-                color="red")
+                linetype="dashed") +
+  scale_colour_manual("Priors", values=c("blue", "red"))
 ```
 
 ### Define Model
@@ -227,7 +225,9 @@ mdl2 <- stan_glm(mpg ~ c_disp, data = mtcars,
 
 Below is an alternative to manually constructing the prior predictive distribution like I did previously. Setting `prior_PD = TRUE` refits the model _without_ conditioning on the data which then gives the prior predictive distribution.
 
-```{r mdl2_prior, results="hide", message=FALSE}
+```{r mdl2_prior, fig.show='hold', out.width="50%", results="hide", message=FALSE}
+
+default_prior_plot
 
 mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 
@@ -241,7 +241,8 @@ draws <- posterior_epred(mdl2_prior, newdata=data.frame(c_disp=D), draws=50) %>%
 
 draws %>%
   ggplot() +
-  geom_line(mapping=aes(x=c_disp, y=mpg, group=draw), alpha=0.2)
+  geom_line(mapping=aes(x=c_disp, y=mpg, group=draw), alpha=0.2) +
+  labs(title="Prior Predictive Distribution - Informative Priors")
 
 ```
 
@@ -297,12 +298,19 @@ In this case, there is sufficient data that the choice of prior really didn't ma
 
 ### Posterior Predictive Distribution
 
-```{r}
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl2, draws=50))
+```{r fig.show="hold", out.width="50%"}
+
+mdl1_ppd_plot
+
+#Equivalent to ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl2, draws=50))
+pp_check(mdl2) +
+  labs(title = "Posterior Predictive Distribution - Informative Priors")
 ```
 
 
-```{r mdl2_ppd}
+```{r mdl2_ppd, fig.show="hold", out.width="50%"}
+
+(mdl1_eppd_plot)
 
 # Expected value of posterior predictive
 newdata <- data.frame(c_disp=seq(min(mtcars$c_disp), max(mtcars$c_disp)))
@@ -314,7 +322,8 @@ y_rep <- as.data.frame(t(posterior_epred(mdl2, newdata=newdata, draws=50))) %>%
 y_rep %>%
   ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=grp), alpha=0.2) +
-  geom_point(data = mtcars) 
+  geom_point(data = mtcars) +
+  labs(title="Expected Value ppd - Informative Priors")
 ```
 
 The results are very similar to those with the default priors.
@@ -333,7 +342,7 @@ mdl3 <- stan_gamm4(mpg ~ s(c_disp, bs="cr", k=7),
 
 ### Prior Predictive Distribution
 
-Again, I'll use `rstanarm` tonautomatically generate the prior predictive distribution.
+Again, I'll use `rstanarm` to automatically generate the prior predictive distribution.
 
 ```{r mdl3_prior, results="hide"}
 mdl3_prior <- update(mdl3, prior_PD = TRUE, chains=1)

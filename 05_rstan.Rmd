@@ -113,7 +113,8 @@ generated quantities{
   real a_sim = normal_rng(13.2, 5.3);
   real b_sim = normal_rng(-0.1, 0.05);
   real sigma_sim = exponential_rng(1);
-  real mpg_sim[N] = normal_rng(a_sim + b_sim * c_disp, sigma_sim);
+  vector[N] Y_hat = a_sim + b_sim * c_disp;
+  real mpg_sim[N] = normal_rng(Y_hat, sigma_sim);
 }
 '
 
@@ -130,15 +131,24 @@ mdl_prior <- stan(model_code=mdl_prior, data=mdl_data_prior, model_name="mdl_pri
 draws <- as.data.frame(mdl_prior) %>%
   head(50)
 
-# Expected value prior predictive distribution
-exp_mpg_sim <- apply(draws, 1, function(x) x["a_sim"] + x["b_sim"] * (D)) %>%
+# Expected value prior predictive distribution from generated Y_hat
+exp_mpg_sim <- draws %>%
+  select(starts_with("Y_hat")) %>%
+  t() %>%
   as.data.frame() %>%
   mutate(c_disp = D) %>%
   pivot_longer(-c_disp, names_to="iter", values_to="mpg") 
 
+# Alternative method: Expected value prior predictive distribution from a_sim and b_sim
+# exp_mpg_sim <- apply(draws, 1, function(x) x["a_sim"] + x["b_sim"] * (D)) %>%
+#   as.data.frame() %>%
+#   mutate(c_disp = D) %>%
+#   pivot_longer(-c_disp, names_to="iter", values_to="mpg") 
+
 ggplot() +
   geom_line(data=exp_mpg_sim, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) 
 ```
+
 
 ### Diagnostics
 
@@ -361,7 +371,7 @@ mdl2 <- '
 '
 
 mdl_gam_prior <- stan(model_code=mdl2, 
-                      data=list(N=N, 
+                      data=list(N=nrow(B_plot), 
                                 num_basis=ncol(B_plot),
                                 B=B_plot),
                       chains=1, algorithm="Fixed_param")
@@ -369,25 +379,15 @@ mdl_gam_prior <- stan(model_code=mdl2,
 draws <- as.data.frame(mdl_gam_prior) %>%
   head(50)
 
-# Expected value prior predictive distribution
-exp_mpg_sim <- apply(draws, 1, function(x) {
-  x["a_sim"] + B_plot %*% x[grepl("w", names(x))]
-}) %>%
-  as.data.frame() %>%
-  mutate(c_disp = D) %>%
-  pivot_longer(-c_disp, names_to="iter", values_to="mpg") 
-
-# 95% interval prior predictive distribution
-mpg_sim <- as.data.frame(mdl_gam_prior) %>% select(starts_with("mpg")) %>%
-  apply(2, function(x) quantile(x, probs=c(0.025, 0.5, 0.975))) %>%
+exp_mpg_sim <- draws %>% 
+  select(starts_with("Y_hat")) %>%
   t() %>%
   as.data.frame() %>%
-  mutate(c_disp = D)
+  mutate(c_disp = D) %>%
+  pivot_longer(-c_disp, names_to="iter", values_to="mpg")
 
 ggplot() +
-  geom_line(data=exp_mpg_sim, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) +
-  geom_ribbon(data=mpg_sim, mapping=aes(x=c_disp, ymin=`2.5%`, ymax=`97.5%`), 
-              alpha=0.5, fill="lightblue")
+  geom_line(data=exp_mpg_sim, mapping=aes(x=c_disp, y=mpg, group=iter), alpha=0.2) 
 ```
 
 ### Diagnostics

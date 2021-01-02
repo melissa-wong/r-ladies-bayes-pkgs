@@ -99,13 +99,14 @@ D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
 
 res <- as.data.frame(apply(prior_samples, 1, 
                            function(x) x[1] + x[2] * (D))) %>%
-  mutate(disp = D) %>%
-  pivot_longer(cols=c(-"disp"), names_to="iter") 
+  mutate(c_disp = D) %>%
+  pivot_longer(cols=-c_disp, names_to="iter") 
 
-res %>%
+(default_prior_plot <- res %>%
   ggplot() +
-  geom_line(aes(x=disp, y=value, group=iter), alpha=0.2) +
-  labs(x="disp", y="prior predictive mpg")
+  geom_line(aes(x=c_disp, y=value, group=iter), alpha=0.2) +
+  labs(x="c_disp", y="mpg", 
+       title = "Prior Predictive Distribution - Default Priors"))
 ```
 
 <img src="02_rstanarm_files/figure-html/mdl1_prior_plot-1.png" width="672" />
@@ -195,51 +196,16 @@ summary(mdl1)
 
 ### Posterior Distribution
 
-Since the chains, `n_eff` and $\widehat{R}$ look good, let's examine the posterior distributions next.
+Since the chains, `n_eff` and $\widehat{R}$ look good, let's examine the posterior distributions next.  The `Estimates` section of the `summary` output above displays the posterior point estimates, standard deviation and 10%, 50% and 90% quantiles.  Alternatively, we can plot the posterior distributions:
 
 
 ```r
 # Posterior point estimates (medians are used for point estimates)
-coef(mdl1)
+plot(mdl1)
 ```
 
-```
-## (Intercept)      c_disp 
-##    20.11105    -0.04103
-```
+<img src="02_rstanarm_files/figure-html/mdl1_post-1.png" width="672" />
 
-
-```r
-# 95% credible intervals
-knitr::kable(posterior_interval(mdl1, prob=0.95))
-```
-
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> 2.5% </th>
-   <th style="text-align:right;"> 97.5% </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 18.9076 </td>
-   <td style="text-align:right;"> 21.3009 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> c_disp </td>
-   <td style="text-align:right;"> -0.0509 </td>
-   <td style="text-align:right;"> -0.0313 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sigma </td>
-   <td style="text-align:right;"> 2.6281 </td>
-   <td style="text-align:right;"> 4.3876 </td>
-  </tr>
-</tbody>
-</table>
 
 
 ### Posterior Predictive Distribution
@@ -248,7 +214,8 @@ The `posterior_predict` function draws samples from the posterior predictive dis
 
 
 ```r
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, draws=50))
+(mdl1_ppd_plot <- ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl1, draws=50)) +
+   labs(title="Posterior Predictive Distribution - Default Priors"))
 ```
 
 <img src="02_rstanarm_files/figure-html/unnamed-chunk-1-1.png" width="672" />
@@ -263,10 +230,11 @@ y_rep <- as.data.frame(t(posterior_epred(mdl1, newdata=newdata, draws=50))) %>%
   cbind(newdata) %>%
   pivot_longer(cols=starts_with("V"), names_to="grp", values_to="mpg")
 
-y_rep %>%
+(mdl1_eppd_plot <- y_rep %>%
   ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=grp), alpha=0.2) +
-  geom_point(data = mtcars) 
+  geom_point(data = mtcars) +
+  labs(title="Expected Value ppd - Default Priors"))
 ```
 
 <img src="02_rstanarm_files/figure-html/mdl1_ppd-1.png" width="672" />
@@ -309,6 +277,8 @@ Below is an alternative to manually constructing the prior predictive distributi
 
 
 ```r
+default_prior_plot
+
 mdl2_prior <- update(mdl2, prior_PD=TRUE, chains=1)
 
 D <- seq(min(mtcars$c_disp), max(mtcars$c_disp), length.out = N)
@@ -321,10 +291,11 @@ draws <- posterior_epred(mdl2_prior, newdata=data.frame(c_disp=D), draws=50) %>%
 
 draws %>%
   ggplot() +
-  geom_line(mapping=aes(x=c_disp, y=mpg, group=draw), alpha=0.2)
+  geom_line(mapping=aes(x=c_disp, y=mpg, group=draw), alpha=0.2) +
+  labs(title="Prior Predictive Distribution - Informative Priors")
 ```
 
-<img src="02_rstanarm_files/figure-html/mdl2_prior-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/mdl2_prior-1.png" width="50%" /><img src="02_rstanarm_files/figure-html/mdl2_prior-2.png" width="50%" />
 
 
 
@@ -464,14 +435,20 @@ In this case, there is sufficient data that the choice of prior really didn't ma
 
 
 ```r
-ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl2, draws=50))
+mdl1_ppd_plot
+
+#Equivalent to ppc_dens_overlay(mtcars$mpg, posterior_predict(mdl2, draws=50))
+pp_check(mdl2) +
+  labs(title = "Posterior Predictive Distribution - Informative Priors")
 ```
 
-<img src="02_rstanarm_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/unnamed-chunk-3-1.png" width="50%" /><img src="02_rstanarm_files/figure-html/unnamed-chunk-3-2.png" width="50%" />
 
 
 
 ```r
+(mdl1_eppd_plot)
+
 # Expected value of posterior predictive
 newdata <- data.frame(c_disp=seq(min(mtcars$c_disp), max(mtcars$c_disp)))
 
@@ -482,10 +459,11 @@ y_rep <- as.data.frame(t(posterior_epred(mdl2, newdata=newdata, draws=50))) %>%
 y_rep %>%
   ggplot(aes(x=c_disp, y=mpg)) +
   geom_line(aes(group=grp), alpha=0.2) +
-  geom_point(data = mtcars) 
+  geom_point(data = mtcars) +
+  labs(title="Expected Value ppd - Informative Priors")
 ```
 
-<img src="02_rstanarm_files/figure-html/mdl2_ppd-1.png" width="672" />
+<img src="02_rstanarm_files/figure-html/mdl2_ppd-1.png" width="50%" /><img src="02_rstanarm_files/figure-html/mdl2_ppd-2.png" width="50%" />
 
 The results are very similar to those with the default priors.
 
@@ -504,7 +482,7 @@ mdl3 <- stan_gamm4(mpg ~ s(c_disp, bs="cr", k=7),
 
 ### Prior Predictive Distribution
 
-Again, I'll use `rstanarm` tonautomatically generate the prior predictive distribution.
+Again, I'll use `rstanarm` to automatically generate the prior predictive distribution.
 
 
 ```r
