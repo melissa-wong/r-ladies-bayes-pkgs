@@ -1,7 +1,7 @@
 --- 
 title: "Intro to R Bayes Packages"
 author: "Melissa Wong"
-date: "2021-01-02"
+date: "2021-01-04"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book

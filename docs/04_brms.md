@@ -162,12 +162,12 @@ summary(mdl1)
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.01      0.56    18.90    21.13 1.00     3358     2509
-## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4113     2720
+## Intercept    20.00      0.56    18.88    21.09 1.00     3026     2639
+## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4983     3485
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     3.21      0.40     2.56     4.14 1.00     3030     2442
+## sigma     3.20      0.40     2.55     4.08 1.00     3102     2884
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -185,8 +185,8 @@ fixef(mdl1)
 
 ```
 ##           Estimate Est.Error     Q2.5    Q97.5
-## Intercept 20.01137  0.561868 18.90493 21.12712
-## c_disp    -0.04156  0.004668 -0.05102 -0.03211
+## Intercept 20.00493  0.558534 18.88211 21.09144
+## c_disp    -0.04166  0.004478 -0.05048 -0.03317
 ```
 
 ```r
@@ -195,10 +195,10 @@ posterior_summary(mdl1)
 
 ```
 ##              Estimate Est.Error      Q2.5     Q97.5
-## b_Intercept  20.01137  0.561868  18.90493  21.12712
-## b_c_disp     -0.04156  0.004668  -0.05102  -0.03211
-## sigma         3.21264  0.404501   2.55725   4.14268
-## lp__        -87.64601  1.291216 -90.98746 -86.22136
+## b_Intercept  20.00493  0.558534  18.88211  21.09144
+## b_c_disp     -0.04166  0.004478  -0.05048  -0.03317
+## sigma         3.20167  0.395576   2.54915   4.08289
+## lp__        -87.59319  1.221629 -90.84011 -86.21320
 ```
 
 ### Posterior Predictive Distribution
@@ -275,7 +275,7 @@ mdl2 <- brm(mpg ~ s(c_disp, bs="cr", k=7), data=mtcars, family=gaussian(),
 ```
 
 ```
-## Warning: There were 2 divergent transitions after warmup. See
+## Warning: There were 1 divergent transitions after warmup. See
 ## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ## to find out why this is a problem and how to eliminate them.
 ```
@@ -315,7 +315,7 @@ summary(mdl2)
 ```
 
 ```
-## Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta
+## Warning: There were 1 divergent transitions after warmup. Increasing adapt_delta
 ## above 0.99 may help. See http://mc-stan.org/misc/warnings.html#divergent-
 ## transitions-after-warmup
 ```
@@ -330,16 +330,16 @@ summary(mdl2)
 ## 
 ## Smooth Terms: 
 ##                Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sds(sc_disp_1)     1.42      0.88     0.42     3.66 1.00      881     1841
+## sds(sc_disp_1)     1.45      0.93     0.41     3.98 1.01      831     1168
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.09      0.42    19.25    20.91 1.00     3566     2513
-## sc_disp_1    -3.18      0.27    -3.71    -2.65 1.00     2980     2679
+## Intercept    20.09      0.42    19.29    20.97 1.00     4156     2515
+## sc_disp_1    -3.19      0.27    -3.73    -2.64 1.00     3318     2702
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     2.41      0.35     1.83     3.22 1.00     2531     2312
+## sigma     2.39      0.35     1.81     3.20 1.00     3037     2899
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -366,16 +366,16 @@ posterior_summary(mdl2)
 
 ```
 ##                 Estimate Est.Error     Q2.5    Q97.5
-## b_Intercept     20.08637    0.4234  19.2513  20.9086
-## bs_sc_disp_1    -3.17969    0.2728  -3.7052  -2.6496
-## sds_sc_disp_1    1.41671    0.8788   0.4225   3.6582
-## sigma            2.40620    0.3547   1.8261   3.2163
-## s_sc_disp_1[1]   0.21932    1.4015  -2.6522   3.3024
-## s_sc_disp_1[2]   0.40156    0.1369   0.1261   0.6694
-## s_sc_disp_1[3]   1.21622    0.3535   0.5096   1.8888
-## s_sc_disp_1[4]   0.02512    0.5783  -1.1131   1.1811
-## s_sc_disp_1[5]  -1.06316    1.1489  -3.5961   0.8077
-## lp__           -87.14421    2.7291 -93.3661 -82.6821
+## b_Intercept     20.08994    0.4201  19.2862  20.9660
+## bs_sc_disp_1    -3.18766    0.2750  -3.7282  -2.6391
+## sds_sc_disp_1    1.44909    0.9337   0.4123   3.9792
+## sigma            2.38786    0.3477   1.8134   3.1977
+## s_sc_disp_1[1]   0.16363    1.4591  -2.7846   3.2205
+## s_sc_disp_1[2]   0.40172    0.1385   0.1211   0.6747
+## s_sc_disp_1[3]   1.23405    0.3570   0.5345   1.9129
+## s_sc_disp_1[4]   0.02237    0.5712  -1.1829   1.1282
+## s_sc_disp_1[5]  -1.11892    1.1578  -3.7692   0.7649
+## lp__           -87.15563    2.8198 -93.6426 -82.5589
 ```
 
 

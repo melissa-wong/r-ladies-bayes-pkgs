@@ -4,6 +4,8 @@
 
 - [mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
 
+- [Bayes Rules!](https://www.bayesrulesbook.com/) by Johnson, Ott, Dogucu
+
 ## Description
 
 All of the packages in the previous chapters are running `stan` under the hood. One of the biggest advantages to using `rstan` (or `cmdstanr`) is you get the full power and flexibility of `stan` so you can build models that aren't supported by the other packages. The tradeoff is the syntax is quite different which can be a challenge for those who are only familiar with R.

@@ -24,7 +24,7 @@
 <meta name="author" content="Melissa Wong" />
 
 
-<meta name="date" content="2021-01-02" />
+<meta name="date" content="2021-01-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -387,12 +387,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.01      0.56    18.90    21.13 1.00     3358     2509
-## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4113     2720
+## Intercept    20.00      0.56    18.88    21.09 1.00     3026     2639
+## c_disp       -0.04      0.00    -0.05    -0.03 1.00     4983     3485
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     3.21      0.40     2.56     4.14 1.00     3030     2442
+## sigma     3.20      0.40     2.55     4.08 1.00     3102     2884
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -403,14 +403,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The <code>fixef</code> function extracts a summary of those population-level (i.e. fixed effect) parameters only, whereas the <code>posterior_summary</code> function summarizes the posterior draws for all model parameters.</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="brms.html#cb61-1"></a><span class="kw">fixef</span>(mdl1)</span></code></pre></div>
 <pre><code>##           Estimate Est.Error     Q2.5    Q97.5
-## Intercept 20.01137  0.561868 18.90493 21.12712
-## c_disp    -0.04156  0.004668 -0.05102 -0.03211</code></pre>
+## Intercept 20.00493  0.558534 18.88211 21.09144
+## c_disp    -0.04166  0.004478 -0.05048 -0.03317</code></pre>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="brms.html#cb63-1"></a><span class="kw">posterior_summary</span>(mdl1)</span></code></pre></div>
 <pre><code>##              Estimate Est.Error      Q2.5     Q97.5
-## b_Intercept  20.01137  0.561868  18.90493  21.12712
-## b_c_disp     -0.04156  0.004668  -0.05102  -0.03211
-## sigma         3.21264  0.404501   2.55725   4.14268
-## lp__        -87.64601  1.291216 -90.98746 -86.22136</code></pre>
+## b_Intercept  20.00493  0.558534  18.88211  21.09144
+## b_c_disp     -0.04166  0.004478  -0.05048  -0.03317
+## sigma         3.20167  0.395576   2.54915   4.08289
+## lp__        -87.59319  1.221629 -90.84011 -86.21320</code></pre>
 </div>
 <div id="posterior-predictive-distribution-5" class="section level3">
 <h3><span class="header-section-number">4.4.5</span> Posterior Predictive Distribution</h3>
@@ -461,7 +461,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="brms.html#cb69-1"></a>mdl2 &lt;-<span class="st"> </span><span class="kw">brm</span>(mpg <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(c_disp, <span class="dt">bs=</span><span class="st">&quot;cr&quot;</span>, <span class="dt">k=</span><span class="dv">7</span>), <span class="dt">data=</span>mtcars, <span class="dt">family=</span><span class="kw">gaussian</span>(), </span>
 <span id="cb69-2"><a href="brms.html#cb69-2"></a>            <span class="dt">prior=</span><span class="kw">c</span>(<span class="kw">set_prior</span>(<span class="st">&quot;normal(0,5)&quot;</span>, <span class="dt">class=</span><span class="st">&quot;b&quot;</span>)),</span>
 <span id="cb69-3"><a href="brms.html#cb69-3"></a>            <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">adapt_delta=</span><span class="fl">0.99</span>))</span></code></pre></div>
-<pre><code>## Warning: There were 2 divergent transitions after warmup. See
+<pre><code>## Warning: There were 1 divergent transitions after warmup. See
 ## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ## to find out why this is a problem and how to eliminate them.</code></pre>
 <pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
@@ -488,7 +488,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="diagnostics-5" class="section level3">
 <h3><span class="header-section-number">4.5.3</span> Diagnostics</h3>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="brms.html#cb73-1"></a><span class="kw">summary</span>(mdl2)</span></code></pre></div>
-<pre><code>## Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta
+<pre><code>## Warning: There were 1 divergent transitions after warmup. Increasing adapt_delta
 ## above 0.99 may help. See http://mc-stan.org/misc/warnings.html#divergent-
 ## transitions-after-warmup</code></pre>
 <pre><code>##  Family: gaussian 
@@ -500,16 +500,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Smooth Terms: 
 ##                Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sds(sc_disp_1)     1.42      0.88     0.42     3.66 1.00      881     1841
+## sds(sc_disp_1)     1.45      0.93     0.41     3.98 1.01      831     1168
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    20.09      0.42    19.25    20.91 1.00     3566     2513
-## sc_disp_1    -3.18      0.27    -3.71    -2.65 1.00     2980     2679
+## Intercept    20.09      0.42    19.29    20.97 1.00     4156     2515
+## sc_disp_1    -3.19      0.27    -3.73    -2.64 1.00     3318     2702
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     2.41      0.35     1.83     3.22 1.00     2531     2312
+## sigma     2.39      0.35     1.81     3.20 1.00     3037     2899
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -522,16 +522,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The <code>posterior_summary</code> function summarizes the posterior samples for all of the model parameters.</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="brms.html#cb77-1"></a><span class="kw">posterior_summary</span>(mdl2)</span></code></pre></div>
 <pre><code>##                 Estimate Est.Error     Q2.5    Q97.5
-## b_Intercept     20.08637    0.4234  19.2513  20.9086
-## bs_sc_disp_1    -3.17969    0.2728  -3.7052  -2.6496
-## sds_sc_disp_1    1.41671    0.8788   0.4225   3.6582
-## sigma            2.40620    0.3547   1.8261   3.2163
-## s_sc_disp_1[1]   0.21932    1.4015  -2.6522   3.3024
-## s_sc_disp_1[2]   0.40156    0.1369   0.1261   0.6694
-## s_sc_disp_1[3]   1.21622    0.3535   0.5096   1.8888
-## s_sc_disp_1[4]   0.02512    0.5783  -1.1131   1.1811
-## s_sc_disp_1[5]  -1.06316    1.1489  -3.5961   0.8077
-## lp__           -87.14421    2.7291 -93.3661 -82.6821</code></pre>
+## b_Intercept     20.08994    0.4201  19.2862  20.9660
+## bs_sc_disp_1    -3.18766    0.2750  -3.7282  -2.6391
+## sds_sc_disp_1    1.44909    0.9337   0.4123   3.9792
+## sigma            2.38786    0.3477   1.8134   3.1977
+## s_sc_disp_1[1]   0.16363    1.4591  -2.7846   3.2205
+## s_sc_disp_1[2]   0.40172    0.1385   0.1211   0.6747
+## s_sc_disp_1[3]   1.23405    0.3570   0.5345   1.9129
+## s_sc_disp_1[4]   0.02237    0.5712  -1.1829   1.1282
+## s_sc_disp_1[5]  -1.11892    1.1578  -3.7692   0.7649
+## lp__           -87.15563    2.8198 -93.6426 -82.5589</code></pre>
 </div>
 <div id="posterior-predictive-distribution-6" class="section level3">
 <h3><span class="header-section-number">4.5.5</span> Posterior Predictive Distribution</h3>

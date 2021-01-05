@@ -4,6 +4,8 @@
 
 - [mc-stan online documentation](https://mc-stan.org/users/interfaces/rstan)
 
+- [Bayes Rules!](https://www.bayesrulesbook.com/) by Johnson, Ott, Dogucu
+
 ## Description
 
 All of the packages in the previous chapters are running `stan` under the hood. One of the biggest advantages to using `rstan` (or `cmdstanr`) is you get the full power and flexibility of `stan` so you can build models that aren't supported by the other packages. The tradeoff is the syntax is quite different which can be a challenge for those who are only familiar with R.
@@ -189,7 +191,7 @@ print(mdl1)
 ## sigma   3.21    0.01 0.39   2.55   2.93   3.18   3.45   4.07  3023    1
 ## lp__  -57.72    0.03 1.25 -61.03 -58.30 -57.39 -56.81 -56.30  1672    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Jan  2 17:37:23 2021.
+## Samples were drawn using NUTS(diag_e) at Mon Jan  4 21:42:34 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -498,7 +500,7 @@ print(mdl1_gam, pars=c("a", "sigma", "w"))
 ## w[5]  -2.30    0.07 2.92  -7.98  -4.28 -2.36 -0.41  3.55  1740    1
 ## w[6]  -8.82    0.06 2.42 -13.47 -10.48 -8.84 -7.19 -3.91  1639    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Jan  2 17:39:22 2021.
+## Samples were drawn using NUTS(diag_e) at Mon Jan  4 21:44:48 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).
@@ -670,7 +672,7 @@ print(mdl2_gam_smooth, pars=c("a", "sigma", "w"))
 ## w[21] -19.58    0.04 2.55 -24.50 -21.26 -19.59 -17.89 -14.52  3525    1
 ## w[22] -20.55    0.04 2.67 -25.78 -22.35 -20.60 -18.77 -15.21  3964    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Jan  2 17:40:26 2021.
+## Samples were drawn using NUTS(diag_e) at Mon Jan  4 21:46:37 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).

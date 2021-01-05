@@ -4,9 +4,9 @@
 
 - [Bayesian Data Analysis](http://www.stat.columbia.edu/~gelman/book/) by Andrew Gelman, et. al.
 
-- [A First Course in Bayesian Statistical Methods](https://pdhoff.github.io/book/) by Peter Hoff
-
 - [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by Richard McElreath
+
+- [A First Course in Bayesian Statistical Methods](https://pdhoff.github.io/book/) by Peter Hoff
 
 ## A Motivating Example
 
